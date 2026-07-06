@@ -287,24 +287,6 @@ export default function App() {
   const refreshRef=useRef(null);
 
 
-  const proxyGet=useCallback(async(yahooUrl,syms="")=>{
-    const urls=[
-      syms?`/api/finance?symbols=${encodeURIComponent(syms)}`:"",
-      `https://corsproxy.io/?url=${encodeURIComponent(yahooUrl)}`,
-      `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(yahooUrl)}`,
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(yahooUrl)}`,
-    ].filter(Boolean);
-    for(const url of urls){
-      try{
-        const r=await fetch(url,{signal:AbortSignal.timeout(8000)});
-        if(!r.ok) continue;
-        const j=await r.json();
-        if(j?.quoteResponse?.result!==undefined) return j;
-      }catch(_){continue;}
-    }
-    return null;
-  },[]);
-
   const fetchAll=useCallback(async()=>{
     setLoading(true);setErr(false);
     try{
@@ -312,43 +294,39 @@ export default function App() {
       const batches=[STOCKS.slice(0,20),STOCKS.slice(20,40),STOCKS.slice(40,60),STOCKS.slice(60,80),STOCKS.slice(80)];
       for(const b of batches){
         const syms=b.map(s=>s.sym).join(",");
-        const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}&fields=regularMarketPrice,regularMarketChange,regularMarketChangePercent,regularMarketVolume,averageDailyVolume3Month,fiftyTwoWeekHigh,fiftyTwoWeekLow`;
-        const j=await proxyGet(url,syms);
-        (j?.quoteResponse?.result||[]).forEach(q=>{newLd[q.symbol]={price:q.regularMarketPrice,chg:q.regularMarketChange,pct:q.regularMarketChangePercent,vol:q.regularMarketVolume,avgVol:q.averageDailyVolume3Month,h52:q.fiftyTwoWeekHigh,l52:q.fiftyTwoWeekLow};});
-        await new Promise(r=>setTimeout(r,400));
+        try{
+          const r=await fetch(`/api/finance?symbols=${encodeURIComponent(syms)}`,{signal:AbortSignal.timeout(15000)});
+          const j=await r.json();
+          (j?.quoteResponse?.result||[]).forEach(q=>{newLd[q.symbol]={price:q.regularMarketPrice,chg:q.regularMarketChange,pct:q.regularMarketChangePercent,vol:q.regularMarketVolume,avgVol:q.averageDailyVolume3Month,h52:q.fiftyTwoWeekHigh,l52:q.fiftyTwoWeekLow};});
+        }catch(_){}
+        await new Promise(r=>setTimeout(r,300));
       }
       setLd(newLd);setTs(new Date());
-      const nu=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=%5ENSEI`;
-      const nj=await proxyGet(nu,"%5ENSEI");
-      const n=nj?.quoteResponse?.result?.[0];
-      if(n)setNifty({price:n.regularMarketPrice,pct:n.regularMarketChangePercent,chg:n.regularMarketChange});
+      try{
+        const nr=await fetch(`/api/finance?type=nifty`,{signal:AbortSignal.timeout(8000)});
+        const nj=await nr.json();
+        const n=nj?.quoteResponse?.result?.[0];
+        if(n)setNifty({price:n.regularMarketPrice,pct:n.regularMarketChangePercent,chg:n.regularMarketChange});
+      }catch(_){}
     }catch(e){setErr(true);}
     setLoading(false);
-  },[proxyGet]);
+  },[]);
 
   const fetchNews=useCallback(async(symbol)=>{
     setNewsLoad(true);setNews([]);
     const allNews=[];
     const sym=symbol.replace(".NS","");
-    const yahooUrl=`https://query1.finance.yahoo.com/v1/finance/search?q=${sym}+NSE+India&newsCount=5`;
     try{
-      const j=await proxyGet(yahooUrl);
+      const r=await fetch(`/api/finance?type=news&q=${encodeURIComponent(sym)}`,{signal:AbortSignal.timeout(10000)});
+      const j=await r.json();
       (j?.news||[]).forEach(n=>allNews.push({title:n.title,link:n.link,publisher:n.publisher,date:n.providerPublishTime?new Date(n.providerPublishTime*1000).toLocaleDateString():"",source:"Yahoo Finance"}));
     }catch(_){}
     try{
       const etUrl=`https://economictimes.indiatimes.com/markets/stocks/news/rssfeeds/2146842.cms`;
-      const r=await fetch(`https://corsproxy.io/?url=${encodeURIComponent(etUrl)}`,{signal:AbortSignal.timeout(6000)});
-      const txt=await r.text();
-      const parser=new DOMParser();const doc=parser.parseFromString(txt,"text/xml");
-      Array.from(doc.querySelectorAll("item")).slice(0,3).forEach(item=>{
-        const title=item.querySelector("title")?.textContent||"";
-        const link=item.querySelector("link")?.textContent||"";
-        const pubDate=item.querySelector("pubDate")?.textContent||"";
-        if(title)allNews.push({title,link,publisher:"Economic Times",date:pubDate?new Date(pubDate).toLocaleDateString():"",source:"Economic Times"});
-      });
+      const r=await fetch(`/api/finance?type=news&q=market+india`,{signal:AbortSignal.timeout(6000)});
     }catch(_){}
     setNews(allNews);setNewsLoad(false);
-  },[proxyGet]);
+  },[]);
 
   useEffect(()=>{
     fetchAll();
