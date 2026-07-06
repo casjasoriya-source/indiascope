@@ -295,7 +295,7 @@ export default function App() {
         const syms=b.map(s=>s.sym).join(",");
         const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}&fields=regularMarketPrice,regularMarketChange,regularMarketChangePercent,regularMarketVolume,averageDailyVolume3Month,fiftyTwoWeekHigh,fiftyTwoWeekLow`;
         try{
-          const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,{signal:AbortSignal.timeout(12000)});
+          const r=await fetch(`https://corsproxy.io/?url=${encodeURIComponent(url)}`,{signal:AbortSignal.timeout(12000)});
           const j=await r.json();
           (j?.quoteResponse?.result||[]).forEach(q=>{newLd[q.symbol]={price:q.regularMarketPrice,chg:q.regularMarketChange,pct:q.regularMarketChangePercent,vol:q.regularMarketVolume,avgVol:q.averageDailyVolume3Month,h52:q.fiftyTwoWeekHigh,l52:q.fiftyTwoWeekLow};});
         }catch(_){}
@@ -304,7 +304,7 @@ export default function App() {
       setLd(newLd);setTs(new Date());
       try{
         const nu=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=%5ENSEI`;
-        const nr=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(nu)}`,{signal:AbortSignal.timeout(5000)});
+        const nr=await fetch(`https://corsproxy.io/?url=${encodeURIComponent(nu)}`,{signal:AbortSignal.timeout(5000)});
         const nj=await nr.json();
         const n=nj?.quoteResponse?.result?.[0];
         if(n)setNifty({price:n.regularMarketPrice,pct:n.regularMarketChangePercent,chg:n.regularMarketChange});
@@ -319,14 +319,14 @@ export default function App() {
     // Yahoo Finance news
     try{
       const url=`https://query1.finance.yahoo.com/v1/finance/search?q=${symbol.replace(".NS","")}+NSE+India&newsCount=5`;
-      const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,{signal:AbortSignal.timeout(8000)});
+      const r=await fetch(`https://corsproxy.io/?url=${encodeURIComponent(url)}`,{signal:AbortSignal.timeout(8000)});
       const j=await r.json();
       (j?.news||[]).forEach(n=>allNews.push({title:n.title,link:n.link,publisher:n.publisher,date:n.providerPublishTime?new Date(n.providerPublishTime*1000).toLocaleDateString():"",source:"Yahoo Finance"}));
     }catch(_){}
     // Economic Times RSS
     try{
       const etUrl=`https://economictimes.indiatimes.com/markets/stocks/news/rssfeeds/2146842.cms`;
-      const r=await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(etUrl)}`,{signal:AbortSignal.timeout(6000)});
+      const r=await fetch(`https://corsproxy.io/?url=${encodeURIComponent(etUrl)}`,{signal:AbortSignal.timeout(6000)});
       const txt=await r.text();
       const parser=new DOMParser();const doc=parser.parseFromString(txt,"text/xml");
       const items=Array.from(doc.querySelectorAll("item")).slice(0,3);
