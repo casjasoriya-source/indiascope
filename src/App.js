@@ -8,9 +8,9 @@ const SCOL = {Banking:"#3b82f6","Power Finance":"#0ea5e9",Finance:"#60a5fa",IT:"
 const CCOL = {"Large Cap":"#60a5fa","Mid Cap":"#fbbf24","Small Cap":"#f87171"};
 
 // ─── FII SECTOR FLOWS (Updated weekly — I will update this manually) ──────────
-const SECTOR_FLOWS = {
-  Banking:{fii:"Buying",dii:"Buying",fiiAmt:"₹4,200Cr",diiAmt:"₹3,100Cr",fiiWk:"↑",diiWk:"↑"},
-  "Power Finance":{fii:"Buying",dii:"Buying",fiiAmt:"₹2,800Cr",diiAmt:"₹1,900Cr",fiiWk:"↑",diiWk:"↑"},
+const FII_FLOW = {
+  Banking:{flow:"Buying",amt:"₹4,200Cr",wk:"↑"},
+  "Power Finance":{flow:"Buying",amt:"₹2,800Cr",wk:"↑"},
   Finance:{flow:"Neutral",amt:"₹800Cr",wk:"→"},
   IT:{flow:"Selling",amt:"₹-3,200Cr",wk:"↓"},
   Pharma:{flow:"Buying",amt:"₹1,800Cr",wk:"↑"},
@@ -26,8 +26,8 @@ const SECTOR_FLOWS = {
   Chemicals:{flow:"Neutral",amt:"₹400Cr",wk:"→"},
   Electronics:{flow:"Buying",amt:"₹800Cr",wk:"↑"},
   Technology:{flow:"Neutral",amt:"₹200Cr",wk:"→"},
-  "Real Estate":{fii:"Buying",dii:"Buying",fiiAmt:"₹1,000Cr",diiAmt:"₹700Cr",fiiWk:"↑",diiWk:"↑"},
-  "Consumer Durables":{fii:"Neutral",dii:"Buying",fiiAmt:"₹400Cr",diiAmt:"₹500Cr",fiiWk:"→",diiWk:"↑"},
+  "Real Estate":{flow:"Buying",amt:"₹1,000Cr",wk:"↑"},
+  "Consumer Durables":{flow:"Neutral",amt:"₹400Cr",wk:"→"},
 };
 
 // ─── 100 STOCKS ───────────────────────────────────────────────────────────────
@@ -172,12 +172,10 @@ function calcPillars(stock, ld) {
   const rMap={"Strong Buy":5,"Buy":4,"Hold":2,"Reduce":1,"Sell":0};
   const p6_rat=rMap[stock.ar]??2;
   let p6_upside=2;
-  const sf2=SECTOR_FLOWS[stock.s];const fii=sf2;
-  const sf=SECTOR_FLOWS[stock.s];
-  const p6_fii=sf?.fii==="Buying"?1:0;
-  const p6_dii=sf?.dii==="Buying"?1:0;
+  const fii=FII_FLOW[stock.s];
+  const p6_fii=fii?.flow==="Buying"?2:fii?.flow==="Selling"?0:1;
   if(ld?.price&&stock.at){const up=(stock.at-ld.price)/ld.price*100;p6_upside=up>35?3:up>25?3:up>15?2:up>8?2:up>0?1:0;}
-  const p6=Math.min(10,p6_rat+p6_upside+p6_fii+p6_dii);
+  const p6=Math.min(10,p6_rat+p6_upside+p6_fii);
   let p7_52w=4,p7_vol=0;
   if(ld?.price&&ld?.h52&&ld?.l52){const range=ld.h52-ld.l52;const pos=range>0?(ld.price-ld.l52)/range:0.5;p7_52w=pos<0.2?5:pos<0.35?4:pos<0.5?3:pos<0.65?2:1;}
   if(ld?.vol&&ld?.avgVol){const vr=ld.vol/ld.avgVol;p7_vol=vr>2.5?3:vr>1.5?2:vr>1.0?1:0;}
@@ -228,15 +226,15 @@ function generateRemark(stock, pillars, rec, upside, peg) {
   const spe=SECTOR_PE[stock.s]||25;
   const best=pillars.reduce((a,b)=>a.score/a.max>b.score/b.max?a:b);
   const worst=pillars.reduce((a,b)=>a.score/a.max<b.score/b.max?a:b);
-  const sf2=SECTOR_FLOWS[stock.s];const fii=sf2;
+  const fii=FII_FLOW[stock.s];
   const opener={"STRONG BUY":`All pillars strong — ${stock.name} is a high-conviction entry.`,"BUY":`${stock.name} presents a clear buying opportunity.`,"HOLD":`${stock.name} is fairly valued — hold or wait for better entry.`,"REDUCE":`${stock.name} showing weakness — consider reducing.`,"SELL":`Multiple red flags for ${stock.name} — exit recommended.`};
   const parts=[opener[rec.label]||""];
   if(best.score/best.max>0.65) parts.push(`Strongest: ${best.name} (${best.score}/${best.max}).`);
   if(peg<1.0) parts.push(`PEG ${peg} = undervalued growth.`);
   else if(peg>2.0) parts.push(`PEG ${peg} = expensive vs growth.`);
   if(stock.pe<spe*0.75) parts.push(`PE ${((1-stock.pe/spe)*100).toFixed(0)}% below sector = undervalued.`);
-  if(sf2?.fii==="Buying") parts.push(`FII+DII buying ${stock.s} sector this week.`);
-  else if(sf2?.fii==="Selling") parts.push(`⚠ FII selling ${stock.s} sector — headwind.`);
+  if(fii?.flow==="Buying") parts.push(`FII buying ${stock.s} sector this week.`);
+  else if(fii?.flow==="Selling") parts.push(`⚠ FII selling ${stock.s} sector — headwind.`);
   if(worst.score/worst.max<0.35) parts.push(`Watch: ${worst.name} (${worst.score}/${worst.max}).`);
   if(upside!=null&&upside>15) parts.push(`Analyst sees ${upside.toFixed(0)}% upside to ₹${stock.at}.`);
   else if(upside!=null&&upside<0) parts.push(`⚠ Above analyst target — limited upside.`);
@@ -245,16 +243,16 @@ function generateRemark(stock, pillars, rec, upside, peg) {
 
 function getFlags(stock, score, live, vr, peg) {
   const risks=[],opps=[];
-  const sf2=SECTOR_FLOWS[stock.s];const fii=sf2;
+  const fii=FII_FLOW[stock.s];
   if(stock.pledged>10) risks.push("⚠ High pledging "+stock.pledged+"%");
   if(stock.prT==="↓") risks.push("⬇ Promoter reducing stake");
   if(stock.de>1.5&&!stock.isB) risks.push("⚠ High debt/equity "+stock.de);
   if(stock.fcf==="L") risks.push("⚠ Poor free cash flow");
-  if(sf2?.fii==="Selling") risks.push("📉 FII selling sector this week");
+  if(fii?.flow==="Selling") risks.push("📉 FII selling sector this week");
   if(stock.ec<5) risks.push("⚠ Inconsistent earnings ("+stock.ec+"/10)");
   if(live?.price&&live.price>live.h52*0.95) risks.push("⚠ Near 52-week high");
   if(stock.prT==="↑") opps.push("⬆ Promoter increasing stake");
-  if(sf2?.fii==="Buying") opps.push("💚 FII buying sector "+fii.amt);
+  if(fii?.flow==="Buying") opps.push("💚 FII buying sector "+fii.amt);
   if(live?.price&&live.price<live.l52*1.1) opps.push("🎯 Near 52-week low — opportunity");
   if(peg<0.8) opps.push("✅ PEG "+peg+" = cheap growth");
   if(stock.pledged===0) opps.push("✅ Zero promoter pledging");
@@ -388,7 +386,6 @@ export default function App() {
             <span style={{fontSize:10,color:"#2a3a55"}}>100 Stocks · 10-Factor · Live</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
-            {fiiDii&&<span style={{fontSize:11,color:"#8899bb",marginRight:4}}>FII <span style={{color:fiiDii.fii>=0?"#34d399":"#ff5252",fontWeight:700}}>{fiiDii.fii>=0?"+":""}{fiiDii.fii?.toFixed(0)}Cr</span> DII <span style={{color:fiiDii.dii>=0?"#60a5fa":"#ff5252",fontWeight:700}}>{fiiDii.dii>=0?"+":""}{fiiDii.dii?.toFixed(0)}Cr</span></span>}
             {nifty&&<span style={{fontSize:12,color:nifty.pct>=0?"#69f0ae":"#ff5252",fontWeight:700,cursor:"pointer"}} onClick={()=>setFiiPanelOpen(!fiiPanelOpen)}>Nifty ₹{fmt(nifty.price,0)} {nifty.pct>=0?"+":""}{fmt(nifty.pct,2)}% · 📊 FII</span>}
             {loading&&<span style={{fontSize:11,color:"#3b82f6",display:"flex",alignItems:"center",gap:4}}><span style={{width:6,height:6,borderRadius:"50%",background:"#3b82f6",display:"inline-block",animation:"blink 1s infinite"}}/>Auto ↻</span>}
             {!loading&&ts&&<span style={{fontSize:10,color:"#2a3a55"}}>↺ {ts.toLocaleTimeString()}</span>}
@@ -516,7 +513,7 @@ export default function App() {
             </thead>
             <tbody>
               {rows.map((s,i)=>{
-                const sf3=SECTOR_FLOWS[s.s];const fii=sf3;
+                const fii=FII_FLOW[s.s];
                 const daysToResult=s.rd?(new Date(s.rd+", 2026")-new Date())/86400000:999;
                 return(
                   <tr key={s.id} onClick={()=>{setSel(s);setMTab("overview");setNews([]);}} style={{cursor:"pointer"}}
@@ -529,7 +526,7 @@ export default function App() {
                     </td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17",fontSize:10,fontWeight:600,color:CCOL[s.cap]||"#60a5fa",whiteSpace:"nowrap"}}>{s.cap.replace(" Cap","")}</td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
-                      <span style={{fontSize:10,fontWeight:700,color:sf2?.fii==="Buying"?"#34d399":sf2?.fii==="Selling"?"#f87171":"#4a6080"}}>{fii?.wk||"→"}</span>
+                      <span style={{fontSize:10,fontWeight:700,color:fii?.flow==="Buying"?"#34d399":fii?.flow==="Selling"?"#f87171":"#4a6080"}}>{fii?.wk||"→"}</span>
                     </td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
                       {s.live?.price?<><div style={{fontWeight:800,color:"#e0ecff",fontSize:12}}>₹{fmt(s.live.price,1)}</div><div style={{fontSize:9,color:s.live.chg>=0?"#69f0ae":"#ff5252"}}>{s.live.chg>=0?"+":""}{fmt(s.live.pct,2)}%</div></>:<span style={{color:"#1e2e45"}}>—</span>}
