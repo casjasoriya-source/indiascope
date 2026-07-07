@@ -211,7 +211,35 @@ const SWING_EXTRA=[
   {sym:"TRENT.NS",name:"Trent Zudio",s:"Consumer",cap:"Large Cap"},
   {sym:"JSWSTEEL.NS",name:"JSW Steel",s:"Metals",cap:"Large Cap"},
   {sym:"HINDPETRO.NS",name:"HPCL",s:"Energy",cap:"Large Cap"},
+  {sym:"TRENT.NS",name:"Trent Zudio",s:"Consumer",cap:"Large Cap"},
+  {sym:"ZOMATO.NS",name:"Zomato",s:"Consumer",cap:"Large Cap"},
+  {sym:"TECHM.NS",name:"Tech Mahindra",s:"IT",cap:"Large Cap"},
+  {sym:"LTTS.NS",name:"L&T Technology Services",s:"IT",cap:"Large Cap"},
+  {sym:"JUBLPHARMA.NS",name:"Jubilant Pharmova",s:"Pharma",cap:"Mid Cap"},
+  {sym:"IPCALAB.NS",name:"IPCA Laboratories",s:"Pharma",cap:"Mid Cap"},
+  {sym:"TATACOMM.NS",name:"Tata Communications",s:"Telecom",cap:"Large Cap"},
+  {sym:"IDEA.NS",name:"Vodafone Idea",s:"Telecom",cap:"Large Cap"},
+  {sym:"INDUSTOWER.NS",name:"Indus Towers",s:"Telecom",cap:"Large Cap"},
+  {sym:"DLF.NS",name:"DLF",s:"Real Estate",cap:"Large Cap"},
+  {sym:"LODHA.NS",name:"Macrotech Developers",s:"Real Estate",cap:"Large Cap"},
+  {sym:"CANBK.NS",name:"Canara Bank",s:"Banking",cap:"Large Cap"},
+  {sym:"PNB.NS",name:"Punjab National Bank",s:"Banking",cap:"Large Cap"},
+  {sym:"BANKBARODA.NS",name:"Bank of Baroda",s:"Banking",cap:"Large Cap"},
+  {sym:"UNIONBANK.NS",name:"Union Bank of India",s:"Banking",cap:"Large Cap"},
+  {sym:"MANAPPURAM.NS",name:"Manappuram Finance",s:"Finance",cap:"Mid Cap"},
+  {sym:"STARHEALTH.NS",name:"Star Health Insurance",s:"Insurance",cap:"Large Cap"},
+  {sym:"NESTLEIND.NS",name:"Nestle India",s:"FMCG",cap:"Large Cap"},
+  {sym:"BRITANNIA.NS",name:"Britannia Industries",s:"FMCG",cap:"Large Cap"},
+  {sym:"DABUR.NS",name:"Dabur India",s:"FMCG",cap:"Large Cap"},
+  {sym:"GODREJCP.NS",name:"Godrej Consumer",s:"FMCG",cap:"Large Cap"},
+  {sym:"SCHAEFFLER.NS",name:"Schaeffler India",s:"Auto",cap:"Mid Cap"},
+  {sym:"EXIDEIND.NS",name:"Exide Industries",s:"Auto",cap:"Mid Cap"},
+  {sym:"SIEMENS.NS",name:"Siemens India",s:"Infrastructure",cap:"Large Cap"},
+  {sym:"ABB.NS",name:"ABB India",s:"Infrastructure",cap:"Large Cap"},
+  {sym:"KAJARIACER.NS",name:"Kajaria Ceramics",s:"Infrastructure",cap:"Mid Cap"},
+  {sym:"MFSL.NS",name:"Max Financial Services",s:"Insurance",cap:"Large Cap"},
 ];
+
 const ALL_SWING=[...STOCKS,...SWING_EXTRA];
 
 
@@ -486,7 +514,7 @@ export default function App() {
       const lv=allLd[s.sym];
       if(!lv||!lv.price||!lv.vol||!lv.avgVol)return null;
       const vr2=lv.vol/lv.avgVol;
-      if(vr2<1.2)return null;
+      if(vr2<1.0)return null;
       const pc2=lv.pct||0;
       const sw=(vr2>3?35:vr2>2?28:vr2>1.5?20:12)+(pc2>3?25:pc2>2?20:pc2>1?15:pc2>0?8:0)+(lv.chg>0?15:5);
       const lvl=getPriceLevels(s,lv);
@@ -712,7 +740,7 @@ export default function App() {
           {SECTORS.map(sec=><button key={sec} onClick={()=>setSector(sec)} style={{background:sector===sec?`${SCOL[sec]||"#3b82f6"}22`:"transparent",border:`1px solid ${sector===sec?(SCOL[sec]||"#3b82f6"):"#141e30"}`,borderRadius:99,padding:"3px 10px",color:sector===sec?(SCOL[sec]||"#60a5fa"):"#3d5070",cursor:"pointer",fontSize:9.5,fontWeight:sector===sec?700:400,whiteSpace:"nowrap",flexShrink:0}}>{sec}</button>)}
         </div>
         <div style={{padding:"0 16px 8px",display:"flex",gap:7,flexWrap:"wrap",alignItems:"center"}}>
-          <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search…" style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:7,padding:"7px 11px",color:"#c8d8f0",fontSize:12,flex:1,minWidth:150,outline:"none"}}/>
+          <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search any stock — type name or symbol (e.g. Reliance, SBIN)" style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:7,padding:"7px 11px",color:"#c8d8f0",fontSize:12,flex:1,minWidth:150,outline:"none"}}/>
           <div style={{display:"flex",gap:3,flexWrap:"wrap"}}>{[["score","Score"],["peg","PEG"],["roe","ROE"],["roce","ROCE"],["pe","P/E"],["evEb","EV/EBITDA"],["divY","Div%"],["upside","Upside"]].map(([k,l])=>sBtn(k,l))}</div>
         </div>
         <div style={{overflowX:"auto",padding:"0 16px 80px"}}>
@@ -786,33 +814,45 @@ export default function App() {
       {/* SWING ALERTS */}
       {mainTab==="swing"&&(
         <div style={{padding:"14px"}}>
-          <div style={{fontSize:11,color:"#4a6080",marginBottom:10,background:"#0a0f1e",padding:"10px 14px",borderRadius:8,border:"1px solid #141e30"}}>⚡ <strong style={{color:"#f59e0b"}}>Swing Scanner — 300 stocks</strong>, refreshes every 3 min. Buy today, exit 1-3 days.<br/>Volume — sorted highest volume vs 3M average. Entry window: today's session only.</div>
-          {swingRows.length===0?<div style={{color:"#2a3a55",padding:24,textAlign:"center",background:"#0a0f1e",borderRadius:12}}>No swing alerts. Click Refresh after 9:15 AM when market is open.</div>:(
-            swingRows.map((s,i)=>(
-              <div key={s.id} onClick={()=>{setSel(s);setMTab("targets");setNews([]);}} style={{background:"#0a0f1e",border:`1px solid ${s.rec.ring}`,borderRadius:11,padding:"13px 15px",cursor:"pointer",marginBottom:10,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
-                <div style={{flex:1}}>
-                  <div style={{fontWeight:800,color:"#e0ecff",fontSize:14}}>{i+1}. {s.name} <span style={{fontSize:11,color:CCOL[s.cap]||"#60a5fa"}}>({s.cap})</span></div>
-                  <div style={{fontSize:11,color:"#4a6080",marginTop:4,lineHeight:1.5,maxWidth:480}}>{s.remark}</div>
-                  {s.flags.opps.length>0&&<div style={{display:"flex",gap:5,marginTop:5,flexWrap:"wrap"}}>{s.flags.opps.slice(0,3).map((f,fi)=><span key={fi} style={{background:"#001510",color:"#34d399",border:"1px solid #34d39933",fontSize:9,padding:"2px 6px",borderRadius:3}}>{f}</span>)}</div>}
+          <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:8,padding:"10px 14px",marginBottom:12,fontSize:11,color:"#4a6080",lineHeight:1.6}}>
+            ⚡ <strong style={{color:"#f59e0b"}}>Live Swing Scanner — 300 stocks</strong> · Top 20 by volume surge + momentum · Refreshes every 3 min · Buy today, exit in 1–3 days
+          </div>
+          {swingRows.length===0
+            ?<div style={{color:"#2a3a55",padding:28,textAlign:"center",background:"#0a0f1e",borderRadius:12,fontSize:12}}>No swing signals yet. Market may be closed or data loading.<br/>Click Refresh at 9:15 AM when market opens.</div>
+            :swingRows.map((s,i)=>{
+              const rec=s.rec||{label:"BUY",c:"#69f0ae",bg:"#001a08",ring:"#69f0ae44"};
+              const cap=s.cap||"";
+              const lvl=s.levels||null;
+              return(
+                <div key={s.sym||String(i)} onClick={()=>{setSel({...s,pillars:s.pillars||[],cats:[{l:"Swing",c:"#f59e0b",bg:"#1a1000"}],remark:s.remark||("Vol "+(s.vr||0).toFixed(1)+"x avg · momentum pick"),flags:s.flags||{risks:[],opps:[]}});setMTab("targets");setNews([]);}} style={{background:"#0a0f1e",border:"2px solid #f59e0b33",borderRadius:11,padding:"12px 14px",cursor:"pointer",marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+                  <div style={{flex:1,minWidth:200}}>
+                    <div style={{fontWeight:800,color:"#e0ecff",fontSize:14}}>{i+1}. {s.name}</div>
+                    <div style={{fontSize:10,color:"#4a6080",marginTop:3}}>
+                      <span style={{color:"#f59e0b",fontWeight:700}}>Volume {(s.vr||0).toFixed(1)}× avg</span>
+                      {" · "}
+                      <span style={{color:((s.pct||0)>=0?"#69f0ae":"#ff5252"),fontWeight:700}}>{(s.pct||0)>=0?"+":""}{(s.pct||0).toFixed(2)}% today</span>
+                      {cap&&<span style={{color:"#3d5070"}}>{" · "}{cap}</span>}
+                    </div>
+                  </div>
+                  <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
+                    {s.live&&s.live.price&&<div style={{textAlign:"center"}}>
+                      <div style={{fontSize:16,fontWeight:800,color:"#e0ecff"}}>₹{fmt(s.live.price,1)}</div>
+                      <div style={{fontSize:9,color:(s.live.chg||0)>=0?"#69f0ae":"#ff5252"}}>{(s.live.chg||0)>=0?"+":""}{fmt(s.live.pct,2)}%</div>
+                    </div>}
+                    {lvl&&<div style={{background:"#070b14",borderRadius:7,padding:"8px 12px",textAlign:"right"}}>
+                      <div style={{fontSize:11,color:"#69f0ae",fontWeight:700}}>🟢 Buy: {lvl.buyZone}</div>
+                      <div style={{fontSize:11,color:"#4ade80"}}>Target: {lvl.swing.target} ({lvl.swing.gain})</div>
+                      <div style={{fontSize:10,color:"#ff5252"}}>Stop Loss: {lvl.swing.stop}</div>
+                      <div style={{fontSize:9,color:"#2a3a55"}}>Exit within {lvl.swing.duration}</div>
+                    </div>}
+                  </div>
                 </div>
-                <div style={{display:"flex",gap:10,flexWrap:"wrap",alignItems:"center"}}>
-                  <div style={{textAlign:"center"}}><div style={{fontSize:18,fontWeight:900,color:"#f59e0b"}}>{s.vr?.toFixed(1)}×</div><div style={{fontSize:9,color:"#2a3a55"}}>Volume</div></div>
-                  {s.live?.price&&<div style={{textAlign:"center"}}><div style={{fontSize:15,fontWeight:800,color:"#e0ecff"}}>₹{fmt(s.live.price,1)}</div><div style={{fontSize:9,color:s.live.chg>=0?"#69f0ae":"#ff5252"}}>{s.live.chg>=0?"+":""}{fmt(s.live.pct,2)}%</div></div>}
-                  {s.levels&&<div style={{textAlign:"center"}}><div style={{fontSize:12,fontWeight:700,color:"#4ade80"}}>T: {s.levels.swing.target}</div><div style={{fontSize:10,color:"#ff5252"}}>SL: {s.levels.swing.stop}</div><div style={{fontSize:9,color:"#2a3a55"}}>R:R {s.levels.swing.rr}</div></div>}
-                  {s.levels&&<div style={{background:"#070b14",borderRadius:6,padding:"7px 10px",textAlign:"right",minWidth:140}}>
-                  <div style={{fontSize:10,color:"#69f0ae",fontWeight:700}}>Buy: {s.levels.buyZone}</div>
-                  <div style={{fontSize:10,color:"#4ade80"}}>Target: {s.levels.swing.target}</div>
-                  <div style={{fontSize:10,color:"#ff5252"}}>Stop: {s.levels.swing.stop}</div>
-                  <div style={{fontSize:9,color:"#2a3a55"}}>Exit in {s.levels.swing.duration}</div>
-                </div>}
-                </div>
-              </div>
-            ))
-          )}
+              );
+            })
+          }
         </div>
       )}
 
-      {/* PORTFOLIO */}
       {mainTab==="portfolio"&&(
         <div style={{padding:"14px"}}>
           <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:11,padding:14,marginBottom:14}}>
@@ -986,6 +1026,12 @@ export default function App() {
 
               {/* ALL DATA */}
               {mTab==="data"&&(
+                <div>
+                {!sel.pe&&<div style={{background:"#0a0f1e",borderRadius:8,padding:"12px 14px",marginBottom:12,textAlign:"center"}}>
+                  <div style={{color:"#8899bb",fontSize:11,marginBottom:8}}>Extended universe stock — full fundamental data not pre-loaded yet.</div>
+                  <a href={"https://www.screener.in/company/"+sel.sym.replace(".NS","")+"/"} target="_blank" rel="noopener noreferrer" style={{display:"inline-block",background:"#1a2540",border:"1px solid #3b82f6",borderRadius:6,padding:"7px 14px",color:"#60a5fa",textDecoration:"none",fontSize:11,fontWeight:600}}>View Full Data on Screener.in ↗</a>
+                  <div style={{fontSize:10,color:"#2a3a55",marginTop:6}}>Mention this stock on Monday to add it to core 100.</div>
+                </div>}
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
                   {[
                     {l:"P/E Ratio",v:sel.pe,sub:`Sector: ${SECTOR_PE[sel.s]||"—"}`,ok:sel.pe<(SECTOR_PE[sel.s]||999)},
@@ -1014,6 +1060,7 @@ export default function App() {
                     </div>
                   ))}
                 </div>
+</div>
               )}
             </div>
             <div style={{padding:"0 18px 12px",fontSize:9.5,color:"#141e30",borderTop:"1px solid #0d1525",paddingTop:10,lineHeight:1.6}}>
