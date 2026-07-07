@@ -8,28 +8,27 @@ const SCOL = {Banking:"#3b82f6","Power Finance":"#0ea5e9",Finance:"#60a5fa",IT:"
 const CCOL = {"Large Cap":"#60a5fa","Mid Cap":"#fbbf24","Small Cap":"#f87171"};
 
 // ─── FII + DII SECTOR FLOWS ─────────────────────────────────────────────────
-const SECTOR_FLOWS={
-  Banking:{fii:"Buying",dii:"Buying",fiiAmt:"₹4,200Cr",diiAmt:"₹3,100Cr",fiiWk:"↑",diiWk:"↑"},
-  "Power Finance":{fii:"Buying",dii:"Buying",fiiAmt:"₹2,800Cr",diiAmt:"₹1,900Cr",fiiWk:"↑",diiWk:"↑"},
-  Finance:{fii:"Neutral",dii:"Buying",fiiAmt:"₹800Cr",diiAmt:"₹1,200Cr",fiiWk:"→",diiWk:"↑"},
-  IT:{fii:"Selling",dii:"Neutral",fiiAmt:"₹-3,200Cr",diiAmt:"₹400Cr",fiiWk:"↓",diiWk:"→"},
-  Pharma:{fii:"Buying",dii:"Buying",fiiAmt:"₹1,800Cr",diiAmt:"₹2,100Cr",fiiWk:"↑",diiWk:"↑"},
-  FMCG:{fii:"Neutral",dii:"Neutral",fiiAmt:"₹400Cr",diiAmt:"₹600Cr",fiiWk:"→",diiWk:"→"},
-  Auto:{fii:"Buying",dii:"Buying",fiiAmt:"₹1,200Cr",diiAmt:"₹1,800Cr",fiiWk:"↑",diiWk:"↑"},
-  Energy:{fii:"Neutral",dii:"Buying",fiiAmt:"₹600Cr",diiAmt:"₹1,400Cr",fiiWk:"→",diiWk:"↑"},
-  Power:{fii:"Buying",dii:"Buying",fiiAmt:"₹1,600Cr",diiAmt:"₹2,200Cr",fiiWk:"↑",diiWk:"↑"},
-  Infrastructure:{fii:"Buying",dii:"Buying",fiiAmt:"₹2,200Cr",diiAmt:"₹2,800Cr",fiiWk:"↑",diiWk:"↑"},
-  Metals:{fii:"Selling",dii:"Neutral",fiiAmt:"₹-800Cr",diiAmt:"₹200Cr",fiiWk:"↓",diiWk:"→"},
-  Telecom:{fii:"Buying",dii:"Buying",fiiAmt:"₹1,400Cr",diiAmt:"₹900Cr",fiiWk:"↑",diiWk:"↑"},
-  Consumer:{fii:"Neutral",dii:"Buying",fiiAmt:"₹200Cr",diiAmt:"₹800Cr",fiiWk:"→",diiWk:"↑"},
-  Insurance:{fii:"Neutral",dii:"Neutral",fiiAmt:"₹600Cr",diiAmt:"₹400Cr",fiiWk:"→",diiWk:"→"},
-  Chemicals:{fii:"Neutral",dii:"Neutral",fiiAmt:"₹400Cr",diiAmt:"₹300Cr",fiiWk:"→",diiWk:"→"},
-  Electronics:{fii:"Buying",dii:"Buying",fiiAmt:"₹800Cr",diiAmt:"₹600Cr",fiiWk:"↑",diiWk:"↑"},
-  Technology:{fii:"Neutral",dii:"Neutral",fiiAmt:"₹200Cr",diiAmt:"₹100Cr",fiiWk:"→",diiWk:"→"},
-  "Real Estate":{fii:"Buying",dii:"Buying",fiiAmt:"₹1,000Cr",diiAmt:"₹700Cr",fiiWk:"↑",diiWk:"↑"},
-  "Consumer Durables":{fii:"Neutral",dii:"Buying",fiiAmt:"₹400Cr",diiAmt:"₹500Cr",fiiWk:"→",diiWk:"↑"},
+const SF={
+  Banking:{fi:"Buying",di:"Buying",fa:"₹4,200Cr",da:"₹3,100Cr",fw:"↑",dw:"↑"},
+  "Power Finance":{fi:"Buying",di:"Buying",fa:"₹2,800Cr",da:"₹1,900Cr",fw:"↑",dw:"↑"},
+  Finance:{fi:"Neutral",di:"Buying",fa:"₹800Cr",da:"₹1,200Cr",fw:"→",dw:"↑"},
+  IT:{fi:"Selling",di:"Neutral",fa:"₹-3,200Cr",da:"₹400Cr",fw:"↓",dw:"→"},
+  Pharma:{fi:"Buying",di:"Buying",fa:"₹1,800Cr",da:"₹2,100Cr",fw:"↑",dw:"↑"},
+  FMCG:{fi:"Neutral",di:"Neutral",fa:"₹400Cr",da:"₹600Cr",fw:"→",dw:"→"},
+  Auto:{fi:"Buying",di:"Buying",fa:"₹1,200Cr",da:"₹1,800Cr",fw:"↑",dw:"↑"},
+  Energy:{fi:"Neutral",di:"Buying",fa:"₹600Cr",da:"₹1,400Cr",fw:"→",dw:"↑"},
+  Power:{fi:"Buying",di:"Buying",fa:"₹1,600Cr",da:"₹2,200Cr",fw:"↑",dw:"↑"},
+  Infrastructure:{fi:"Buying",di:"Buying",fa:"₹2,200Cr",da:"₹2,800Cr",fw:"↑",dw:"↑"},
+  Metals:{fi:"Selling",di:"Neutral",fa:"₹-800Cr",da:"₹200Cr",fw:"↓",dw:"→"},
+  Telecom:{fi:"Buying",di:"Buying",fa:"₹1,400Cr",da:"₹900Cr",fw:"↑",dw:"↑"},
+  Consumer:{fi:"Neutral",di:"Buying",fa:"₹200Cr",da:"₹800Cr",fw:"→",dw:"↑"},
+  Insurance:{fi:"Neutral",di:"Neutral",fa:"₹600Cr",da:"₹400Cr",fw:"→",dw:"→"},
+  Chemicals:{fi:"Neutral",di:"Neutral",fa:"₹400Cr",da:"₹300Cr",fw:"→",dw:"→"},
+  Electronics:{fi:"Buying",di:"Buying",fa:"₹800Cr",da:"₹600Cr",fw:"↑",dw:"↑"},
+  Technology:{fi:"Neutral",di:"Neutral",fa:"₹200Cr",da:"₹100Cr",fw:"→",dw:"→"},
+  "Real Estate":{fi:"Buying",di:"Buying",fa:"₹1,000Cr",da:"₹700Cr",fw:"↑",dw:"↑"},
+  "Consumer Durables":{fi:"Neutral",di:"Buying",fa:"₹400Cr",da:"₹500Cr",fw:"→",dw:"↑"},
 };
-
 
 // ─── 100 STOCKS ───────────────────────────────────────────────────────────────
 // Fields: sym,name,s=sector,cap,pe,pb,de,roe,roce,divY,revG,profG,
@@ -139,47 +138,82 @@ const STOCKS = [
   {id:100,sym:"PERSISTENT.NS",name:"Persistent Systems",s:"IT",cap:"Mid Cap",pe:55.8,pb:14.5,de:0.0,roe:28.4,roce:27.2,divY:0.6,revG:32,profG:38,prHold:31,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:7500,isB:false,prT:"→",ec:9,rd:"Jul 22",evEb:42,roic:"H",wce:"H",note:"Fastest growing mid-cap IT. 32% revenue CAGR. GenAI+digital. Premium justified by growth."},
 ];
 
-// 200 extra stocks for swing universe
 const SWING_EXTRA=[
-  {sym:"EICHERMOT.NS",name:"Eicher Motors",s:"Auto"},{sym:"M&M.NS",name:"Mahindra & Mahindra",s:"Auto"},
-  {sym:"TVSMOTOR.NS",name:"TVS Motor",s:"Auto"},{sym:"ASHOKLEY.NS",name:"Ashok Leyland",s:"Auto"},
-  {sym:"MOTHERSON.NS",name:"Motherson Sumi",s:"Auto"},{sym:"BOSCHLTD.NS",name:"Bosch India",s:"Auto"},
-  {sym:"FEDERALBNK.NS",name:"Federal Bank",s:"Banking"},{sym:"BANDHANBNK.NS",name:"Bandhan Bank",s:"Banking"},
-  {sym:"AUBANK.NS",name:"AU Small Finance Bank",s:"Banking"},{sym:"RBLBANK.NS",name:"RBL Bank",s:"Banking"},
-  {sym:"MPHASIS.NS",name:"Mphasis",s:"IT"},{sym:"OFSS.NS",name:"Oracle Financial",s:"IT"},
-  {sym:"KPITTECH.NS",name:"KPIT Technologies",s:"IT"},{sym:"CYIENT.NS",name:"Cyient",s:"IT"},
-  {sym:"TATAELXSI.NS",name:"Tata Elxsi",s:"IT"},{sym:"HAPPSTMNDS.NS",name:"Happiest Minds",s:"IT"},
-  {sym:"ALKEM.NS",name:"Alkem Labs",s:"Pharma"},{sym:"TORNTPHARM.NS",name:"Torrent Pharma",s:"Pharma"},
-  {sym:"AUROPHARMA.NS",name:"Aurobindo Pharma",s:"Pharma"},{sym:"MANKIND.NS",name:"Mankind Pharma",s:"Pharma"},
-  {sym:"NATCO.NS",name:"Natco Pharma",s:"Pharma"},{sym:"LAURUS.NS",name:"Laurus Labs",s:"Pharma"},
-  {sym:"GLAND.NS",name:"Gland Pharma",s:"Pharma"},{sym:"METROPOLIS.NS",name:"Metropolis Healthcare",s:"Pharma"},
-  {sym:"COLPAL.NS",name:"Colgate-Palmolive",s:"FMCG"},{sym:"EMAMILTD.NS",name:"Emami",s:"FMCG"},
-  {sym:"VARUNBEV.NS",name:"Varun Beverages",s:"FMCG"},{sym:"TATACONSUM.NS",name:"Tata Consumer",s:"FMCG"},
-  {sym:"CUMMINSIND.NS",name:"Cummins India",s:"Infrastructure"},{sym:"THERMAX.NS",name:"Thermax",s:"Infrastructure"},
-  {sym:"KEC.NS",name:"KEC International",s:"Infrastructure"},{sym:"BEML.NS",name:"BEML",s:"Infrastructure"},
-  {sym:"GRSE.NS",name:"Garden Reach Shipbuilders",s:"Infrastructure"},{sym:"DATAPATTNS.NS",name:"Data Patterns",s:"Electronics"},
-  {sym:"ADANIGREEN.NS",name:"Adani Green",s:"Power"},{sym:"CESC.NS",name:"CESC",s:"Power"},
-  {sym:"TORNTPOWER.NS",name:"Torrent Power",s:"Power"},{sym:"SJVN.NS",name:"SJVN",s:"Power"},
-  {sym:"JSWENERGY.NS",name:"JSW Energy",s:"Power"},{sym:"SAIL.NS",name:"SAIL",s:"Metals"},
-  {sym:"NMDC.NS",name:"NMDC",s:"Metals"},{sym:"HINDZINC.NS",name:"Hindustan Zinc",s:"Metals"},
-  {sym:"VEDL.NS",name:"Vedanta",s:"Metals"},{sym:"NATIONALUM.NS",name:"National Aluminium",s:"Metals"},
-  {sym:"NAVINFLUOR.NS",name:"Navin Fluorine",s:"Chemicals"},{sym:"VINATI.NS",name:"Vinati Organics",s:"Chemicals"},
-  {sym:"ATUL.NS",name:"Atul",s:"Chemicals"},{sym:"CLEAN.NS",name:"Clean Science",s:"Chemicals"},
-  {sym:"NYKAA.NS",name:"Nykaa",s:"Consumer"},{sym:"PAGEIND.NS",name:"Page Industries",s:"Consumer"},
-  {sym:"MANYAVAR.NS",name:"Vedant Fashions",s:"Consumer"},{sym:"METRO.NS",name:"Metro Brands",s:"Consumer"},
-  {sym:"BATA.NS",name:"Bata India",s:"Consumer"},{sym:"DMART.NS",name:"Avenue Supermarts",s:"Consumer"},
-  {sym:"CROMPTON.NS",name:"Crompton Consumer",s:"Consumer Durables"},{sym:"VGUARD.NS",name:"V-Guard",s:"Consumer Durables"},
-  {sym:"PHOENIXLTD.NS",name:"Phoenix Mills",s:"Real Estate"},{sym:"BRIGADE.NS",name:"Brigade Enterprises",s:"Real Estate"},
-  {sym:"SOBHA.NS",name:"Sobha Developers",s:"Real Estate"},{sym:"PAYTM.NS",name:"Paytm",s:"Technology"},
-  {sym:"POLICYBZR.NS",name:"PB Fintech",s:"Finance"},{sym:"360ONE.NS",name:"360 ONE WAM",s:"Finance"},
-  {sym:"MOTILALOFS.NS",name:"Motilal Oswal",s:"Finance"},{sym:"CONCOR.NS",name:"Container Corp",s:"Infrastructure"},
-  {sym:"DELHIVERY.NS",name:"Delhivery",s:"Infrastructure"},{sym:"TIINDIA.NS",name:"Tube Investments",s:"Auto"},
-  {sym:"AMBER.NS",name:"Amber Enterprises",s:"Electronics"},{sym:"BPCL.NS",name:"BPCL",s:"Energy"},
-  {sym:"IOC.NS",name:"Indian Oil Corp",s:"Energy"},{sym:"GAIL.NS",name:"GAIL India",s:"Energy"},
-  {sym:"HINDPETRO.NS",name:"HPCL",s:"Energy"},{sym:"NAUKRI.NS",name:"Info Edge",s:"Technology"},
-  {sym:"TRENT.NS",name:"Trent Zudio",s:"Consumer"},{sym:"JSWSTEEL.NS",name:"JSW Steel",s:"Metals"},
+  {sym:"EICHERMOT.NS",name:"Eicher Motors",s:"Auto",cap:"Large Cap"},
+  {sym:"M&M.NS",name:"Mahindra & Mahindra",s:"Auto",cap:"Large Cap"},
+  {sym:"TVSMOTOR.NS",name:"TVS Motor",s:"Auto",cap:"Large Cap"},
+  {sym:"ASHOKLEY.NS",name:"Ashok Leyland",s:"Auto",cap:"Large Cap"},
+  {sym:"MOTHERSON.NS",name:"Motherson Sumi",s:"Auto",cap:"Mid Cap"},
+  {sym:"BOSCHLTD.NS",name:"Bosch India",s:"Auto",cap:"Large Cap"},
+  {sym:"FEDERALBNK.NS",name:"Federal Bank",s:"Banking",cap:"Mid Cap"},
+  {sym:"BANDHANBNK.NS",name:"Bandhan Bank",s:"Banking",cap:"Large Cap"},
+  {sym:"AUBANK.NS",name:"AU Small Finance Bank",s:"Banking",cap:"Mid Cap"},
+  {sym:"RBLBANK.NS",name:"RBL Bank",s:"Banking",cap:"Mid Cap"},
+  {sym:"MPHASIS.NS",name:"Mphasis",s:"IT",cap:"Large Cap"},
+  {sym:"OFSS.NS",name:"Oracle Financial",s:"IT",cap:"Large Cap"},
+  {sym:"KPITTECH.NS",name:"KPIT Technologies",s:"IT",cap:"Mid Cap"},
+  {sym:"CYIENT.NS",name:"Cyient",s:"IT",cap:"Mid Cap"},
+  {sym:"TATAELXSI.NS",name:"Tata Elxsi",s:"IT",cap:"Mid Cap"},
+  {sym:"HAPPSTMNDS.NS",name:"Happiest Minds",s:"IT",cap:"Small Cap"},
+  {sym:"ALKEM.NS",name:"Alkem Labs",s:"Pharma",cap:"Large Cap"},
+  {sym:"TORNTPHARM.NS",name:"Torrent Pharma",s:"Pharma",cap:"Large Cap"},
+  {sym:"AUROPHARMA.NS",name:"Aurobindo Pharma",s:"Pharma",cap:"Large Cap"},
+  {sym:"MANKIND.NS",name:"Mankind Pharma",s:"Pharma",cap:"Large Cap"},
+  {sym:"NATCO.NS",name:"Natco Pharma",s:"Pharma",cap:"Mid Cap"},
+  {sym:"LAURUS.NS",name:"Laurus Labs",s:"Pharma",cap:"Mid Cap"},
+  {sym:"GLAND.NS",name:"Gland Pharma",s:"Pharma",cap:"Mid Cap"},
+  {sym:"COLPAL.NS",name:"Colgate-Palmolive",s:"FMCG",cap:"Large Cap"},
+  {sym:"EMAMILTD.NS",name:"Emami",s:"FMCG",cap:"Mid Cap"},
+  {sym:"VARUNBEV.NS",name:"Varun Beverages",s:"FMCG",cap:"Large Cap"},
+  {sym:"TATACONSUM.NS",name:"Tata Consumer",s:"FMCG",cap:"Large Cap"},
+  {sym:"CUMMINSIND.NS",name:"Cummins India",s:"Infrastructure",cap:"Large Cap"},
+  {sym:"THERMAX.NS",name:"Thermax",s:"Infrastructure",cap:"Large Cap"},
+  {sym:"KEC.NS",name:"KEC International",s:"Infrastructure",cap:"Mid Cap"},
+  {sym:"BEML.NS",name:"BEML",s:"Infrastructure",cap:"Mid Cap"},
+  {sym:"GRSE.NS",name:"Garden Reach Shipbuilders",s:"Infrastructure",cap:"Mid Cap"},
+  {sym:"DATAPATTNS.NS",name:"Data Patterns",s:"Electronics",cap:"Small Cap"},
+  {sym:"ADANIGREEN.NS",name:"Adani Green",s:"Power",cap:"Large Cap"},
+  {sym:"CESC.NS",name:"CESC",s:"Power",cap:"Mid Cap"},
+  {sym:"TORNTPOWER.NS",name:"Torrent Power",s:"Power",cap:"Large Cap"},
+  {sym:"SJVN.NS",name:"SJVN",s:"Power",cap:"Mid Cap"},
+  {sym:"JSWENERGY.NS",name:"JSW Energy",s:"Power",cap:"Large Cap"},
+  {sym:"SAIL.NS",name:"SAIL",s:"Metals",cap:"Large Cap"},
+  {sym:"NMDC.NS",name:"NMDC",s:"Metals",cap:"Large Cap"},
+  {sym:"HINDZINC.NS",name:"Hindustan Zinc",s:"Metals",cap:"Large Cap"},
+  {sym:"VEDL.NS",name:"Vedanta",s:"Metals",cap:"Large Cap"},
+  {sym:"NATIONALUM.NS",name:"National Aluminium",s:"Metals",cap:"Large Cap"},
+  {sym:"NAVINFLUOR.NS",name:"Navin Fluorine",s:"Chemicals",cap:"Mid Cap"},
+  {sym:"VINATI.NS",name:"Vinati Organics",s:"Chemicals",cap:"Mid Cap"},
+  {sym:"ATUL.NS",name:"Atul",s:"Chemicals",cap:"Mid Cap"},
+  {sym:"CLEAN.NS",name:"Clean Science",s:"Chemicals",cap:"Mid Cap"},
+  {sym:"NYKAA.NS",name:"Nykaa",s:"Consumer",cap:"Large Cap"},
+  {sym:"PAGEIND.NS",name:"Page Industries",s:"Consumer",cap:"Large Cap"},
+  {sym:"MANYAVAR.NS",name:"Vedant Fashions",s:"Consumer",cap:"Large Cap"},
+  {sym:"METRO.NS",name:"Metro Brands",s:"Consumer",cap:"Mid Cap"},
+  {sym:"BATA.NS",name:"Bata India",s:"Consumer",cap:"Mid Cap"},
+  {sym:"DMART.NS",name:"Avenue Supermarts",s:"Consumer",cap:"Large Cap"},
+  {sym:"CROMPTON.NS",name:"Crompton Consumer",s:"Consumer Durables",cap:"Mid Cap"},
+  {sym:"VGUARD.NS",name:"V-Guard Industries",s:"Consumer Durables",cap:"Mid Cap"},
+  {sym:"PHOENIXLTD.NS",name:"Phoenix Mills",s:"Real Estate",cap:"Large Cap"},
+  {sym:"BRIGADE.NS",name:"Brigade Enterprises",s:"Real Estate",cap:"Mid Cap"},
+  {sym:"SOBHA.NS",name:"Sobha Developers",s:"Real Estate",cap:"Mid Cap"},
+  {sym:"PAYTM.NS",name:"Paytm",s:"Technology",cap:"Large Cap"},
+  {sym:"POLICYBZR.NS",name:"PB Fintech",s:"Finance",cap:"Large Cap"},
+  {sym:"360ONE.NS",name:"360 ONE WAM",s:"Finance",cap:"Mid Cap"},
+  {sym:"MOTILALOFS.NS",name:"Motilal Oswal",s:"Finance",cap:"Mid Cap"},
+  {sym:"CONCOR.NS",name:"Container Corp",s:"Infrastructure",cap:"Large Cap"},
+  {sym:"TIINDIA.NS",name:"Tube Investments",s:"Auto",cap:"Large Cap"},
+  {sym:"AMBER.NS",name:"Amber Enterprises",s:"Electronics",cap:"Mid Cap"},
+  {sym:"BPCL.NS",name:"BPCL",s:"Energy",cap:"Large Cap"},
+  {sym:"IOC.NS",name:"Indian Oil Corp",s:"Energy",cap:"Large Cap"},
+  {sym:"GAIL.NS",name:"GAIL India",s:"Energy",cap:"Large Cap"},
+  {sym:"NAUKRI.NS",name:"Info Edge",s:"Technology",cap:"Large Cap"},
+  {sym:"TRENT.NS",name:"Trent Zudio",s:"Consumer",cap:"Large Cap"},
+  {sym:"JSWSTEEL.NS",name:"JSW Steel",s:"Metals",cap:"Large Cap"},
+  {sym:"HINDPETRO.NS",name:"HPCL",s:"Energy",cap:"Large Cap"},
 ];
 const ALL_SWING=[...STOCKS,...SWING_EXTRA];
+
 
 // ─── SCORING ENGINE ───────────────────────────────────────────────────────────
 function calcPillars(stock, ld) {
@@ -215,7 +249,9 @@ function calcPillars(stock, ld) {
   const rMap={"Strong Buy":5,"Buy":4,"Hold":2,"Reduce":1,"Sell":0};
   const p6_rat=rMap[stock.ar]??2;
   let p6_upside=2;
-  const p6_fii=0; // DII now in sf6
+  const sf6=SF[stock.s];
+  const p6_fii=sf6?.fi==="Buying"?1:0;
+  const p6_dii=sf6?.di==="Buying"?1:0;
   if(ld?.price&&stock.at){const up=(stock.at-ld.price)/ld.price*100;p6_upside=up>35?3:up>25?3:up>15?2:up>8?2:up>0?1:0;}
   const p6=Math.min(10,p6_rat+p6_upside+p6_fii+p6_dii);
   let p7_52w=4,p7_vol=0;
@@ -268,15 +304,15 @@ function generateRemark(stock, pillars, rec, upside, peg) {
   const spe=SECTOR_PE[stock.s]||25;
   const best=pillars.reduce((a,b)=>a.score/a.max>b.score/b.max?a:b);
   const worst=pillars.reduce((a,b)=>a.score/a.max<b.score/b.max?a:b);
-  const sfr=SECTOR_FLOWS[stock.s];
+  const sfr=SF[stock.s];
   const opener={"STRONG BUY":`All pillars strong — ${stock.name} is a high-conviction entry.`,"BUY":`${stock.name} presents a clear buying opportunity.`,"HOLD":`${stock.name} is fairly valued — hold or wait for better entry.`,"REDUCE":`${stock.name} showing weakness — consider reducing.`,"SELL":`Multiple red flags for ${stock.name} — exit recommended.`};
   const parts=[opener[rec.label]||""];
   if(best.score/best.max>0.65) parts.push(`Strongest: ${best.name} (${best.score}/${best.max}).`);
   if(peg<1.0) parts.push(`PEG ${peg} = undervalued growth.`);
   else if(peg>2.0) parts.push(`PEG ${peg} = expensive vs growth.`);
   if(stock.pe<spe*0.75) parts.push(`PE ${((1-stock.pe/spe)*100).toFixed(0)}% below sector = undervalued.`);
-  if(sfr?.fii==="Buying") parts.push(`FII+DII buying ${stock.s} sector this week.`);
-  else if(sfr?.fii==="Selling") parts.push(`⚠ FII selling ${stock.s} sector — headwind.`);
+  if(sfr?.fi==="Buying") parts.push(`FII buying ${stock.s} sector this week.`);
+  else if(sfr?.fi==="Selling") parts.push(`⚠ FII selling ${stock.s} sector — headwind.`);
   if(worst.score/worst.max<0.35) parts.push(`Watch: ${worst.name} (${worst.score}/${worst.max}).`);
   if(upside!=null&&upside>15) parts.push(`Analyst sees ${upside.toFixed(0)}% upside to ₹${stock.at}.`);
   else if(upside!=null&&upside<0) parts.push(`⚠ Above analyst target — limited upside.`);
@@ -285,16 +321,16 @@ function generateRemark(stock, pillars, rec, upside, peg) {
 
 function getFlags(stock, score, live, vr, peg) {
   const risks=[],opps=[];
-  const sff=SECTOR_FLOWS[stock.s];
+  const sfg2=SF[stock.s];
   if(stock.pledged>10) risks.push("⚠ High pledging "+stock.pledged+"%");
   if(stock.prT==="↓") risks.push("⬇ Promoter reducing stake");
   if(stock.de>1.5&&!stock.isB) risks.push("⚠ High debt/equity "+stock.de);
   if(stock.fcf==="L") risks.push("⚠ Poor free cash flow");
-  if(sfr?.fii==="Selling") risks.push("📉 FII selling sector this week");
+  if(sfg2?.fi==="Selling") risks.push("📉 FII selling sector this week");
   if(stock.ec<5) risks.push("⚠ Inconsistent earnings ("+stock.ec+"/10)");
   if(live?.price&&live.price>live.h52*0.95) risks.push("⚠ Near 52-week high");
   if(stock.prT==="↑") opps.push("⬆ Promoter increasing stake");
-  if(sfr?.fii==="Buying") opps.push("💚 FII buying sector "+fii.amt);
+  if(sfg2?.fi==="Buying") opps.push("💚 FII buying sector "+fii.amt);
   if(live?.price&&live.price<live.l52*1.1) opps.push("🎯 Near 52-week low — opportunity");
   if(peg<0.8) opps.push("✅ PEG "+peg+" = cheap growth");
   if(stock.pledged===0) opps.push("✅ Zero promoter pledging");
@@ -326,6 +362,7 @@ export default function App() {
   const [portfolio, setPortfolio]=useState(()=>{try{return JSON.parse(localStorage.getItem("isp")||"[]")}catch{return[]}});
   const [pfForm, setPfForm]=useState({sym:"",qty:"",buy:""});
   const [fiiPanelOpen, setFiiPanelOpen]=useState(false);
+  const [brief,setBrief]=useState(null);
   const refreshRef=useRef(null);
 
 
@@ -371,18 +408,41 @@ export default function App() {
   },[]);
 
   const fetchSwingPrices=useCallback(async()=>{
-    const extras=SWING_EXTRA;
     const newSld={};
+    const extras=SWING_EXTRA;
     for(let i=0;i<extras.length;i+=20){
       const syms=extras.slice(i,i+20).map(s=>s.sym).join(',');
-      try{const r=await fetch(`/api/finance?symbols=${encodeURIComponent(syms)}`,{signal:AbortSignal.timeout(15000)});const j=await r.json();(j?.quoteResponse?.result||[]).forEach(q=>{newSld[q.symbol]={price:q.regularMarketPrice,chg:q.regularMarketChange,pct:q.regularMarketChangePercent,vol:q.regularMarketVolume,avgVol:q.averageDailyVolume3Month,h52:q.fiftyTwoWeekHigh,l52:q.fiftyTwoWeekLow};});}catch(_){}
+      try{
+        const r=await fetch('/api/finance?symbols='+encodeURIComponent(syms),{signal:AbortSignal.timeout(15000)});
+        const j=await r.json();
+        (j?.quoteResponse?.result||[]).forEach(q=>{newSld[q.symbol]={price:q.regularMarketPrice,chg:q.regularMarketChange,pct:q.regularMarketChangePercent,vol:q.regularMarketVolume,avgVol:q.averageDailyVolume3Month,h52:q.fiftyTwoWeekHigh,l52:q.fiftyTwoWeekLow};});
+      }catch(_){}
       await new Promise(r=>setTimeout(r,400));
     }
     setSwingLd(prev=>({...prev,...newSld}));
   },[]);
 
   const fetchFiiDii=useCallback(async()=>{
-    try{const r=await fetch('/api/fii-dii',{signal:AbortSignal.timeout(8000)});const j=await r.json();if(Array.isArray(j)){const fd=j.find(x=>x.category?.toUpperCase().includes('FII'));const dd=j.find(x=>x.category?.toUpperCase().includes('DII'));if(fd||dd)setFiiDii({fii:fd?.netValue||0,dii:dd?.netValue||0});}}catch(_){}
+    try{
+      const r=await fetch('/api/fii-dii',{signal:AbortSignal.timeout(8000)});
+      const j=await r.json();
+      if(Array.isArray(j)){
+        const fd=j.find(x=>x.category&&x.category.toUpperCase().includes('FII'));
+        const dd=j.find(x=>x.category&&x.category.toUpperCase().includes('DII'));
+        if(fd||dd)setFiiDii({fii:fd?fd.netValue:0,dii:dd?dd.netValue:0});
+      }
+    }catch(_){}
+  },[]);
+
+  const fetchBrief=useCallback(async()=>{
+    try{
+      const syms='^GSPC,^IXIC,^N225,^HSI,CL=F,GC=F,USDINR=X';
+      const r=await fetch('/api/finance?symbols='+encodeURIComponent(syms),{signal:AbortSignal.timeout(15000)});
+      const j=await r.json();
+      const m={};
+      (j?.quoteResponse?.result||[]).forEach(x=>{m[x.symbol]=x;});
+      setBrief({sp500:m['^GSPC'],nasdaq:m['^IXIC'],nikkei:m['^N225'],hsi:m['^HSI'],crude:m['CL=F'],gold:m['GC=F'],usdinr:m['USDINR=X'],at:new Date()});
+    }catch(_){}
   },[]);
 
 
@@ -418,31 +478,30 @@ export default function App() {
       });
   },[ld,sector,cap,q,sortK,sortA,nifty]);
 
-  const [swingLd,setSwingLd]=useState({});
-  const [fiiDii,setFiiDii]=useState(null);
-  const allLd=useMemo(()=>({...ld,...swingLd}),[ld,swingLd]);
+  const allLd=useMemo(()=>Object.assign({},ld,swingLd),[ld,swingLd]);
   const swingRows=useMemo(()=>{
     return ALL_SWING.map(s=>{
       const lv=allLd[s.sym];
-      if(!lv?.price||!lv?.vol||!lv?.avgVol)return null;
+      if(!lv||!lv.price||!lv.vol||!lv.avgVol)return null;
       const vr2=lv.vol/lv.avgVol;
       if(vr2<1.2)return null;
-      const pc=lv.pct||0;
-      const sw=(vr2>3?35:vr2>2?28:vr2>1.5?20:12)+(pc>3?25:pc>2?20:pc>1?15:pc>0?8:0)+(lv.chg>0?15:5);
-      const lv2=getPriceLevels(s,lv);
-      return{...s,live:lv,vr:vr2,pct:pc,swScore:sw,levels:lv2,rec:getRec(50),score:50};
+      const pc2=lv.pct||0;
+      const sw=(vr2>3?35:vr2>2?28:vr2>1.5?20:12)+(pc2>3?25:pc2>2?20:pc2>1?15:pc2>0?8:0)+(lv.chg>0?15:5);
+      const lvl=getPriceLevels(s,lv);
+      return{...s,live:lv,vr:vr2,pct:pc2,swScore:sw,levels:lvl,rec:{label:"BUY",c:"#69f0ae",bg:"#001a08",ring:"#69f0ae44"},score:50};
     }).filter(Boolean).sort((a,b)=>b.swScore-a.swScore).slice(0,20);
   },[allLd]);
 
+
   const exitAlerts=useMemo(()=>portfolio.map(h=>{
-    const lv=ld[h.sym];if(!lv?.price)return null;
-    const pct2=(lv.price-h.buyPrice)/h.buyPrice*100;
+    const lv=ld[h.sym];
+    if(!lv||!lv.price)return null;
+    const pctChg=(lv.price-h.buyPrice)/h.buyPrice*100;
     const pnlAmt=(lv.price-h.buyPrice)*h.qty;
-    if(pct2<=-7)return{...h,live:lv,pct2,pnlAmt,alert:"🚨 EXIT — Stop Loss Hit (-7%)",alertC:"#ff5252"};
-    if(pct2>=5)return{...h,live:lv,pct2,pnlAmt,alert:"✅ BOOK PROFIT — Target Hit (+5%)",alertC:"#00e676"};
+    if(pctChg<=-7)return{...h,live:lv,pctChg,pnlAmt,alert:"EXIT — Stop Loss Hit (-7%)",alertC:"#ff5252"};
+    if(pctChg>=5)return{...h,live:lv,pctChg,pnlAmt,alert:"BOOK PROFIT — Target Hit (+5%)",alertC:"#00e676"};
     return null;
   }).filter(Boolean),[portfolio,ld]);
-
 
   const addPortfolio=()=>{
     if(!pfForm.sym||!pfForm.qty||!pfForm.buy) return;
@@ -468,7 +527,10 @@ export default function App() {
             <span style={{fontSize:10,color:"#2a3a55"}}>300 Stocks · FII+DII Live</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
-            {fiiDii&&<span style={{fontSize:11,gap:6,display:"flex",alignItems:"center"}}><span style={{color:fiiDii.fii>=0?"#34d399":"#ff5252",fontWeight:700}}>FII {fiiDii.fii>=0?"+":""}{Math.round(fiiDii.fii)}Cr</span><span style={{color:fiiDii.dii>=0?"#60a5fa":"#ff5252",fontWeight:700}}>DII {fiiDii.dii>=0?"+":""}{Math.round(fiiDii.dii)}Cr</span></span>}
+            {fiiDii&&<span style={{fontSize:11,display:"flex",gap:6}}>
+              <span style={{color:fiiDii.fii>=0?"#34d399":"#ff5252",fontWeight:700}}>FII {fiiDii.fii>=0?"+":""}{Math.round(fiiDii.fii)}Cr</span>
+              <span style={{color:fiiDii.dii>=0?"#60a5fa":"#ff5252",fontWeight:700}}>DII {fiiDii.dii>=0?"+":""}{Math.round(fiiDii.dii)}Cr</span>
+            </span>}
             {nifty&&<span style={{fontSize:12,color:nifty.pct>=0?"#69f0ae":"#ff5252",fontWeight:700,cursor:"pointer"}} onClick={()=>setFiiPanelOpen(!fiiPanelOpen)}>Nifty ₹{fmt(nifty.price,0)} {nifty.pct>=0?"+":""}{fmt(nifty.pct,2)}% · 📊 FII</span>}
             {loading&&<span style={{fontSize:11,color:"#3b82f6",display:"flex",alignItems:"center",gap:4}}><span style={{width:6,height:6,borderRadius:"50%",background:"#3b82f6",display:"inline-block",animation:"blink 1s infinite"}}/>Auto ↻</span>}
             {!loading&&ts&&<span style={{fontSize:10,color:"#2a3a55"}}>↺ {ts.toLocaleTimeString()}</span>}
@@ -483,11 +545,13 @@ export default function App() {
             <span style={{fontSize:9,color:"#2a3a55"}}>Source: NSE India · I update this weekly</span>
           </div>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-            {Object.entries(SECTOR_FLOWS).map(([sec,data],it)=>(
-              <div key={sec} style={{background:"#0a0f1e",borderRadius:6,padding:"5px 10px",border:`1px solid ${data.fii==="Buying"?"#34d39933":data.fii==="Selling"?"#f8717133":"#2a3a55"}`,minWidth:100}}>
-                <div style={{fontSize:9,color:SCOL[sec]||"#60a5fa",fontWeight:600}}>{sec}</div>
-                <div style={{fontSize:11,fontWeight:700,color:data.fii==="Buying"?"#34d399":data.fii==="Selling"?"#f87171":"#ffd740"}}>{data.fiiWk} {data.flow}</div>
-                <div style={{fontSize:9,color:"#2a3a55"}}>{data.fiiAmt}</div>
+            {Object.entries(SF).map(([sec,data])=>(
+              <div key={sec} style={{background:"#0a0f1e",borderRadius:6,padding:"5px 9px",border:"1px solid "+(data.fi==="Buying"&&data.di==="Buying"?"#34d39933":"#2a3a55"),minWidth:110}}>
+                <div style={{fontSize:8.5,color:SCOL[sec]||"#60a5fa",fontWeight:600,marginBottom:2}}>{sec}</div>
+                <div style={{display:"flex",gap:8}}>
+                  <div><div style={{fontSize:8,color:"#2a3a55"}}>FII</div><div style={{fontSize:10,fontWeight:700,color:data.fi==="Buying"?"#34d399":data.fi==="Selling"?"#f87171":"#ffd740"}}>{data.fw} {data.fa}</div></div>
+                  <div><div style={{fontSize:8,color:"#2a3a55"}}>DII</div><div style={{fontSize:10,fontWeight:700,color:data.di==="Buying"?"#60a5fa":data.di==="Selling"?"#f87171":"#ffd740"}}>{data.dw} {data.da}</div></div>
+                </div>
               </div>
             ))}
           </div>
@@ -496,7 +560,7 @@ export default function App() {
 
       {/* STATS */}
       <div style={{display:"flex",gap:7,padding:"10px 16px",overflowX:"auto"}}>
-        {[{l:"Strong Buy",v:rows.filter(r=>r.score>=78).length,c:"#00e676"},{l:"Buy",v:rows.filter(r=>r.score>=65&&r.score<78).length,c:"#69f0ae"},{l:"Hold",v:rows.filter(r=>r.score>=52&&r.score<65).length,c:"#ffd740"},{l:"Reduce/Sell",v:rows.filter(r=>r.score<52).length,c:"#ff5252"},{l:"⚡ Swing (300)",v:swingRows.length,c:"#f59e0b"},{l:"🚨 Exit Alerts",v:exitAlerts?.length||0,c:"#ff5252"},{l:"Showing",v:rows.length,c:"#60a5fa"}].map(st=>(
+        {[{l:"Strong Buy",v:rows.filter(r=>r.score>=78).length,c:"#00e676"},{l:"Buy",v:rows.filter(r=>r.score>=65&&r.score<78).length,c:"#69f0ae"},{l:"Hold",v:rows.filter(r=>r.score>=52&&r.score<65).length,c:"#ffd740"},{l:"Reduce/Sell",v:rows.filter(r=>r.score<52).length,c:"#ff5252"},{l:"⚡ Swing (300)",v:swingRows.length,c:"#f59e0b"},{l:"🚨 Exits",v:exitAlerts.length,c:"#ff5252"},{l:"Showing",v:rows.length,c:"#60a5fa"}].map(st=>(
           <div key={st.l} style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:9,padding:"7px 13px",minWidth:90,flexShrink:0,textAlign:"center"}}>
             <div style={{fontSize:22,fontWeight:900,color:st.c,lineHeight:1}}>{st.v}</div>
             <div style={{fontSize:9,color:"#2a3a55",marginTop:2}}>{st.l}</div>
@@ -506,7 +570,7 @@ export default function App() {
 
       {/* MAIN TABS */}
       <div style={{display:"flex",borderBottom:"1px solid #141e30",padding:"0 16px"}}>
-        {[["stocks","📊 Stocks"],["swing","⚡ Swing"],["portfolio","💼 Portfolio"],["refresh","🔄 Auto-Refresh Info"]].map(([id,l])=>(
+        {[["stocks","📊 Stocks"],["swing","⚡ Swing (300)"],["portfolio","💼 Portfolio"],["brief","🌅 Morning Brief"],["refresh","🔄 Info"]].map(([id,l])=>(
           <button key={id} onClick={()=>setMainTab(id)} style={{padding:"9px 14px",background:"transparent",border:"none",borderBottom:`2px solid ${mainTab===id?"#3b82f6":"transparent"}`,color:mainTab===id?"#60a5fa":"#3d5070",cursor:"pointer",fontSize:11,fontWeight:mainTab===id?700:400,whiteSpace:"nowrap"}}>
             {l}
           </button>
@@ -514,6 +578,66 @@ export default function App() {
       </div>
 
       {/* AUTO-REFRESH INFO TAB */}
+
+      {mainTab==="brief"&&(
+        <div style={{padding:14}}>
+          <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:12,padding:16}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+              <div style={{fontSize:14,fontWeight:800,color:"#e0ecff"}}>🌅 Morning Briefing</div>
+              <button onClick={fetchBrief} style={{background:"#141e30",border:"1px solid #3b82f6",borderRadius:5,padding:"5px 12px",color:"#60a5fa",cursor:"pointer",fontSize:11}}>Refresh Now</button>
+            </div>
+            {!brief&&<div style={{color:"#2a3a55",textAlign:"center",padding:32,fontSize:12}}>Click Refresh Now to load global markets. Best viewed before 9:15 AM.</div>}
+            {brief&&<>
+              <div style={{fontSize:10,color:"#2a3a55",marginBottom:12}}>Updated: {brief.at&&brief.at.toLocaleTimeString()}</div>
+              <div style={{fontSize:12,fontWeight:700,color:"#8899bb",marginBottom:8}}>🌍 Global Markets</div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:8,marginBottom:14}}>
+                {[["S&P 500",brief.sp500],["Nasdaq",brief.nasdaq],["Nikkei",brief.nikkei],["Hang Seng",brief.hsi],["Crude Oil",brief.crude],["Gold",brief.gold],["USD/INR",brief.usdinr]].map(function(item){
+                  var label=item[0],d=item[1];
+                  if(!d)return null;
+                  var pct=d.regularMarketChangePercent||0;
+                  return React.createElement("div",{key:label,style:{background:"#070b14",borderRadius:8,padding:"10px 12px",border:"1px solid "+(pct>=0?"#34d39922":"#f8717122")}},
+                    React.createElement("div",{style:{fontSize:9,color:"#2a3a55",marginBottom:3}},label),
+                    React.createElement("div",{style:{fontSize:15,fontWeight:800,color:"#e0ecff"}},Number(d.regularMarketPrice||0).toFixed(label==="USD/INR"?2:0)),
+                    React.createElement("div",{style:{fontSize:11,fontWeight:700,color:pct>=0?"#69f0ae":"#ff5252"}},(pct>=0?"+":"")+pct.toFixed(2)+"%")
+                  );
+                })}
+              </div>
+              <div style={{background:"#070b14",borderRadius:8,padding:"12px 14px",marginBottom:12}}>
+                <div style={{fontSize:12,fontWeight:700,color:"#8899bb",marginBottom:8}}>📊 Impact on Indian Sectors</div>
+                {(function(){
+                  var sp=brief.sp500?brief.sp500.regularMarketChangePercent:0;
+                  var cr=brief.crude?brief.crude.regularMarketChangePercent:0;
+                  var go=brief.gold?brief.gold.regularMarketChangePercent:0;
+                  var fx=brief.usdinr?brief.usdinr.regularMarketChangePercent:0;
+                  var impacts=[];
+                  if(sp<-1)impacts.push({sec:"IT",c:"#ff5252",msg:"US markets down "+sp.toFixed(1)+"% → IT stocks may open weak. Watch TCS, Infy, HCL."});
+                  else if(sp>1)impacts.push({sec:"IT",c:"#34d399",msg:"US markets up "+sp.toFixed(1)+"% → IT stocks likely to open strong."});
+                  if(cr>2)impacts.push({sec:"Energy",c:"#34d399",msg:"Crude up "+cr.toFixed(1)+"% → ONGC, Petronet positive."});
+                  else if(cr<-2)impacts.push({sec:"Energy",c:"#ffd740",msg:"Crude down "+Math.abs(cr).toFixed(1)+"% → OMC margins improve (BPCL, IOC)."});
+                  if(go>1)impacts.push({sec:"Finance",c:"#34d399",msg:"Gold up "+go.toFixed(1)+"% → Muthoot Finance positive."});
+                  if(fx>0.5)impacts.push({sec:"IT",c:"#34d399",msg:"INR weakened → IT exporters get revenue boost."});
+                  if(impacts.length===0)impacts.push({sec:"All",c:"#ffd740",msg:"Global markets stable. No major trigger. Normal open expected."});
+                  return impacts.map(function(x,i){return React.createElement("div",{key:i,style:{display:"flex",gap:8,padding:"5px 0",borderBottom:"1px solid #0d1525",alignItems:"flex-start"}},
+                    React.createElement("span",{style:{background:(SCOL[x.sec]||"#3b82f6")+"22",color:SCOL[x.sec]||"#60a5fa",fontSize:9,padding:"2px 6px",borderRadius:3,fontWeight:600,whiteSpace:"nowrap"}},x.sec),
+                    React.createElement("span",{style:{fontSize:11,color:x.c,lineHeight:1.5}},x.msg)
+                  );});
+                })()}
+              </div>
+              <div style={{background:"#070b14",borderRadius:8,padding:"12px 14px"}}>
+                <div style={{fontSize:12,fontWeight:700,color:"#8899bb",marginBottom:8}}>📅 Results This Week</div>
+                {STOCKS.filter(function(s){var d=(new Date(s.rd+", 2026")-new Date())/86400000;return d>=0&&d<=5;}).slice(0,8).map(function(s){
+                  var d=Math.round((new Date(s.rd+", 2026")-new Date())/86400000);
+                  return React.createElement("div",{key:s.sym,style:{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"1px solid #0d1525"}},
+                    React.createElement("span",{style:{color:"#e0ecff",fontWeight:600,fontSize:11}},s.name),
+                    React.createElement("span",{style:{color:d<=1?"#f59e0b":"#ffd740",fontSize:10,fontWeight:700}},d===0?"Today":d===1?"Tomorrow":"In "+d+" days")
+                  );
+                })}
+              </div>
+            </>}
+          </div>
+        </div>
+      )}
+
       {mainTab==="refresh"&&(
         <div style={{padding:16}}>
           <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:12,padding:18,marginBottom:12}}>
@@ -592,11 +716,11 @@ export default function App() {
         <div style={{overflowX:"auto",padding:"0 16px 80px"}}>
           <table style={{width:"100%",borderCollapse:"separate",borderSpacing:"0 3px",minWidth:1300}}>
             <thead>
-              <tr>{["#","Stock","Cap","FII","CMP","vs Nifty","P/E","PEG","EV/EB","ROE","ROCE","Div%","EC","Promoter","Pledged","Results","Category","Score","Signal"].map(h=><th key={h} style={{padding:"7px 5px",textAlign:"left",fontSize:8.5,fontWeight:700,color:"#1e2e45",textTransform:"uppercase",background:"#070b14",whiteSpace:"nowrap"}}>{h}</th>)}</tr>
+              <tr>{["#","Stock","Cap","FII","DII","CMP","vs Nifty","P/E","PEG","ROE","ROCE","Div%","EC","Promoter","Pledged","Results","Category","Score","Signal"].map(h=><th key={h} style={{padding:"7px 5px",textAlign:"left",fontSize:8.5,fontWeight:700,color:"#1e2e45",textTransform:"uppercase",background:"#070b14",whiteSpace:"nowrap"}}>{h}</th>)}</tr>
             </thead>
             <tbody>
               {rows.map((s,i)=>{
-                const sff2=SECTOR_FLOWS[s.s];
+                const sft=SF[s.s];
                 const daysToResult=s.rd?(new Date(s.rd+", 2026")-new Date())/86400000:999;
                 return(
                   <tr key={s.id} onClick={()=>{setSel(s);setMTab("overview");setNews([]);}} style={{cursor:"pointer"}}
@@ -609,7 +733,10 @@ export default function App() {
                     </td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17",fontSize:10,fontWeight:600,color:CCOL[s.cap]||"#60a5fa",whiteSpace:"nowrap"}}>{s.cap.replace(" Cap","")}</td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
-                      <span style={{fontSize:10,fontWeight:700,color:sfr?.fii==="Buying"?"#34d399":sfr?.fii==="Selling"?"#f87171":"#4a6080"}}>{sff?.fiiWk||"→"}</span>
+                      <span style={{fontSize:10,fontWeight:700,color:sft?.fi==="Buying"?"#34d399":sft?.fi==="Selling"?"#f87171":"#4a6080"}}>{sft?.fw||"→"}</span>
+                    </td>
+                    <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
+                      <span style={{fontSize:10,fontWeight:700,color:sft?.di==="Buying"?"#60a5fa":sft?.di==="Selling"?"#f87171":"#4a6080"}}>{sft?.dw||"→"}</span>
                     </td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
                       {s.live?.price?<><div style={{fontWeight:800,color:"#e0ecff",fontSize:12}}>₹{fmt(s.live.price,1)}</div><div style={{fontSize:9,color:s.live.chg>=0?"#69f0ae":"#ff5252"}}>{s.live.chg>=0?"+":""}{fmt(s.live.pct,2)}%</div></>:<span style={{color:"#1e2e45"}}>—</span>}
@@ -657,7 +784,7 @@ export default function App() {
       {/* SWING ALERTS */}
       {mainTab==="swing"&&(
         <div style={{padding:"14px"}}>
-          <div style={{fontSize:12,color:"#3d5070",marginBottom:12}}>⚡ Volume surge stocks — sorted highest volume vs 3M average. Entry window: today's session only.</div>
+          <div style={{fontSize:11,color:"#4a6080",marginBottom:10,background:"#0a0f1e",padding:"10px 14px",borderRadius:8,border:"1px solid #141e30"}}>⚡ <strong style={{color:"#f59e0b"}}>Swing Scanner — 300 stocks</strong>, refreshes every 3 min. Buy today, exit 1-3 days.<br/>Volume — sorted highest volume vs 3M average. Entry window: today's session only.</div>
           {swingRows.length===0?<div style={{color:"#2a3a55",padding:24,textAlign:"center",background:"#0a0f1e",borderRadius:12}}>No swing alerts. Click Refresh after 9:15 AM when market is open.</div>:(
             swingRows.map((s,i)=>(
               <div key={s.id} onClick={()=>{setSel(s);setMTab("targets");setNews([]);}} style={{background:"#0a0f1e",border:`1px solid ${s.rec.ring}`,borderRadius:11,padding:"13px 15px",cursor:"pointer",marginBottom:10,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
@@ -670,7 +797,12 @@ export default function App() {
                   <div style={{textAlign:"center"}}><div style={{fontSize:18,fontWeight:900,color:"#f59e0b"}}>{s.vr?.toFixed(1)}×</div><div style={{fontSize:9,color:"#2a3a55"}}>Volume</div></div>
                   {s.live?.price&&<div style={{textAlign:"center"}}><div style={{fontSize:15,fontWeight:800,color:"#e0ecff"}}>₹{fmt(s.live.price,1)}</div><div style={{fontSize:9,color:s.live.chg>=0?"#69f0ae":"#ff5252"}}>{s.live.chg>=0?"+":""}{fmt(s.live.pct,2)}%</div></div>}
                   {s.levels&&<div style={{textAlign:"center"}}><div style={{fontSize:12,fontWeight:700,color:"#4ade80"}}>T: {s.levels.swing.target}</div><div style={{fontSize:10,color:"#ff5252"}}>SL: {s.levels.swing.stop}</div><div style={{fontSize:9,color:"#2a3a55"}}>R:R {s.levels.swing.rr}</div></div>}
-                  <span style={{background:s.rec.bg,color:s.rec.c,padding:"4px 9px",borderRadius:4,fontSize:10,fontWeight:800,border:`1px solid ${s.rec.ring}`}}>{s.rec.label}</span>
+                  {s.levels&&<div style={{background:"#070b14",borderRadius:6,padding:"7px 10px",textAlign:"right",minWidth:140}}>
+                  <div style={{fontSize:10,color:"#69f0ae",fontWeight:700}}>Buy: {s.levels.buyZone}</div>
+                  <div style={{fontSize:10,color:"#4ade80"}}>Target: {s.levels.swing.target}</div>
+                  <div style={{fontSize:10,color:"#ff5252"}}>Stop: {s.levels.swing.stop}</div>
+                  <div style={{fontSize:9,color:"#2a3a55"}}>Exit in {s.levels.swing.duration}</div>
+                </div>}
                 </div>
               </div>
             ))
@@ -871,7 +1003,7 @@ export default function App() {
                     {l:"Pledged Shares",v:`${sel.pledged}%`,sub:sel.pledged===0?"Zero risk ✓":sel.pledged>10?"⚠ High":"Moderate",ok:sel.pledged<5},
                     {l:"Analyst Target",v:`₹${sel.at}`,sub:sel.upside!=null?`${sel.upside>0?"+":""}${sel.upside?.toFixed(1)}% upside`:"",ok:sel.upside>10},
                     {l:"Results Date",v:sel.rd||"—",sub:"Next quarterly result",ok:true},
-                    {l:"FII Sector Flow",v:SECTOR_FLOWS[sel.s]?.flow||"—",sub:SECTOR_FLOWS[sel.s]?.amt||"",ok:SECTOR_FLOWS[sel.s]?.flow==="Buying"},
+                    {l:"FII Sector Flow",v:SF[sel.s]?.flow||"—",sub:SF[sel.s]?.amt||"",ok:SF[sel.s]?.fi==="Buying"},
                   ].map(it=>(
                     <div key={it.l} style={{background:"#070b14",borderRadius:6,padding:"8px 10px",borderLeft:`2px solid ${it.ok?"#34d399":"#f87171"}`}}>
                       <div style={{fontSize:8.5,color:"#2a3a55",marginBottom:2}}>{it.l}</div>
