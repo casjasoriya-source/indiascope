@@ -330,7 +330,7 @@ function getFlags(stock, score, live, vr, peg) {
   if(stock.ec<5) risks.push("⚠ Inconsistent earnings ("+stock.ec+"/10)");
   if(live?.price&&live.price>live.h52*0.95) risks.push("⚠ Near 52-week high");
   if(stock.prT==="↑") opps.push("⬆ Promoter increasing stake");
-  if(sfg2?.fi==="Buying") opps.push("💚 FII buying sector "+fii.amt);
+  if(sfg2?.fi==="Buying") opps.push("💚 FII buying sector "+sfg2?.fa);
   if(live?.price&&live.price<live.l52*1.1) opps.push("🎯 Near 52-week low — opportunity");
   if(peg<0.8) opps.push("✅ PEG "+peg+" = cheap growth");
   if(stock.pledged===0) opps.push("✅ Zero promoter pledging");
