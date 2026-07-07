@@ -240,7 +240,8 @@ const SWING_EXTRA=[
   {sym:"MFSL.NS",name:"Max Financial Services",s:"Insurance",cap:"Large Cap"},
 ];
 
-const ALL_SWING=[...STOCKS,...SWING_EXTRA];
+const _syms=new Set(STOCKS.map(s=>s.sym));
+const ALL_SWING=[...STOCKS,...SWING_EXTRA.filter(s=>!_syms.has(s.sym))];
 
 
 // ─── SCORING ENGINE ───────────────────────────────────────────────────────────
@@ -817,8 +818,15 @@ export default function App() {
           <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:8,padding:"10px 14px",marginBottom:12,fontSize:11,color:"#4a6080",lineHeight:1.6}}>
             ⚡ <strong style={{color:"#f59e0b"}}>Live Swing Scanner — 300 stocks</strong> · Top 20 by volume surge + momentum · Refreshes every 3 min · Buy today, exit in 1–3 days
           </div>
+          <div style={{background:"#0a0f1e",border:"1px solid #2563eb44",borderRadius:8,padding:"10px 14px",marginBottom:12}}>
+            <span style={{fontSize:11,color:"#60a5fa",fontWeight:700}}>🔍 Request Analysis for any stock: </span>
+            <span style={{fontSize:10,color:"#4a6080"}}>Go to Stocks tab → type stock name in search → click on it → "All Data" tab shows analysis or Screener.in link.</span>
+          </div>
+          {swingRows.length>0&&swingRows.length<10&&<div style={{background:"#131c2e",border:"1px solid #1a2540",borderRadius:8,padding:"8px 14px",marginBottom:10,fontSize:10,color:"#3b82f6"}}>
+            ⏳ Loading {200-swingRows.length} more stocks... Extended universe prices load in ~60 sec. Showing {swingRows.length}/20 now.
+          </div>}
           {swingRows.length===0
-            ?<div style={{color:"#2a3a55",padding:28,textAlign:"center",background:"#0a0f1e",borderRadius:12,fontSize:12}}>No swing signals yet. Market may be closed or data loading.<br/>Click Refresh at 9:15 AM when market opens.</div>
+            ?<div style={{color:"#2a3a55",padding:28,textAlign:"center",background:"#0a0f1e",borderRadius:12,fontSize:12}}>No swing signals yet. Click Refresh after 9:15 AM when market opens.</div>
             :swingRows.map((s,i)=>{
               const rec=s.rec||{label:"BUY",c:"#69f0ae",bg:"#001a08",ring:"#69f0ae44"};
               const cap=s.cap||"";
