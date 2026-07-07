@@ -357,6 +357,8 @@ export default function App() {
   const [loading, setLoading]=useState(false);
   const [err, setErr]=useState(false);
   const [nifty, setNifty]=useState(null);
+  const [fiiDii,setFiiDii]=useState(null);
+  const [swingLd,setSwingLd]=useState({});
   const [news, setNews]=useState([]);
   const [newsLoad, setNewsLoad]=useState(false);
   const [portfolio, setPortfolio]=useState(()=>{try{return JSON.parse(localStorage.getItem("isp")||"[]")}catch{return[]}});
