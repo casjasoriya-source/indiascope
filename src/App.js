@@ -35,214 +35,134 @@ const SF={
 //   prHold,pledged,intCov,fcf,ar,at,isB=isBanking,
 //   prT=promoter trend(↑→↓), ec=earnings consistency(1-10),
 //   rd=results date, evEb=EV/EBITDA, roic=H/M/L, wce=working capital efficiency H/M/L
-const STOCKS = [
-  {id:1,sym:"HDFCBANK.NS",name:"HDFC Bank",s:"Banking",cap:"Large Cap",pe:19.2,pb:2.5,de:6.8,roe:16.1,roce:7.2,divY:1.2,revG:14,profG:18,prHold:26,pledged:0,intCov:null,fcf:"H",ar:"Buy",at:1950,isB:true,prT:"→",ec:9,rd:"Jul 19",evEb:12,roic:"H",wce:"H",note:"India's largest private bank. Decade-low NPAs. CASA 42%+. Consistent dividend. Strong retail franchise."},
-  {id:2,sym:"ICICIBANK.NS",name:"ICICI Bank",s:"Banking",cap:"Large Cap",pe:17.1,pb:2.9,de:5.9,roe:18.2,roce:7.8,divY:0.8,revG:18,profG:28,prHold:0,pledged:0,intCov:null,fcf:"H",ar:"Strong Buy",at:1380,isB:true,prT:"→",ec:10,rd:"Jul 26",evEb:10,roic:"H",wce:"H",note:"Fastest-growing large private bank. GNPA at decade low. Best digital banking. 28% profit CAGR."},
-  {id:3,sym:"SBIN.NS",name:"SBI",s:"Banking",cap:"Large Cap",pe:9.4,pb:1.5,de:14.2,roe:18.5,roce:6.1,divY:2.5,revG:12,profG:35,prHold:57,pledged:0,intCov:null,fcf:"H",ar:"Buy",at:1020,isB:true,prT:"→",ec:8,rd:"Aug 2",evEb:8,roic:"H",wce:"H",note:"India's largest bank. PSU turnaround complete. NPA sharply down. 67,000 branches. 2.5% dividend."},
-  {id:4,sym:"KOTAKBANK.NS",name:"Kotak Mahindra Bank",s:"Banking",cap:"Large Cap",pe:20.4,pb:3.2,de:4.8,roe:15.3,roce:6.9,divY:0.1,revG:16,profG:12,prHold:26,pledged:0,intCov:null,fcf:"H",ar:"Buy",at:2200,isB:true,prT:"→",ec:8,rd:"Jul 19",evEb:11,roic:"H",wce:"H",note:"Premium private bank. Insurance+AMC+lending diversified. Conservative management. Strong CASA."},
-  {id:5,sym:"AXISBANK.NS",name:"Axis Bank",s:"Banking",cap:"Large Cap",pe:12.8,pb:1.8,de:7.2,roe:17.4,roce:6.8,divY:0.1,revG:20,profG:45,prHold:8,pledged:0,intCov:null,fcf:"H",ar:"Buy",at:1280,isB:true,prT:"↑",ec:8,rd:"Jul 26",evEb:9,roic:"H",wce:"H",note:"3rd largest private bank. Citibank integration driving retail growth. Cheapest P/E among large private banks."},
-  {id:6,sym:"INDUSINDBK.NS",name:"IndusInd Bank",s:"Banking",cap:"Large Cap",pe:8.5,pb:1.0,de:8.5,roe:12.4,roce:5.8,divY:1.5,revG:18,profG:8,prHold:16,pledged:0,intCov:null,fcf:"M",ar:"Hold",at:1100,isB:true,prT:"↓",ec:5,rd:"Jul 15",evEb:7,roic:"M",wce:"M",note:"Private bank under NPA pressure. P/B at 1x = deep value but high risk. Recovery play. Watch NPA trend."},
-  {id:7,sym:"IDFCFIRSTB.NS",name:"IDFC First Bank",s:"Banking",cap:"Mid Cap",pe:15.2,pb:1.2,de:8.4,roe:8.4,roce:5.2,divY:0.0,revG:22,profG:0,prHold:40,pledged:0,intCov:null,fcf:"M",ar:"Buy",at:95,isB:true,prT:"→",ec:6,rd:"Jul 19",evEb:6,roic:"M",wce:"M",note:"Retail banking transformation. P/B 1.2 cheap. Revenue growing 22% but ROE still low. High potential."},
-  {id:8,sym:"BAJFINANCE.NS",name:"Bajaj Finance",s:"Finance",cap:"Large Cap",pe:28.3,pb:5.8,de:3.8,roe:21.2,roce:10.4,divY:0.3,revG:28,profG:26,prHold:56,pledged:0,intCov:8,fcf:"H",ar:"Buy",at:9800,isB:false,prT:"→",ec:9,rd:"Jul 22",evEb:16,roic:"H",wce:"H",note:"India's largest NBFC. 80M+ customers. 28% revenue CAGR. Zero pledging. Best cross-sell engine."},
-  {id:9,sym:"MUTHOOTFIN.NS",name:"Muthoot Finance",s:"Finance",cap:"Large Cap",pe:18.4,pb:4.5,de:2.5,roe:25.2,roce:12.4,divY:1.8,revG:18,profG:22,prHold:73,pledged:0,intCov:6,fcf:"H",ar:"Buy",at:3800,isB:false,prT:"→",ec:8,rd:"Aug 5",evEb:12,roic:"H",wce:"H",note:"Gold loan NBFC leader. 73% promoter = high conviction. Rural India moat. 25% ROE. No pledging."},
-  {id:10,sym:"CHOLAFIN.NS",name:"Cholamandalam Finance",s:"Finance",cap:"Mid Cap",pe:22.4,pb:4.2,de:5.1,roe:20.4,roce:9.8,divY:0.5,revG:25,profG:30,prHold:47,pledged:0,intCov:4,fcf:"M",ar:"Buy",at:1450,isB:false,prT:"→",ec:8,rd:"Aug 8",evEb:14,roic:"H",wce:"M",note:"Vehicle & home finance NBFC. Murugappa group. 25-30% growth. Clean books."},
-  {id:11,sym:"IRFC.NS",name:"IRFC",s:"Finance",cap:"Large Cap",pe:14.2,pb:2.0,de:9.8,roe:14.8,roce:5.2,divY:3.8,revG:18,profG:20,prHold:86,pledged:0,intCov:null,fcf:"H",ar:"Buy",at:195,isB:true,prT:"→",ec:8,rd:"Aug 12",evEb:10,roic:"H",wce:"H",note:"Railway financier. 86% Govt = near-zero credit risk. 3.8% dividend + consistent growth."},
-  {id:12,sym:"BAJAJFINSV.NS",name:"Bajaj Finserv",s:"Finance",cap:"Large Cap",pe:12.5,pb:2.2,de:3.5,roe:14.4,roce:8.8,divY:0.1,revG:18,profG:15,prHold:60,pledged:0,intCov:5,fcf:"M",ar:"Buy",at:2200,isB:false,prT:"→",ec:8,rd:"Jul 22",evEb:10,roic:"M",wce:"H",note:"Bajaj Finance parent. Discount to sum-of-parts. Insurance+NBFC+lending combined."},
-  {id:13,sym:"CAMS.NS",name:"CAMS",s:"Finance",cap:"Mid Cap",pe:38.5,pb:14.8,de:0.0,roe:42.4,roce:41.8,divY:1.8,revG:18,profG:22,prHold:19,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:4200,isB:false,prT:"→",ec:9,rd:"Aug 15",evEb:28,roic:"H",wce:"H",note:"MF processing monopoly 70%+ share. Zero debt, 42% ROE. SIP growth = direct revenue."},
-  {id:14,sym:"CDSL.NS",name:"CDSL",s:"Finance",cap:"Mid Cap",pe:42.5,pb:18.5,de:0.0,roe:48.4,roce:47.2,divY:0.8,revG:22,profG:28,prHold:15,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1850,isB:false,prT:"→",ec:9,rd:"Aug 12",evEb:32,roic:"H",wce:"H",note:"Depository monopoly. 48% ROE, zero debt. Every new demat account = revenue."},
-  {id:15,sym:"ANGELONE.NS",name:"Angel One",s:"Finance",cap:"Mid Cap",pe:18.5,pb:4.5,de:0.5,roe:28.4,roce:22.8,divY:1.5,revG:32,profG:28,prHold:38,pledged:0,intCov:12,fcf:"H",ar:"Buy",at:2800,isB:false,prT:"→",ec:8,rd:"Aug 8",evEb:14,roic:"H",wce:"H",note:"Discount broking. 28% ROE. India retail investor boom = decade tailwind. Tech-first model."},
-  {id:16,sym:"SBICARD.NS",name:"SBI Card",s:"Finance",cap:"Large Cap",pe:22.5,pb:4.2,de:3.8,roe:18.4,roce:9.8,divY:0.5,revG:15,profG:8,prHold:69,pledged:0,intCov:5,fcf:"M",ar:"Hold",at:850,isB:false,prT:"→",ec:6,rd:"Aug 5",evEb:14,roic:"M",wce:"M",note:"2nd largest credit card issuer. SBI distribution advantage. Consumer spending recovery play."},
-  {id:17,sym:"TCS.NS",name:"TCS",s:"IT",cap:"Large Cap",pe:22.4,pb:12,de:0.0,roe:55.1,roce:52.3,divY:3.5,revG:14,profG:12,prHold:72,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:4200,isB:false,prT:"→",ec:10,rd:"Jul 10",evEb:20,roic:"H",wce:"H",note:"India's largest IT. Zero debt, 55% ROE. 20+ consecutive profitable quarters. Best for SIP."},
-  {id:18,sym:"INFY.NS",name:"Infosys",s:"IT",cap:"Large Cap",pe:20.1,pb:7.5,de:0.0,roe:32.4,roce:30.8,divY:3.2,revG:12,profG:10,prHold:15,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:1750,isB:false,prT:"→",ec:9,rd:"Jul 17",evEb:18,roic:"H",wce:"H",note:"Global IT leader. 3.2% dividend. IT at 52W low = long-term entry opportunity."},
-  {id:19,sym:"HCLTECH.NS",name:"HCL Technologies",s:"IT",cap:"Large Cap",pe:22.8,pb:5.5,de:0.1,roe:24.1,roce:22.8,divY:4.2,revG:16,profG:18,prHold:60,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1960,isB:false,prT:"→",ec:9,rd:"Jul 12",evEb:19,roic:"H",wce:"H",note:"Best growth among top-4 IT. 4.2% dividend. Engineering+IT products. 60% promoter."},
-  {id:20,sym:"WIPRO.NS",name:"Wipro",s:"IT",cap:"Large Cap",pe:20.5,pb:3.0,de:0.0,roe:14.2,roce:13.8,divY:2.5,revG:6,profG:5,prHold:73,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:320,isB:false,prT:"→",ec:7,rd:"Jul 16",evEb:16,roic:"M",wce:"H",note:"4th largest IT. Margin recovery underway. 73% promoter. 2.5% dividend. Value buy at current levels."},
-  {id:21,sym:"LTIM.NS",name:"LTIMindtree",s:"IT",cap:"Large Cap",pe:28.5,pb:7.2,de:0.0,roe:24.5,roce:23.2,divY:1.8,revG:22,profG:18,prHold:69,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:6500,isB:false,prT:"→",ec:8,rd:"Jul 15",evEb:22,roic:"H",wce:"H",note:"Merged LTI+Mindtree. 22% revenue growth. Tata group backing. Strong engineering+digital portfolio."},
-  {id:22,sym:"PERSISTENT.NS",name:"Persistent Systems",s:"IT",cap:"Mid Cap",pe:55.8,pb:14.5,de:0.0,roe:28.4,roce:27.2,divY:0.6,revG:32,profG:38,prHold:31,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:7500,isB:false,prT:"→",ec:9,rd:"Jul 22",evEb:42,roic:"H",wce:"H",note:"Fastest-growing mid-cap IT. 32% rev CAGR. GenAI services. Premium justified by growth."},
-  {id:23,sym:"COFORGE.NS",name:"Coforge",s:"IT",cap:"Mid Cap",pe:38.2,pb:8.5,de:0.2,roe:25.4,roce:22.8,divY:0.8,revG:28,profG:32,prHold:63,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:8200,isB:false,prT:"→",ec:8,rd:"Jul 25",evEb:28,roic:"H",wce:"H",note:"IT focus on insurance+travel. 28% rev growth. 63% promoter. Strong deal wins."},
-  {id:24,sym:"SUNPHARMA.NS",name:"Sun Pharmaceutical",s:"Pharma",cap:"Large Cap",pe:34.8,pb:5.4,de:0.1,roe:18.4,roce:17.2,divY:0.6,revG:14,profG:22,prHold:54,pledged:2,intCov:25,fcf:"H",ar:"Buy",at:1980,isB:false,prT:"→",ec:8,rd:"Aug 5",evEb:22,roic:"H",wce:"H",note:"India's largest pharma. Specialty US drugs growing. Sector rally Jul 2026 live. Strong branded."},
-  {id:25,sym:"DRREDDY.NS",name:"Dr. Reddy's Labs",s:"Pharma",cap:"Large Cap",pe:18.2,pb:3.8,de:0.1,roe:22.1,roce:20.8,divY:0.8,revG:15,profG:28,prHold:26,pledged:0,intCov:30,fcf:"H",ar:"Buy",at:6800,isB:false,prT:"→",ec:8,rd:"Aug 2",evEb:14,roic:"H",wce:"H",note:"Cheapest large-cap pharma on P/E. 22% ROE. Global generics. Zero pledging. Strong US biz."},
-  {id:26,sym:"CIPLA.NS",name:"Cipla",s:"Pharma",cap:"Large Cap",pe:24.9,pb:4.2,de:0.1,roe:17.8,roce:16.9,divY:0.6,revG:12,profG:24,prHold:33,pledged:0,intCov:28,fcf:"H",ar:"Buy",at:1720,isB:false,prT:"→",ec:8,rd:"Aug 9",evEb:18,roic:"H",wce:"H",note:"Nifty top gainer +4.82% Jul 1. Pharma sector rotation live. US respiratory pipeline strong."},
-  {id:27,sym:"DIVISLAB.NS",name:"Divi's Laboratories",s:"Pharma",cap:"Large Cap",pe:49.8,pb:8.2,de:0.0,roe:20.4,roce:19.8,divY:1.2,revG:10,profG:8,prHold:52,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:5800,isB:false,prT:"→",ec:7,rd:"Aug 12",evEb:38,roic:"H",wce:"H",note:"Global API/CDMO leader. Zero debt. Premium justified. Await growth recovery before adding."},
-  {id:28,sym:"MOREPENLAB.NS",name:"Morepen Labs",s:"Pharma",cap:"Small Cap",pe:20.2,pb:2.2,de:0.2,roe:12.1,roce:16.8,divY:0.5,revG:12,profG:18,prHold:44,pledged:5,intCov:8,fcf:"M",ar:"Buy",at:68,isB:false,prT:"→",ec:6,rd:"Aug 15",evEb:14,roic:"M",wce:"M",note:"API+800 branded pharma products. Low price ₹45-55. Pharma rally beneficiary. Check pledged%."},
-  {id:29,sym:"ITC.NS",name:"ITC",s:"FMCG",cap:"Large Cap",pe:25.4,pb:6.5,de:0.0,roe:28.1,roce:27.4,divY:4.2,revG:12,profG:18,prHold:0,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:510,isB:false,prT:"→",ec:9,rd:"Jul 22",evEb:18,roic:"H",wce:"H",note:"Cigarettes+FMCG+Hotels+Agri. Zero debt. 4.2% dividend. Cheapest FMCG on PE. Hotels re-rating catalyst."},
-  {id:30,sym:"HINDUNILVR.NS",name:"Hindustan Unilever",s:"FMCG",cap:"Large Cap",pe:50.2,pb:9.8,de:0.0,roe:20.8,roce:19.4,divY:2.0,revG:8,profG:12,prHold:62,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:2600,isB:false,prT:"→",ec:8,rd:"Jul 22",evEb:38,roic:"H",wce:"H",note:"100+ consumer brands. Defensive. Rich valuation limits upside. Volume growth recovering slowly."},
-  {id:31,sym:"MARICO.NS",name:"Marico",s:"FMCG",cap:"Large Cap",pe:52.5,pb:14.5,de:0.1,roe:35.4,roce:34.8,divY:1.8,revG:8,profG:12,prHold:59,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:720,isB:false,prT:"→",ec:8,rd:"Aug 2",evEb:38,roic:"H",wce:"H",note:"Parachute+Saffola brand leader. 35% ROE. International business growing. Quality compounder."},
-  {id:32,sym:"DABUR.NS",name:"Dabur India",s:"FMCG",cap:"Large Cap",pe:48.5,pb:10.5,de:0.2,roe:22.4,roce:21.8,divY:1.5,revG:8,profG:10,prHold:68,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:650,isB:false,prT:"→",ec:7,rd:"Aug 5",evEb:36,roic:"H",wce:"H",note:"Ayurvedic FMCG leader. 68% promoter. International 30% revenue. Defensive dividend payer."},
-  {id:33,sym:"GODREJCP.NS",name:"Godrej Consumer",s:"FMCG",cap:"Large Cap",pe:55.5,pb:8.5,de:0.5,roe:16.4,roce:15.8,divY:1.0,revG:10,profG:14,prHold:63,pledged:0,intCov:18,fcf:"H",ar:"Hold",at:1450,isB:false,prT:"→",ec:7,rd:"Aug 5",evEb:38,roic:"H",wce:"H",note:"Household insecticides+hair care+soaps. Africa+Indonesia operations. Steady compounder."},
-  {id:34,sym:"BIKAJI.NS",name:"Bikaji Foods",s:"FMCG",cap:"Small Cap",pe:52.5,pb:8.5,de:0.1,roe:18.4,roce:17.8,divY:0.5,revG:22,profG:28,prHold:55,pledged:0,intCov:22,fcf:"H",ar:"Buy",at:850,isB:false,prT:"→",ec:7,rd:"Aug 12",evEb:38,roic:"H",wce:"H",note:"Rajasthani snacks brand expanding nationally. 22% CAGR. Premiumisation story. Growing D2C."},
-  {id:35,sym:"MARUTI.NS",name:"Maruti Suzuki",s:"Auto",cap:"Large Cap",pe:22.4,pb:3.8,de:0.0,roe:17.8,roce:17.2,divY:1.2,revG:14,profG:35,prHold:56,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:13500,isB:false,prT:"→",ec:9,rd:"Jul 25",evEb:16,roic:"H",wce:"H",note:"India #1 carmaker 40%+ share. Zero debt. EV+hybrid strategy. 56% promoter. High conviction."},
-  {id:36,sym:"TATAMOTORS.NS",name:"Tata Motors",s:"Auto",cap:"Large Cap",pe:6.2,pb:1.5,de:1.5,roe:25.4,roce:12.8,divY:0.5,revG:20,profG:0,prHold:46,pledged:0,intCov:4,fcf:"M",ar:"Buy",at:1050,isB:false,prT:"→",ec:7,rd:"Jul 28",evEb:8,roic:"M",wce:"M",note:"JLR recovery+India EVs+commercial vehicles. PE 6.2 = deep value. 25% ROE. Debt reducing."},
-  {id:37,sym:"BAJAJ-AUTO.NS",name:"Bajaj Auto",s:"Auto",cap:"Large Cap",pe:30.2,pb:8.5,de:0.0,roe:28.4,roce:27.1,divY:2.8,revG:12,profG:24,prHold:56,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:10800,isB:false,prT:"→",ec:9,rd:"Jul 24",evEb:22,roic:"H",wce:"H",note:"2W/3W export champion. Zero debt. 2.8% dividend. 28% ROE. EV+premiumisation ahead."},
-  {id:38,sym:"HEROMOTOCO.NS",name:"Hero MotoCorp",s:"Auto",cap:"Large Cap",pe:18.4,pb:5.2,de:0.0,roe:30.2,roce:29.4,divY:4.5,revG:8,profG:20,prHold:35,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:4800,isB:false,prT:"→",ec:8,rd:"Jul 28",evEb:14,roic:"H",wce:"H",note:"World's largest 2-wheeler. Zero debt. 4.5% dividend. Rural recovery. 30% ROE."},
-  {id:39,sym:"BALKRISIND.NS",name:"Balkrishna Industries",s:"Auto",cap:"Mid Cap",pe:22.5,pb:4.2,de:0.3,roe:20.4,roce:18.8,divY:1.5,revG:14,profG:22,prHold:58,pledged:0,intCov:12,fcf:"H",ar:"Buy",at:2800,isB:false,prT:"→",ec:8,rd:"Aug 8",evEb:16,roic:"H",wce:"H",note:"Specialty off-highway tyres. Export champion. European+US farm/industrial leader. Strong brand."},
-  {id:40,sym:"APOLLOTYRE.NS",name:"Apollo Tyres",s:"Auto",cap:"Mid Cap",pe:14.5,pb:2.2,de:0.8,roe:16.4,roce:14.8,divY:1.2,revG:12,profG:18,prHold:43,pledged:5,intCov:8,fcf:"M",ar:"Buy",at:480,isB:false,prT:"→",ec:7,rd:"Aug 5",evEb:10,roic:"M",wce:"M",note:"India's 2nd largest tyre. Cheap vs peers. Europe contributing. Debt reducing. Watch pledged 5%."},
-  {id:41,sym:"RELIANCE.NS",name:"Reliance Industries",s:"Energy",cap:"Large Cap",pe:22.1,pb:2.2,de:0.4,roe:10.2,roce:9.4,divY:0.4,revG:14,profG:8,prHold:51,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:1520,isB:false,prT:"→",ec:8,rd:"Jul 18",evEb:14,roic:"M",wce:"M",note:"O2C+Jio+Retail. Most valuable India co. Jio IPO+Retail IPO = mega pending catalysts."},
-  {id:42,sym:"ONGC.NS",name:"ONGC",s:"Energy",cap:"Large Cap",pe:7.4,pb:0.9,de:0.3,roe:18.1,roce:16.8,divY:5.5,revG:10,profG:25,prHold:58,pledged:0,intCov:8,fcf:"H",ar:"Buy",at:340,isB:false,prT:"→",ec:7,rd:"Aug 12",evEb:5,roic:"H",wce:"H",note:"India's largest oil producer. P/B below 1 = below book value. 5.5% dividend. Deep undervalue."},
-  {id:43,sym:"COALINDIA.NS",name:"Coal India",s:"Energy",cap:"Large Cap",pe:7.2,pb:3.2,de:0.0,roe:52.4,roce:51.8,divY:6.0,revG:8,profG:28,prHold:63,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:520,isB:false,prT:"→",ec:8,rd:"Aug 15",evEb:5,roic:"H",wce:"H",note:"World's largest coal miner. Zero debt. 52% ROE+6% dividend = cash machine. PSU turnaround complete."},
-  {id:44,sym:"PETRONET.NS",name:"Petronet LNG",s:"Energy",cap:"Large Cap",pe:12.5,pb:2.5,de:0.2,roe:22.4,roce:20.8,divY:5.5,revG:8,profG:12,prHold:50,pledged:0,intCov:14,fcf:"H",ar:"Buy",at:380,isB:false,prT:"→",ec:8,rd:"Aug 8",evEb:9,roic:"H",wce:"H",note:"LNG terminal monopoly. 5.5% dividend. Dahej at 100% capacity. PE 12.5 very cheap for quality."},
-  {id:45,sym:"IGL.NS",name:"Indraprastha Gas",s:"Energy",cap:"Mid Cap",pe:18.5,pb:3.5,de:0.1,roe:20.4,roce:19.8,divY:1.2,revG:12,profG:15,prHold:45,pledged:0,intCov:22,fcf:"H",ar:"Buy",at:480,isB:false,prT:"→",ec:8,rd:"Aug 12",evEb:14,roic:"H",wce:"H",note:"Delhi CNG distributor monopoly. 20% ROE. Every new CNG vehicle = long-term customer."},
-  {id:46,sym:"NTPC.NS",name:"NTPC",s:"Power",cap:"Large Cap",pe:14.2,pb:1.8,de:1.5,roe:13.2,roce:9.8,divY:3.2,revG:14,profG:15,prHold:51,pledged:0,intCov:5,fcf:"M",ar:"Buy",at:420,isB:false,prT:"→",ec:8,rd:"Aug 8",evEb:10,roic:"M",wce:"M",note:"India's largest power utility. 60GW RE target. 3.2% dividend. Regulated returns."},
-  {id:47,sym:"POWERGRID.NS",name:"Power Grid Corp",s:"Power",cap:"Large Cap",pe:16.1,pb:3.0,de:1.8,roe:20.4,roce:11.2,divY:4.8,revG:10,profG:12,prHold:51,pledged:0,intCov:4,fcf:"M",ar:"Buy",at:360,isB:false,prT:"→",ec:8,rd:"Aug 5",evEb:10,roic:"M",wce:"M",note:"Transmission monopoly. 4.8% dividend. Regulated returns = predictable income stream."},
-  {id:48,sym:"RECLTD.NS",name:"REC Limited",s:"Power Finance",cap:"Large Cap",pe:8.1,pb:1.6,de:7.2,roe:20.8,roce:7.4,divY:4.2,revG:22,profG:28,prHold:52,pledged:0,intCov:null,fcf:"H",ar:"Strong Buy",at:650,isB:true,prT:"→",ec:9,rd:"Aug 5",evEb:8,roic:"H",wce:"H",note:"PSU power lender. Budget ₹11.2L Cr capex beneficiary. 4.2% div+28% profit growth. Top pick."},
-  {id:49,sym:"PFC.NS",name:"Power Finance Corp",s:"Power Finance",cap:"Large Cap",pe:7.4,pb:1.4,de:7.8,roe:18.4,roce:6.8,divY:4.5,revG:18,profG:24,prHold:56,pledged:0,intCov:null,fcf:"H",ar:"Strong Buy",at:530,isB:true,prT:"→",ec:9,rd:"Aug 7",evEb:7,roic:"H",wce:"H",note:"Govt-backed power lender. Beat Q4 EPS by 24.4%. Results Aug 7 = momentum setup. P/B 1.4."},
-  {id:50,sym:"SUZLON.NS",name:"Suzlon Energy",s:"Power",cap:"Mid Cap",pe:39.8,pb:8.5,de:0.3,roe:26.5,roce:23.4,divY:0.0,revG:25,profG:0,prHold:15,pledged:0,intCov:6,fcf:"M",ar:"Buy",at:68,isB:false,prT:"↑",ec:7,rd:"Aug 12",evEb:22,roic:"H",wce:"M",note:"India's largest wind co. Multi-year high order book. Above ₹52 = breakout signal. 26% ROE."},
-  {id:51,sym:"NHPC.NS",name:"NHPC",s:"Power",cap:"Large Cap",pe:14.8,pb:1.4,de:0.8,roe:11.4,roce:9.2,divY:4.0,revG:8,profG:14,prHold:67,pledged:0,intCov:5,fcf:"M",ar:"Buy",at:98,isB:false,prT:"→",ec:7,rd:"Aug 15",evEb:10,roic:"M",wce:"M",note:"PSU hydro power Navratna. 67% Govt. 4% dividend. Clean energy at ₹75-85."},
-  {id:52,sym:"TATAPOWER.NS",name:"Tata Power",s:"Power",cap:"Large Cap",pe:22.5,pb:2.8,de:1.8,roe:12.4,roce:9.8,divY:0.8,revG:18,profG:22,prHold:46,pledged:0,intCov:4,fcf:"M",ar:"Buy",at:520,isB:false,prT:"→",ec:7,rd:"Aug 8",evEb:12,roic:"M",wce:"M",note:"Tata group power. Renewables+pumped hydro+EV charging growing. Debt reducing. Tata brand."},
-  {id:53,sym:"WAAREEENER.NS",name:"Waaree Energies",s:"Power",cap:"Mid Cap",pe:45.5,pb:12.5,de:0.5,roe:28.4,roce:24.8,divY:0.0,revG:45,profG:55,prHold:68,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:380,isB:false,prT:"→",ec:7,rd:"Aug 12",evEb:28,roic:"H",wce:"M",note:"India's largest solar panel maker. PLI beneficiary. 45% rev growth. China+1 play."},
-  {id:54,sym:"INOXWIND.NS",name:"Inox Wind",s:"Power",cap:"Small Cap",pe:28.5,pb:5.5,de:0.8,roe:18.4,roce:15.8,divY:0.0,revG:32,profG:0,prHold:38,pledged:5,intCov:5,fcf:"L",ar:"Hold",at:185,isB:false,prT:"→",ec:5,rd:"Aug 15",evEb:18,roic:"M",wce:"L",note:"Wind turbine manufacturer. Profitability variable. Renewable play. Monitor execution risk."},
-  {id:55,sym:"LT.NS",name:"Larsen & Toubro",s:"Infrastructure",cap:"Large Cap",pe:27.8,pb:3.8,de:1.5,roe:14.2,roce:11.8,divY:1.5,revG:16,profG:20,prHold:0,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:4200,isB:false,prT:"→",ec:8,rd:"Jul 28",evEb:18,roic:"M",wce:"H",note:"₹5.6L Cr order book. Infra supercycle. GCC tech+defence growing. Professional management."},
-  {id:56,sym:"BEL.NS",name:"Bharat Electronics",s:"Infrastructure",cap:"Large Cap",pe:38.4,pb:7.2,de:0.0,roe:22.4,roce:21.8,divY:1.8,revG:14,profG:22,prHold:51,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:320,isB:false,prT:"→",ec:9,rd:"Aug 12",evEb:28,roic:"H",wce:"H",note:"Defence electronics PSU. Order book boom. Zero debt, 22% ROCE. 5yr defence visibility."},
-  {id:57,sym:"NBCC.NS",name:"NBCC India",s:"Infrastructure",cap:"Mid Cap",pe:34.8,pb:5.8,de:0.0,roe:20.2,roce:37.1,divY:0.8,revG:10,profG:18,prHold:61,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:115,isB:false,prT:"→",ec:8,rd:"Aug 5",evEb:26,roic:"H",wce:"H",note:"PSU construction. 37% ROCE exceptional. Smart city+redevelopment. Zero debt. Low price."},
-  {id:58,sym:"HAL.NS",name:"HAL",s:"Infrastructure",cap:"Large Cap",pe:32.5,pb:8.5,de:0.0,roe:28.4,roce:26.8,divY:1.2,revG:22,profG:28,prHold:71,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:5200,isB:false,prT:"→",ec:9,rd:"Aug 8",evEb:24,roic:"H",wce:"H",note:"Defence PSU. Fighter jets+helicopters+engines. ₹1L Cr+ order book. Zero debt, 28% ROE."},
-  {id:59,sym:"MAZAGON.NS",name:"Mazagon Dock",s:"Infrastructure",cap:"Mid Cap",pe:18.5,pb:6.5,de:0.0,roe:38.4,roce:36.8,divY:1.8,revG:32,profG:45,prHold:84,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:2800,isB:false,prT:"→",ec:9,rd:"Aug 12",evEb:14,roic:"H",wce:"H",note:"Submarine+warship builder. 84% Govt. ₹40,000Cr+ order book. Zero debt, 38% ROE."},
-  {id:60,sym:"COCHINSHIP.NS",name:"Cochin Shipyard",s:"Infrastructure",cap:"Mid Cap",pe:15.5,pb:5.5,de:0.0,roe:38.4,roce:36.8,divY:2.8,revG:28,profG:48,prHold:73,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:2200,isB:false,prT:"→",ec:9,rd:"Aug 12",evEb:12,roic:"H",wce:"H",note:"Shipbuilding PSU. 38% ROE+2.8% div+zero debt. Navy order surge."},
-  {id:61,sym:"RVNL.NS",name:"RVNL",s:"Infrastructure",cap:"Mid Cap",pe:22.5,pb:4.5,de:0.2,roe:22.4,roce:18.8,divY:1.5,revG:28,profG:35,prHold:72,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:450,isB:false,prT:"→",ec:8,rd:"Aug 5",evEb:16,roic:"H",wce:"M",note:"Rail Vikas Nigam PSU. ₹2.5L Cr railway capex beneficiary. 22% ROE. 72% Govt."},
-  {id:62,sym:"IRCON.NS",name:"IRCON",s:"Infrastructure",cap:"Mid Cap",pe:14.5,pb:2.8,de:0.1,roe:18.4,roce:16.8,divY:2.5,revG:18,profG:22,prHold:73,pledged:0,intCov:18,fcf:"H",ar:"Buy",at:280,isB:false,prT:"→",ec:8,rd:"Aug 8",evEb:11,roic:"H",wce:"H",note:"Railway+road infra PSU. 73% Govt. 2.5% dividend. Cheapest railway infra on PE."},
-  {id:63,sym:"ADANIPORTS.NS",name:"Adani Ports",s:"Infrastructure",cap:"Large Cap",pe:22.5,pb:4.5,de:1.2,roe:22.4,roce:14.8,divY:0.6,revG:22,profG:28,prHold:65,pledged:0,intCov:6,fcf:"M",ar:"Buy",at:1450,isB:false,prT:"→",ec:8,rd:"Jul 28",evEb:14,roic:"H",wce:"M",note:"India's largest port operator. 14+ ports. Logistics+port+SEZ ecosystem. 22% ROE."},
-  {id:64,sym:"ULTRACEMCO.NS",name:"UltraTech Cement",s:"Infrastructure",cap:"Large Cap",pe:25.5,pb:3.8,de:0.2,roe:16.4,roce:14.8,divY:0.5,revG:12,profG:18,prHold:60,pledged:0,intCov:14,fcf:"H",ar:"Buy",at:12500,isB:false,prT:"→",ec:8,rd:"Jul 22",evEb:18,roic:"H",wce:"H",note:"India's largest cement. 180MT+ capacity. Direct infra capex play. Market leader every region."},
-  {id:65,sym:"GRASIM.NS",name:"Grasim Industries",s:"Infrastructure",cap:"Large Cap",pe:18.4,pb:2.2,de:0.5,roe:12.4,roce:10.8,divY:0.8,revG:14,profG:10,prHold:42,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:2800,isB:false,prT:"→",ec:7,rd:"Aug 5",evEb:14,roic:"M",wce:"M",note:"Aditya Birla: Ultratech cement+Birla Opus paints+VSF. Paints segment is big catalyst."},
-  {id:66,sym:"POLYCAB.NS",name:"Polycab India",s:"Infrastructure",cap:"Mid Cap",pe:38.5,pb:8.2,de:0.1,roe:22.4,roce:21.8,divY:0.8,revG:18,profG:28,prHold:67,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:7800,isB:false,prT:"→",ec:9,rd:"Aug 8",evEb:28,roic:"H",wce:"H",note:"India #1 cables & wires. 67% promoter. Direct infra capex. Expanding into FMEG."},
-  {id:67,sym:"SIEMENS.NS",name:"Siemens India",s:"Infrastructure",cap:"Large Cap",pe:61.4,pb:12,de:0.0,roe:25.1,roce:23.8,divY:0.5,revG:18,profG:28,prHold:75,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:5200,isB:false,prT:"→",ec:9,rd:"Jul 28",evEb:46,roic:"H",wce:"H",note:"Industrial automation+power transmission. 75% promoter. Zero debt. Quality compounder."},
-  {id:68,sym:"ABB.NS",name:"ABB India",s:"Infrastructure",cap:"Large Cap",pe:64.2,pb:18,de:0.0,roe:28.4,roce:26.8,divY:0.5,revG:20,profG:35,prHold:75,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:7800,isB:false,prT:"→",ec:9,rd:"Jul 25",evEb:50,roic:"H",wce:"H",note:"Electrification+automation. 75% promoter, zero debt. Only for long-term wealth building."},
-  {id:69,sym:"TATASTEEL.NS",name:"Tata Steel",s:"Metals",cap:"Large Cap",pe:15.4,pb:1.8,de:0.8,roe:12.4,roce:10.8,divY:0.5,revG:8,profG:0,prHold:33,pledged:5,intCov:4,fcf:"L",ar:"Hold",at:175,isB:false,prT:"→",ec:6,rd:"Jul 28",evEb:8,roic:"M",wce:"L",note:"India's largest steelmaker. Europe drag reducing. Buy in down-cycles only. Watch pledged."},
-  {id:70,sym:"JSWSTEEL.NS",name:"JSW Steel",s:"Metals",cap:"Large Cap",pe:18.2,pb:2.5,de:1.2,roe:14.2,roce:12.4,divY:0.8,revG:12,profG:5,prHold:45,pledged:8,intCov:5,fcf:"L",ar:"Hold",at:920,isB:false,prT:"→",ec:6,rd:"Aug 8",evEb:10,roic:"M",wce:"L",note:"Fast-growing steel. High capex cycle. Pledged 8% = watch. Long-term entry on deep dips."},
-  {id:71,sym:"HINDALCO.NS",name:"Hindalco",s:"Metals",cap:"Large Cap",pe:10.2,pb:1.3,de:0.7,roe:13.2,roce:11.8,divY:0.6,revG:14,profG:8,prHold:35,pledged:5,intCov:6,fcf:"M",ar:"Buy",at:720,isB:false,prT:"→",ec:7,rd:"Jul 28",evEb:7,roic:"M",wce:"M",note:"Aluminium+Novelis. P/B 1.3 cheap. US infra play via Novelis. Cheapest metal on valuation."},
-  {id:72,sym:"BHARTIARTL.NS",name:"Bharti Airtel",s:"Telecom",cap:"Large Cap",pe:44.8,pb:12,de:2.3,roe:41.2,roce:16.8,divY:0.5,revG:18,profG:0,prHold:56,pledged:0,intCov:5,fcf:"M",ar:"Strong Buy",at:1900,isB:false,prT:"→",ec:7,rd:"Jul 28",evEb:15,roic:"H",wce:"M",note:"India #1 telecom. ARPU upcycle live. Africa+B2B growing. 41% ROE. Top analyst conviction."},
-  {id:73,sym:"TITAN.NS",name:"Titan Company",s:"Consumer",cap:"Large Cap",pe:84.2,pb:28,de:0.1,roe:35.4,roce:32.8,divY:0.5,revG:22,profG:28,prHold:52,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:3900,isB:false,prT:"→",ec:9,rd:"Jul 22",evEb:62,roic:"H",wce:"H",note:"Tanishq+Titan+Taneira. 35% ROE, zero debt, 22% rev CAGR. India's most aspirational brand."},
-  {id:74,sym:"DMART.NS",name:"Avenue Supermarts",s:"Consumer",cap:"Large Cap",pe:88.4,pb:13,de:0.0,roe:14.8,roce:14.2,divY:0.0,revG:16,profG:22,prHold:75,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:5800,isB:false,prT:"→",ec:9,rd:"Jul 8",evEb:68,roic:"H",wce:"H",note:"India's most profitable retailer. Zero debt. 75% promoter. Very expensive — buy only on big dips."},
-  {id:75,sym:"TRENT.NS",name:"Trent (Zudio)",s:"Consumer",cap:"Large Cap",pe:98.4,pb:18,de:0.2,roe:20.4,roce:18.8,divY:0.1,revG:35,profG:80,prHold:37,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:4200,isB:false,prT:"→",ec:9,rd:"Jul 22",evEb:72,roic:"H",wce:"H",note:"Zudio fastest-growing fashion retail. 35% rev+80% profit CAGR. Down 60% from peak."},
-  {id:76,sym:"ASIANPAINT.NS",name:"Asian Paints",s:"Consumer",cap:"Large Cap",pe:48.5,pb:12.5,de:0.1,roe:26.4,roce:25.8,divY:1.2,revG:8,profG:5,prHold:52,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:2500,isB:false,prT:"→",ec:7,rd:"Jul 22",evEb:36,roic:"H",wce:"H",note:"India's largest paint co. Now facing Birla Opus competition. 26% ROE but growth slowing."},
-  {id:77,sym:"VOLTAS.NS",name:"Voltas",s:"Consumer Durables",cap:"Mid Cap",pe:68.5,pb:7.5,de:0.0,roe:12.4,roce:11.8,divY:0.6,revG:18,profG:25,prHold:30,pledged:0,intCov:99,fcf:"M",ar:"Buy",at:1850,isB:false,prT:"→",ec:7,rd:"Aug 8",evEb:52,roic:"M",wce:"M",note:"India's AC market leader. Zero debt. Climate change = AC boom for decades. Tata group."},
-  {id:78,sym:"HAVELLS.NS",name:"Havells India",s:"Consumer Durables",cap:"Large Cap",pe:62.5,pb:11.8,de:0.0,roe:18.4,roce:17.8,divY:0.8,revG:14,profG:18,prHold:60,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:1750,isB:false,prT:"→",ec:8,rd:"Jul 25",evEb:46,roic:"H",wce:"H",note:"Premium electricals+lighting+cables. Lloyd AC growing. Zero debt. 60% promoter. Brand leader."},
-  {id:79,sym:"DIXON.NS",name:"Dixon Technologies",s:"Electronics",cap:"Mid Cap",pe:95.5,pb:22.5,de:0.5,roe:24.2,roce:21.8,divY:0.2,revG:38,profG:45,prHold:35,pledged:0,intCov:18,fcf:"M",ar:"Buy",at:18500,isB:false,prT:"↑",ec:8,rd:"Aug 8",evEb:68,roic:"H",wce:"M",note:"India's largest electronics maker. PLI scheme. Phones/TVs/washing machines. 38% rev CAGR."},
-  {id:80,sym:"KAYNES.NS",name:"Kaynes Technology",s:"Electronics",cap:"Small Cap",pe:82.5,pb:18.5,de:0.5,roe:22.4,roce:19.8,divY:0.1,revG:38,profG:48,prHold:58,pledged:0,intCov:15,fcf:"M",ar:"Buy",at:4200,isB:false,prT:"→",ec:8,rd:"Aug 12",evEb:58,roic:"H",wce:"M",note:"EMS for defence+industrial+medical electronics. 38% CAGR. India's EMS story."},
-  {id:81,sym:"IRCTC.NS",name:"IRCTC",s:"Consumer",cap:"Large Cap",pe:52.5,pb:14.5,de:0.0,roe:35.4,roce:34.8,divY:1.2,revG:22,profG:28,prHold:67,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1050,isB:false,prT:"→",ec:8,rd:"Aug 5",evEb:38,roic:"H",wce:"H",note:"Railways ticketing monopoly. Zero debt, 35% ROE. Tourism+catering+Rail Neer. 67% Govt."},
-  {id:82,sym:"ZOMATO.NS",name:"Zomato",s:"Consumer",cap:"Large Cap",pe:198.5,pb:8.5,de:0.1,roe:5.4,roce:4.8,divY:0.0,revG:55,profG:0,prHold:0,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:320,isB:false,prT:"→",ec:6,rd:"Jul 28",evEb:58,roic:"L",wce:"M",note:"Quick commerce+food delivery. Blinkit growing 80%+. First year profits FY24. Long-term play."},
-  {id:83,sym:"HDFCLIFE.NS",name:"HDFC Life Insurance",s:"Insurance",cap:"Large Cap",pe:78.4,pb:8.5,de:0.0,roe:12.4,roce:8.2,divY:0.5,revG:14,profG:16,prHold:50,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:760,isB:false,prT:"→",ec:8,rd:"Jul 25",evEb:58,roic:"H",wce:"H",note:"India's largest private life insurer. VNB margin expansion. Multi-decade insurance story."},
-  {id:84,sym:"SBILIFE.NS",name:"SBI Life Insurance",s:"Insurance",cap:"Large Cap",pe:62.8,pb:9.5,de:0.0,roe:14.8,roce:9.4,divY:0.5,revG:18,profG:18,prHold:57,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1780,isB:false,prT:"→",ec:8,rd:"Jul 22",evEb:46,roic:"H",wce:"H",note:"PSU-backed life insurance via SBI network. 57% SBI. Lower PE vs HDFC Life = better value."},
-  {id:85,sym:"ICICIGI.NS",name:"ICICI Lombard",s:"Insurance",cap:"Large Cap",pe:28.5,pb:4.8,de:0.0,roe:18.4,roce:12.8,divY:0.8,revG:18,profG:22,prHold:52,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:2200,isB:false,prT:"→",ec:8,rd:"Jul 22",evEb:22,roic:"H",wce:"H",note:"ICICI general insurance market leader. Lower PE vs life insurers. Growing motor+health."},
-  {id:86,sym:"PIIND.NS",name:"PI Industries",s:"Chemicals",cap:"Mid Cap",pe:32.5,pb:6.5,de:0.0,roe:22.4,roce:21.8,divY:0.8,revG:12,profG:18,prHold:53,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:4500,isB:false,prT:"→",ec:8,rd:"Aug 12",evEb:24,roic:"H",wce:"H",note:"Agrochemical+CSM specialty chemicals. Zero debt. China+1 beneficiary. 22% ROE. Quality."},
-  {id:87,sym:"SOLARINDS.NS",name:"Solar Industries",s:"Chemicals",cap:"Mid Cap",pe:52.5,pb:12.5,de:0.1,roe:24.4,roce:23.8,divY:0.3,revG:22,profG:28,prHold:72,pledged:0,intCov:32,fcf:"H",ar:"Buy",at:9500,isB:false,prT:"↑",ec:9,rd:"Aug 8",evEb:38,roic:"H",wce:"H",note:"Explosives+defence propellants. 72% promoter+increasing. Defence+mining growth. 24% ROE."},
-  {id:88,sym:"DEEPAKNTR.NS",name:"Deepak Nitrite",s:"Chemicals",cap:"Mid Cap",pe:28.5,pb:4.8,de:0.3,roe:18.4,roce:16.8,divY:0.8,revG:8,profG:5,prHold:46,pledged:0,intCov:12,fcf:"M",ar:"Hold",at:2800,isB:false,prT:"→",ec:6,rd:"Aug 8",evEb:22,roic:"M",wce:"M",note:"Specialty chemicals+phenol+IPA. China+1 play. Recent downcycle but fundamentals intact."},
-  {id:89,sym:"GODREJPROP.NS",name:"Godrej Properties",s:"Real Estate",cap:"Large Cap",pe:45.5,pb:4.5,de:0.8,roe:12.4,roce:8.8,divY:0.0,revG:35,profG:45,prHold:59,pledged:0,intCov:4,fcf:"L",ar:"Buy",at:3200,isB:false,prT:"→",ec:7,rd:"Aug 8",evEb:28,roic:"M",wce:"L",note:"India's largest listed real estate. Pre-sales at record highs. Godrej brand premium. Watch debt."},
-  {id:90,sym:"OBEROIRLTY.NS",name:"Oberoi Realty",s:"Real Estate",cap:"Mid Cap",pe:38.5,pb:5.5,de:0.3,roe:18.4,roce:16.8,divY:0.5,revG:28,profG:38,prHold:68,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:2200,isB:false,prT:"→",ec:8,rd:"Aug 12",evEb:24,roic:"H",wce:"M",note:"Ultra-luxury Mumbai real estate. 68% promoter. Low leverage. India's premium RE brand."},
-  {id:91,sym:"PRESTIGE.NS",name:"Prestige Estates",s:"Real Estate",cap:"Mid Cap",pe:42.5,pb:4.8,de:1.2,roe:15.4,roce:12.8,divY:0.3,revG:32,profG:28,prHold:67,pledged:5,intCov:5,fcf:"L",ar:"Buy",at:1850,isB:false,prT:"→",ec:7,rd:"Aug 15",evEb:22,roic:"M",wce:"L",note:"South India premium RE expanding North. 32% rev growth. Watch debt+pledged 5%."},
-  {id:92,sym:"INDIAMART.NS",name:"IndiaMART",s:"Technology",cap:"Mid Cap",pe:38.5,pb:8.5,de:0.0,roe:22.4,roce:21.8,divY:0.5,revG:18,profG:22,prHold:52,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:2800,isB:false,prT:"→",ec:8,rd:"Aug 5",evEb:28,roic:"H",wce:"H",note:"B2B marketplace monopoly. Zero debt. SME digitisation. Subscription model = recurring revenue."},
-  {id:93,sym:"RATEGAIN.NS",name:"RateGain Travel",s:"Technology",cap:"Small Cap",pe:52.5,pb:8.5,de:0.1,roe:18.4,roce:16.8,divY:0.0,revG:35,profG:42,prHold:44,pledged:0,intCov:22,fcf:"M",ar:"Buy",at:950,isB:false,prT:"→",ec:7,rd:"Aug 8",evEb:38,roic:"H",wce:"M",note:"Travel tech SaaS. 35% rev growth. Global hotel+airline clients. Recurring revenue model."},
-  {id:94,sym:"NEWGEN.NS",name:"Newgen Software",s:"Technology",cap:"Small Cap",pe:38.5,pb:8.5,de:0.0,roe:24.4,roce:23.8,divY:0.5,revG:22,profG:28,prHold:41,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1450,isB:false,prT:"→",ec:8,rd:"Aug 5",evEb:28,roic:"H",wce:"H",note:"Low-code digital process automation. Zero debt, 24% ROE. Govt+banking worldwide clients."},
-  {id:95,sym:"NAZARA.NS",name:"Nazara Technologies",s:"Technology",cap:"Small Cap",pe:65.5,pb:5.5,de:0.1,roe:8.4,roce:7.8,divY:0.0,revG:28,profG:5,prHold:42,pledged:0,intCov:15,fcf:"L",ar:"Hold",at:900,isB:false,prT:"→",ec:5,rd:"Aug 12",evEb:48,roic:"L",wce:"L",note:"India's gaming+esports+edtech. High growth but low profitability. Long-term speculative."},
-  {id:96,sym:"ASTRAL.NS",name:"Astral",s:"Infrastructure",cap:"Mid Cap",pe:58.5,pb:12.5,de:0.1,roe:22.4,roce:21.8,divY:0.3,revG:18,profG:22,prHold:55,pledged:0,intCov:99,fcf:"H",ar:"Hold",at:2200,isB:false,prT:"→",ec:8,rd:"Aug 8",evEb:44,roic:"H",wce:"H",note:"India's fastest growing pipes. CPVC pipes+adhesives. 22% ROE. Quality compounder."},
-  {id:97,sym:"CAMPUS.NS",name:"Campus Activewear",s:"Consumer",cap:"Small Cap",pe:48.5,pb:5.5,de:0.2,roe:14.4,roce:13.8,divY:0.3,revG:12,profG:8,prHold:75,pledged:0,intCov:12,fcf:"M",ar:"Hold",at:320,isB:false,prT:"→",ec:6,rd:"Aug 12",evEb:36,roic:"M",wce:"M",note:"Mass market sports footwear. 75% promoter. Rural+semi-urban. Recovery play from lows."},
-  {id:98,sym:"BLUESTARCO.NS",name:"Blue Star",s:"Consumer Durables",cap:"Mid Cap",pe:55.5,pb:8.5,de:0.1,roe:18.4,roce:17.8,divY:0.8,revG:22,profG:28,prHold:38,pledged:0,intCov:25,fcf:"H",ar:"Buy",at:2200,isB:false,prT:"→",ec:8,rd:"Aug 5",evEb:42,roic:"H",wce:"H",note:"Premium AC+refrigeration. Commercial+residential. Growing with India's AC boom."},
-  {id:99,sym:"LICI.NS",name:"LIC of India",s:"Insurance",cap:"Large Cap",pe:14.5,pb:1.2,de:0.0,roe:82.4,roce:55.2,divY:1.5,revG:12,profG:18,prHold:97,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1200,isB:false,prT:"→",ec:8,rd:"Aug 8",evEb:11,roic:"H",wce:"H",note:"World's largest insurer by policy count. 97% Govt. P/B 1.2 cheap. Massive embedded value."},
-  {id:100,sym:"PERSISTENT.NS",name:"Persistent Systems",s:"IT",cap:"Mid Cap",pe:55.8,pb:14.5,de:0.0,roe:28.4,roce:27.2,divY:0.6,revG:32,profG:38,prHold:31,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:7500,isB:false,prT:"→",ec:9,rd:"Jul 22",evEb:42,roic:"H",wce:"H",note:"Fastest growing mid-cap IT. 32% revenue CAGR. GenAI+digital. Premium justified by growth."},
+const STOCKS=[
+// ── 20 LARGE CAP ANCHORS — Stability + 12-15% CAGR ───────────────────────
+{id:1,sym:"ICICIBANK.NS",name:"ICICI Bank",s:"Banking",cap:"Large Cap",pe:17.1,pb:2.9,de:5.9,roe:18.2,roce:7.8,divY:0.8,revG:18,profG:28,prHold:0,pledged:0,intCov:null,fcf:"H",ar:"Strong Buy",at:1600,isB:true,prT:"→",ec:10,rd:"Oct 26",evEb:10,roic:"H",wce:"H",note:"Best-run private bank. GNPA decade low. 28% profit CAGR. Digital banking leader. A."},
+{id:2,sym:"BHARTIARTL.NS",name:"Bharti Airtel",s:"Telecom",cap:"Large Cap",pe:44.8,pb:12,de:2.3,roe:41.2,roce:16.8,divY:0.5,revG:18,profG:35,prHold:56,pledged:0,intCov:5,fcf:"M",ar:"Strong Buy",at:2100,isB:false,prT:"→",ec:8,rd:"Oct 28",evEb:15,roic:"H",wce:"M",note:"India #1 telecom. ARPU upcycle just starting. Africa business undervalued. 41% ROE."},
+{id:3,sym:"BAJFINANCE.NS",name:"Bajaj Finance",s:"Finance",cap:"Large Cap",pe:28.3,pb:5.8,de:3.8,roe:21.2,roce:10.4,divY:0.3,revG:28,profG:26,prHold:56,pledged:0,intCov:8,fcf:"H",ar:"Buy",at:9800,isB:false,prT:"→",ec:9,rd:"Oct 22",evEb:16,roic:"H",wce:"H",note:"India NBFC king. 80M+ customers. Cross-sell machine. 28% revenue CAGR is structura."},
+{id:4,sym:"ITC.NS",name:"ITC",s:"FMCG",cap:"Large Cap",pe:25.4,pb:6.5,de:0.0,roe:28.1,roce:27.4,divY:4.2,revG:12,profG:18,prHold:0,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:580,isB:false,prT:"→",ec:9,rd:"Oct 22",evEb:18,roic:"H",wce:"H",note:"4.2% dividend + FMCG growth + hotels re-rating catalyst. Zero debt. Cheapest FMCG ."},
+{id:5,sym:"COALINDIA.NS",name:"Coal India",s:"Energy",cap:"Large Cap",pe:7.2,pb:3.2,de:0.0,roe:52.4,roce:51.8,divY:6.0,revG:8,profG:28,prHold:63,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:580,isB:false,prT:"→",ec:8,rd:"Nov 15",evEb:5,roic:"H",wce:"H",note:"World's largest coal miner. 6% dividend + zero debt + 52% ROE. India power demand ."},
+{id:6,sym:"RECLTD.NS",name:"REC Limited",s:"Power Finance",cap:"Large Cap",pe:8.1,pb:1.6,de:7.2,roe:20.8,roce:7.4,divY:4.2,revG:22,profG:28,prHold:52,pledged:0,intCov:null,fcf:"H",ar:"Strong Buy",at:700,isB:true,prT:"→",ec:9,rd:"Nov 5",evEb:8,roic:"H",wce:"H",note:"PSU power lender. ₹11.2L Cr budget capex direct beneficiary. PE 8x + 4.2% dividend."},
+{id:7,sym:"PFC.NS",name:"Power Finance Corp",s:"Power Finance",cap:"Large Cap",pe:7.4,pb:1.4,de:7.8,roe:18.4,roce:6.8,divY:4.5,revG:18,profG:24,prHold:56,pledged:0,intCov:null,fcf:"H",ar:"Strong Buy",at:600,isB:true,prT:"→",ec:9,rd:"Nov 7",evEb:7,roic:"H",wce:"H",note:"Cheapest quality PSU. PE 7.4 + 4.5% dividend. Power sector capex will run for a de."},
+{id:8,sym:"COCHINSHIP.NS",name:"Cochin Shipyard",s:"Infrastructure",cap:"Mid Cap",pe:15.5,pb:5.5,de:0.0,roe:38.4,roce:36.8,divY:2.8,revG:28,profG:48,prHold:73,pledged:0,intCov:99,fcf:"H",ar:"Strong Buy",at:2800,isB:false,prT:"→",ec:9,rd:"Nov 12",evEb:12,roic:"H",wce:"H",note:"India's best shipbuilder. 38% ROE + zero debt + Navy order boom. Defence shipbuild."},
+{id:9,sym:"MAZAGON.NS",name:"Mazagon Dock",s:"Infrastructure",cap:"Mid Cap",pe:18.5,pb:6.5,de:0.0,roe:38.4,roce:36.8,divY:1.8,revG:32,profG:45,prHold:84,pledged:0,intCov:99,fcf:"H",ar:"Strong Buy",at:3500,isB:false,prT:"→",ec:9,rd:"Nov 12",evEb:14,roic:"H",wce:"H",note:"Submarine + warship monopoly. 84% Govt. ₹40,000Cr+ order book. Zero debt, 38% ROE.."},
+{id:10,sym:"HAL.NS",name:"HAL",s:"Infrastructure",cap:"Large Cap",pe:32.5,pb:8.5,de:0.0,roe:28.4,roce:26.8,divY:1.2,revG:22,profG:28,prHold:71,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:6000,isB:false,prT:"→",ec:9,rd:"Nov 8",evEb:24,roic:"H",wce:"H",note:"Fighter jets + helicopters + engines. ₹1L Cr+ order book. Zero debt, 28% ROE. Make."},
+{id:11,sym:"MUTHOOTFIN.NS",name:"Muthoot Finance",s:"Finance",cap:"Large Cap",pe:18.4,pb:4.5,de:2.5,roe:25.2,roce:12.4,divY:1.8,revG:18,profG:22,prHold:73,pledged:0,intCov:6,fcf:"H",ar:"Buy",at:4200,isB:false,prT:"→",ec:8,rd:"Nov 5",evEb:12,roic:"H",wce:"H",note:"Gold loan NBFC king. 73% promoter. Rural India moat nobody can replicate. 25% ROE.."},
+{id:12,sym:"BAJAJ-AUTO.NS",name:"Bajaj Auto",s:"Auto",cap:"Large Cap",pe:30.2,pb:8.5,de:0.0,roe:28.4,roce:27.1,divY:2.8,revG:12,profG:24,prHold:56,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:12000,isB:false,prT:"→",ec:9,rd:"Oct 24",evEb:22,roic:"H",wce:"H",note:"2W/3W export champion. Zero debt, 2.8% dividend, 28% ROE. EV + premiumisation ahea."},
+{id:13,sym:"HCLTECH.NS",name:"HCL Technologies",s:"IT",cap:"Large Cap",pe:22.8,pb:5.5,de:0.1,roe:24.1,roce:22.8,divY:4.2,revG:16,profG:18,prHold:60,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:2200,isB:false,prT:"→",ec:9,rd:"Oct 12",evEb:19,roic:"H",wce:"H",note:"Best growth among top-4 IT. 4.2% dividend. Engineering + IT products diversificati."},
+{id:14,sym:"SUNPHARMA.NS",name:"Sun Pharmaceutical",s:"Pharma",cap:"Large Cap",pe:34.8,pb:5.4,de:0.1,roe:18.4,roce:17.2,divY:0.6,revG:14,profG:22,prHold:54,pledged:2,intCov:25,fcf:"H",ar:"Buy",at:2200,isB:false,prT:"→",ec:8,rd:"Nov 5",evEb:22,roic:"H",wce:"H",note:"India pharma king. US specialty drugs growing 20%+. EBIT margins expanding. Specia."},
+{id:15,sym:"ONGC.NS",name:"ONGC",s:"Energy",cap:"Large Cap",pe:7.4,pb:0.9,de:0.3,roe:18.1,roce:16.8,divY:5.5,revG:10,profG:25,prHold:58,pledged:0,intCov:8,fcf:"H",ar:"Buy",at:380,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:5,roic:"H",wce:"H",note:"P/B below 1 = buying below book value. 5.5% dividend. Highest quality PSU value bu."},
+{id:16,sym:"IRFC.NS",name:"IRFC",s:"Finance",cap:"Large Cap",pe:14.2,pb:2.0,de:9.8,roe:14.8,roce:5.2,divY:3.8,revG:18,profG:20,prHold:86,pledged:0,intCov:null,fcf:"H",ar:"Buy",at:230,isB:true,prT:"→",ec:8,rd:"Nov 12",evEb:10,roic:"H",wce:"H",note:"Railway financier. 86% Govt = zero credit risk. 3.8% dividend. Every railway budge."},
+{id:17,sym:"MARUTI.NS",name:"Maruti Suzuki",s:"Auto",cap:"Large Cap",pe:22.4,pb:3.8,de:0.0,roe:17.8,roce:17.2,divY:1.2,revG:14,profG:35,prHold:56,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:14000,isB:false,prT:"→",ec:9,rd:"Oct 25",evEb:16,roic:"H",wce:"H",note:"India #1 carmaker 40%+ share. Zero debt. Hybrid + CNG leadership. Suzuki Japan bac."},
+{id:18,sym:"LT.NS",name:"Larsen & Toubro",s:"Infrastructure",cap:"Large Cap",pe:27.8,pb:3.8,de:1.5,roe:14.2,roce:11.8,divY:1.5,revG:16,profG:20,prHold:0,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:4800,isB:false,prT:"→",ec:8,rd:"Oct 28",evEb:18,roic:"M",wce:"H",note:"₹5.6L Cr order book. Professional management. Infra + defence + GCC tech. Rides ev."},
+{id:19,sym:"TITAN.NS",name:"Titan Company",s:"Consumer",cap:"Large Cap",pe:84.2,pb:28,de:0.1,roe:35.4,roce:32.8,divY:0.5,revG:22,profG:28,prHold:52,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:5200,isB:false,prT:"→",ec:9,rd:"Oct 22",evEb:62,roic:"H",wce:"H",note:"India's aspirational brand engine. Tanishq jewellery in underpenetrated market. 35."},
+{id:20,sym:"HDFCBANK.NS",name:"HDFC Bank",s:"Banking",cap:"Large Cap",pe:19.2,pb:2.5,de:6.8,roe:16.1,roce:7.2,divY:1.2,revG:14,profG:18,prHold:26,pledged:0,intCov:null,fcf:"H",ar:"Buy",at:2100,isB:true,prT:"→",ec:9,rd:"Oct 19",evEb:12,roic:"H",wce:"H",note:"India's largest private bank. Post-merger integration benefits just starting. Best."},
+// ── 40 MID CAP COMPOUNDERS — Core Wealth Creators 20-25% CAGR ─────────────
+{id:21,sym:"CDSL.NS",name:"CDSL",s:"Finance",cap:"Mid Cap",pe:42.5,pb:18.5,de:0.0,roe:48.4,roce:47.2,divY:0.8,revG:22,profG:28,prHold:15,pledged:0,intCov:99,fcf:"H",ar:"Strong Buy",at:2200,isB:false,prT:"→",ec:9,rd:"Oct 12",evEb:32,roic:"H",wce:"H",note:"Depository monopoly. 48% ROE, zero debt. Every new demat account = pure revenue. I."},
+{id:22,sym:"CAMS.NS",name:"CAMS",s:"Finance",cap:"Mid Cap",pe:38.5,pb:14.8,de:0.0,roe:42.4,roce:41.8,divY:1.8,revG:18,profG:22,prHold:19,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:4500,isB:false,prT:"→",ec:9,rd:"Oct 15",evEb:28,roic:"H",wce:"H",note:"MF processing monopoly 70%+ share. Zero debt, 42% ROE. SIP flows compounding = rev."},
+{id:23,sym:"SOLARINDS.NS",name:"Solar Industries",s:"Chemicals",cap:"Mid Cap",pe:52.5,pb:12.5,de:0.1,roe:24.4,roce:23.8,divY:0.3,revG:22,profG:28,prHold:72,pledged:0,intCov:32,fcf:"H",ar:"Strong Buy",at:11000,isB:false,prT:"↑",ec:9,rd:"Nov 8",evEb:38,roic:"H",wce:"H",note:"Explosives + defence propellants + ammunition. 72% promoter + increasing. India de."},
+{id:24,sym:"POLYCAB.NS",name:"Polycab India",s:"Infrastructure",cap:"Mid Cap",pe:38.5,pb:8.2,de:0.1,roe:22.4,roce:21.8,divY:0.8,revG:18,profG:28,prHold:67,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:8500,isB:false,prT:"→",ec:9,rd:"Nov 8",evEb:28,roic:"H",wce:"H",note:"India #1 cables & wires. Direct infra capex play. 67% promoter. FMEG (fans, lights."},
+{id:25,sym:"DIXON.NS",name:"Dixon Technologies",s:"Electronics",cap:"Mid Cap",pe:95.5,pb:22.5,de:0.5,roe:24.2,roce:21.8,divY:0.2,revG:38,profG:45,prHold:35,pledged:0,intCov:18,fcf:"M",ar:"Buy",at:20000,isB:false,prT:"↑",ec:8,rd:"Nov 8",evEb:68,roic:"H",wce:"M",note:"India EMS king. PLI scheme winner. Phones + TVs + washing machines. China+1 play. ."},
+{id:26,sym:"KAYNES.NS",name:"Kaynes Technology",s:"Electronics",cap:"Small Cap",pe:82.5,pb:18.5,de:0.5,roe:22.4,roce:19.8,divY:0.1,revG:38,profG:48,prHold:58,pledged:0,intCov:15,fcf:"M",ar:"Buy",at:5000,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:58,roic:"H",wce:"M",note:"EMS for defence + industrial + medical electronics. Still undiscovered. 38% CAGR. ."},
+{id:27,sym:"WAAREEENER.NS",name:"Waaree Energies",s:"Power",cap:"Mid Cap",pe:45.5,pb:12.5,de:0.5,roe:28.4,roce:24.8,divY:0.0,revG:45,profG:55,prHold:68,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:500,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:28,roic:"H",wce:"M",note:"India's largest solar panel maker. 45% revenue growth. China+1 biggest beneficiary."},
+{id:28,sym:"PIIND.NS",name:"PI Industries",s:"Chemicals",cap:"Mid Cap",pe:32.5,pb:6.5,de:0.0,roe:22.4,roce:21.8,divY:0.8,revG:12,profG:18,prHold:53,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:5000,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:24,roic:"H",wce:"H",note:"Agrochemical + CSM specialty chemicals. Zero debt. China+1 play. Long-term supply ."},
+{id:29,sym:"PERSISTENT.NS",name:"Persistent Systems",s:"IT",cap:"Mid Cap",pe:55.8,pb:14.5,de:0.0,roe:28.4,roce:27.2,divY:0.6,revG:32,profG:38,prHold:31,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:8500,isB:false,prT:"→",ec:9,rd:"Oct 22",evEb:42,roic:"H",wce:"H",note:"Fastest-growing mid-cap IT. 32% CAGR. GenAI + digital engineering. Premium justifi."},
+{id:30,sym:"COFORGE.NS",name:"Coforge",s:"IT",cap:"Mid Cap",pe:38.2,pb:8.5,de:0.2,roe:25.4,roce:22.8,divY:0.8,revG:28,profG:32,prHold:63,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:9000,isB:false,prT:"→",ec:8,rd:"Oct 25",evEb:28,roic:"H",wce:"H",note:"Insurance + travel + BFS IT. 28% revenue growth. BFSI vertical dominance. Deal win."},
+{id:31,sym:"CHOLAFIN.NS",name:"Cholamandalam Finance",s:"Finance",cap:"Mid Cap",pe:22.4,pb:4.2,de:5.1,roe:20.4,roce:9.8,divY:0.5,revG:25,profG:30,prHold:47,pledged:0,intCov:4,fcf:"M",ar:"Buy",at:1600,isB:false,prT:"→",ec:8,rd:"Nov 8",evEb:14,roic:"H",wce:"M",note:"Murugappa group NBFC. Vehicle + home finance. 25-30% growth. Clean books. Rural + ."},
+{id:32,sym:"ANGELONE.NS",name:"Angel One",s:"Finance",cap:"Mid Cap",pe:18.5,pb:4.5,de:0.5,roe:28.4,roce:22.8,divY:1.5,revG:32,profG:28,prHold:38,pledged:0,intCov:12,fcf:"H",ar:"Buy",at:3200,isB:false,prT:"→",ec:8,rd:"Nov 8",evEb:14,roic:"H",wce:"H",note:"Discount broking + fintech. India retail investor boom = structural tailwind. 28% ."},
+{id:33,sym:"GRSE.NS",name:"Garden Reach Shipbuilders",s:"Infrastructure",cap:"Mid Cap",pe:28.5,pb:6.2,de:0.0,roe:22.5,roce:21.8,divY:1.8,revG:28,profG:35,prHold:74,pledged:0,intCov:99,fcf:"H",ar:"Strong Buy",at:3200,isB:false,prT:"→",ec:8,rd:"Nov 15",evEb:22,roic:"H",wce:"H",note:"2nd largest warship builder. 74% Govt. Order book exploding with Navy expansion. Z."},
+{id:34,sym:"DATAPATTNS.NS",name:"Data Patterns",s:"Electronics",cap:"Small Cap",pe:65.0,pb:14.5,de:0.0,roe:24.5,roce:23.8,divY:0.5,revG:22,profG:28,prHold:48,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:3800,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:50,roic:"H",wce:"H",note:"Defence electronics — radar, sonar, avionics. Zero debt, 24% ROE. India's most cre."},
+{id:35,sym:"OBEROIRLTY.NS",name:"Oberoi Realty",s:"Real Estate",cap:"Mid Cap",pe:38.5,pb:5.5,de:0.3,roe:18.4,roce:16.8,divY:0.5,revG:28,profG:38,prHold:68,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:2500,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:24,roic:"H",wce:"M",note:"Ultra-luxury Mumbai real estate. 68% promoter. Low leverage vs peers. India premiu."},
+{id:36,sym:"NAVINFLUOR.NS",name:"Navin Fluorine",s:"Chemicals",cap:"Mid Cap",pe:35.0,pb:5.5,de:0.1,roe:18.5,roce:17.2,divY:0.5,revG:12,profG:15,prHold:28,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:4500,isB:false,prT:"→",ec:7,rd:"Nov 5",evEb:28,roic:"H",wce:"H",note:"Fluorochemicals specialist. CDMO + refrigerants. Zero debt. China+1 in fluorine ch."},
+{id:37,sym:"VINATI.NS",name:"Vinati Organics",s:"Chemicals",cap:"Mid Cap",pe:40.2,pb:7.8,de:0.0,roe:20.5,roce:19.8,divY:0.4,revG:15,profG:18,prHold:74,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:2500,isB:false,prT:"→",ec:8,rd:"Nov 8",evEb:32,roic:"H",wce:"H",note:"IBB + ATBS global leader. 74% promoter. Zero debt. Niche chemicals with global mon."},
+{id:38,sym:"CUMMINSIND.NS",name:"Cummins India",s:"Infrastructure",cap:"Large Cap",pe:48.0,pb:12.5,de:0.0,roe:28.5,roce:27.8,divY:1.2,revG:18,profG:25,prHold:51,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:4800,isB:false,prT:"→",ec:9,rd:"Oct 25",evEb:38,roic:"H",wce:"H",note:"Industrial engines + power generation. Zero debt, 28% ROE. India infrastructure + ."},
+{id:39,sym:"THERMAX.NS",name:"Thermax",s:"Infrastructure",cap:"Large Cap",pe:55.0,pb:9.5,de:0.0,roe:18.5,roce:17.8,divY:0.5,revG:18,profG:22,prHold:62,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:5500,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:42,roic:"H",wce:"H",note:"Industrial boilers + energy + environment solutions. Zero debt. Every new factory,."},
+{id:40,sym:"METROPOLIS.NS",name:"Metropolis Healthcare",s:"Pharma",cap:"Mid Cap",pe:52.0,pb:10.5,de:0.1,roe:22.5,roce:21.8,divY:0.8,revG:15,profG:18,prHold:49,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:2800,isB:false,prT:"→",ec:8,rd:"Nov 5",evEb:35,roic:"H",wce:"H",note:"Diagnostics chain. India healthcare penetration = structural tailwind. B2C + B2B m."},
+{id:41,sym:"MEDANTA.NS",name:"Global Health (Medanta)",s:"Pharma",cap:"Mid Cap",pe:65.0,pb:8.5,de:0.2,roe:18.5,roce:16.8,divY:0.0,revG:25,profG:35,prHold:66,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:1200,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:38,roic:"H",wce:"M",note:"Premium hospital chain. Tier 1 + Tier 2 expansion. 66% promoter. India hospital be."},
+{id:42,sym:"KIMS.NS",name:"KIMS Hospitals",s:"Pharma",cap:"Mid Cap",pe:45.0,pb:6.5,de:0.2,roe:18.5,roce:16.8,divY:0.5,revG:22,profG:28,prHold:42,pledged:0,intCov:12,fcf:"H",ar:"Buy",at:800,isB:false,prT:"→",ec:7,rd:"Nov 8",evEb:30,roic:"H",wce:"M",note:"South India hospital network. Fastest-growing regional hospital chain. AP + Telang."},
+{id:43,sym:"BEML.NS",name:"BEML",s:"Infrastructure",cap:"Mid Cap",pe:45.0,pb:5.5,de:0.3,roe:12.5,roce:11.8,divY:0.8,revG:18,profG:22,prHold:54,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:5000,isB:false,prT:"→",ec:7,rd:"Nov 15",evEb:35,roic:"M",wce:"M",note:"Defence + mining + railways equipment. Metro coaches + military vehicles + mining ."},
+{id:44,sym:"IRCON.NS",name:"IRCON",s:"Infrastructure",cap:"Mid Cap",pe:14.5,pb:2.8,de:0.1,roe:18.4,roce:16.8,divY:2.5,revG:18,profG:22,prHold:73,pledged:0,intCov:18,fcf:"H",ar:"Buy",at:320,isB:false,prT:"→",ec:8,rd:"Nov 8",evEb:11,roic:"H",wce:"H",note:"Railway + road PSU. 73% Govt. 2.5% dividend. Cheapest railway infra stock. ₹2.5L C."},
+{id:45,sym:"KEC.NS",name:"KEC International",s:"Infrastructure",cap:"Mid Cap",pe:28.5,pb:4.5,de:1.2,roe:14.5,roce:12.8,divY:0.5,revG:22,profG:28,prHold:52,pledged:0,intCov:6,fcf:"M",ar:"Buy",at:1400,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:18,roic:"M",wce:"M",note:"Power T&D + railways + civil. RPG Group. Global operations + domestic infra boom. ."},
+{id:46,sym:"ADANIPORTS.NS",name:"Adani Ports",s:"Infrastructure",cap:"Large Cap",pe:22.5,pb:4.5,de:1.2,roe:22.4,roce:14.8,divY:0.6,revG:22,profG:28,prHold:65,pledged:0,intCov:6,fcf:"M",ar:"Buy",at:1600,isB:false,prT:"→",ec:8,rd:"Oct 28",evEb:14,roic:"H",wce:"M",note:"India's largest port operator. 14+ ports. India trade volumes to double by 2030. L."},
+{id:47,sym:"RVNL.NS",name:"RVNL",s:"Infrastructure",cap:"Mid Cap",pe:22.5,pb:4.5,de:0.2,roe:22.4,roce:18.8,divY:1.5,revG:28,profG:35,prHold:72,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:520,isB:false,prT:"→",ec:8,rd:"Nov 5",evEb:16,roic:"H",wce:"M",note:"Railway infra PSU. 72% Govt. ₹2.5L Cr railway annual budget = direct RVNL opportun."},
+{id:48,sym:"ASTRAL.NS",name:"Astral",s:"Infrastructure",cap:"Mid Cap",pe:58.5,pb:12.5,de:0.1,roe:22.4,roce:21.8,divY:0.3,revG:18,profG:22,prHold:55,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:2500,isB:false,prT:"→",ec:8,rd:"Nov 8",evEb:44,roic:"H",wce:"H",note:"India's fastest growing pipes + adhesives. Quality compounder. 22% ROE. India hous."},
+{id:49,sym:"DLF.NS",name:"DLF",s:"Real Estate",cap:"Large Cap",pe:68.0,pb:5.5,de:0.2,roe:10.5,roce:8.8,divY:0.5,revG:35,profG:55,prHold:75,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:1000,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:35,roic:"M",wce:"L",note:"India's largest real estate developer. 75% promoter. Luxury + premium segment. DLF."},
+{id:50,sym:"GODREJPROP.NS",name:"Godrej Properties",s:"Real Estate",cap:"Large Cap",pe:45.5,pb:4.5,de:0.8,roe:12.4,roce:8.8,divY:0.0,revG:35,profG:45,prHold:59,pledged:0,intCov:4,fcf:"L",ar:"Buy",at:3500,isB:false,prT:"→",ec:7,rd:"Nov 8",evEb:28,roic:"M",wce:"L",note:"India's largest listed real estate. Record pre-sales every quarter. Godrej brand p."},
+{id:51,sym:"NBCC.NS",name:"NBCC India",s:"Infrastructure",cap:"Mid Cap",pe:34.8,pb:5.8,de:0.0,roe:20.2,roce:37.1,divY:0.8,revG:10,profG:18,prHold:61,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:140,isB:false,prT:"→",ec:8,rd:"Nov 5",evEb:26,roic:"H",wce:"H",note:"PSU construction. 37% ROCE exceptional — highest in construction sector. Smart cit."},
+{id:52,sym:"KALPATPOWR.NS",name:"Kalpataru Power",s:"Infrastructure",cap:"Mid Cap",pe:22.0,pb:3.8,de:0.8,roe:18.5,roce:15.8,divY:1.0,revG:22,profG:28,prHold:38,pledged:0,intCov:6,fcf:"M",ar:"Buy",at:2000,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:16,roic:"M",wce:"M",note:"Power T&D + railways + oil/gas. International operations. Renewable energy grid ex."},
+{id:53,sym:"AMBER.NS",name:"Amber Enterprises",s:"Electronics",cap:"Mid Cap",pe:55.0,pb:8.5,de:0.8,roe:14.5,roce:12.8,divY:0.1,revG:32,profG:35,prHold:41,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:8000,isB:false,prT:"→",ec:7,rd:"Nov 8",evEb:40,roic:"M",wce:"M",note:"AC + washing machine EMS. PLI beneficiary. India AC penetration at 8% vs 60%+ in d."},
+{id:54,sym:"IREDA.NS",name:"IREDA",s:"Finance",cap:"Mid Cap",pe:18.5,pb:3.5,de:8.5,roe:16.5,roce:6.2,divY:1.5,revG:28,profG:35,prHold:75,pledged:0,intCov:null,fcf:"H",ar:"Buy",at:310,isB:true,prT:"→",ec:7,rd:"Nov 12",evEb:12,roic:"H",wce:"H",note:"Renewable energy finance PSU. 75% Govt. India's 500GW green target needs ₹30L Cr+ ."},
+{id:55,sym:"DHANUKA.NS",name:"Dhanuka Agritech",s:"Chemicals",cap:"Small Cap",pe:22.0,pb:3.5,de:0.0,roe:22.5,roce:21.8,divY:1.5,revG:12,profG:18,prHold:75,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1800,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:16,roic:"H",wce:"H",note:"Agri-input distribution. 75% promoter, zero debt, 22% ROE. India agriculture produ."},
+{id:56,sym:"ELGIEQUIP.NS",name:"Elgi Equipments",s:"Infrastructure",cap:"Mid Cap",pe:42.0,pb:7.5,de:0.1,roe:22.5,roce:21.8,divY:1.0,revG:15,profG:18,prHold:45,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1000,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:32,roic:"H",wce:"H",note:"Air compressors. Global operations 120+ countries. India + international manufactu."},
+{id:57,sym:"GRINDWELL.NS",name:"Grindwell Norton",s:"Infrastructure",cap:"Mid Cap",pe:45.0,pb:8.5,de:0.0,roe:22.5,roce:21.8,divY:0.8,revG:12,profG:15,prHold:51,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:3000,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:34,roic:"H",wce:"H",note:"Abrasives + ceramics + plastics. Saint-Gobain parent. Zero debt. Every manufacturi."},
+{id:58,sym:"PRINCEPIPE.NS",name:"Prince Pipes",s:"Infrastructure",cap:"Mid Cap",pe:28.0,pb:4.5,de:0.2,roe:18.5,roce:17.2,divY:0.5,revG:18,profG:22,prHold:51,pledged:0,intCov:18,fcf:"H",ar:"Buy",at:1000,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:20,roic:"H",wce:"H",note:"Pipes + fittings. Jal Jeevan Mission direct beneficiary. Every rural household wat."},
+{id:59,sym:"SRF.NS",name:"SRF",s:"Chemicals",cap:"Large Cap",pe:38.0,pb:5.5,de:0.5,roe:18.5,roce:16.8,divY:0.5,revG:12,profG:15,prHold:50,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:3000,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:22,roic:"M",wce:"M",note:"Fluorochemicals + specialty chemicals + technical textiles. Diversified quality. R."},
+{id:60,sym:"SYRMA.NS",name:"Syrma SGS Tech",s:"Electronics",cap:"Small Cap",pe:45.0,pb:6.5,de:0.3,roe:14.5,roce:12.8,divY:0.1,revG:35,profG:40,prHold:50,pledged:0,intCov:15,fcf:"M",ar:"Buy",at:900,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:32,roic:"M",wce:"M",note:"EMS for defence + automotive + consumer electronics. 35% CAGR. India EMS sector at."},
+// ── 30 SMALL CAP HIGH GROWTH — 30-40% CAGR Potential ──────────────────────
+{id:61,sym:"MTARTECH.NS",name:"MTAR Technologies",s:"Infrastructure",cap:"Small Cap",pe:55.0,pb:8.5,de:0.2,roe:14.5,roce:12.8,divY:0.1,revG:25,profG:30,prHold:45,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:2800,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:40,roic:"M",wce:"M",note:"Precision components for defence/nuclear/space. DRDO + ISRO + HAL supplier. India'."},
+{id:62,sym:"PARAS.NS",name:"Paras Defence",s:"Electronics",cap:"Small Cap",pe:85.0,pb:12.5,de:0.0,roe:18.5,roce:17.8,divY:0.2,revG:22,profG:28,prHold:45,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1800,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:65,roic:"H",wce:"H",note:"Defence optics + space + drone electronics. Zero debt. Only listed company in Indi."},
+{id:63,sym:"KPIGREEN.NS",name:"KPI Green Energy",s:"Power",cap:"Small Cap",pe:32.0,pb:8.5,de:0.5,roe:28.5,roce:22.8,divY:0.1,revG:45,profG:55,prHold:72,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:1200,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:22,roic:"H",wce:"M",note:"Solar energy developer + IPP. 72% promoter. 45% revenue growth. Small but fastest-."},
+{id:64,sym:"INOXWIND.NS",name:"Inox Wind",s:"Power",cap:"Small Cap",pe:28.5,pb:5.5,de:0.8,roe:18.4,roce:15.8,divY:0.0,revG:32,profG:0,prHold:38,pledged:5,intCov:5,fcf:"L",ar:"Hold",at:220,isB:false,prT:"→",ec:5,rd:"Nov 15",evEb:18,roic:"M",wce:"L",note:"Wind turbine manufacturer. Multi-year order book. India wind capacity target 10x b."},
+{id:65,sym:"RATEGAIN.NS",name:"RateGain Travel Tech",s:"Technology",cap:"Small Cap",pe:52.5,pb:8.5,de:0.1,roe:18.4,roce:16.8,divY:0.0,revG:35,profG:42,prHold:44,pledged:0,intCov:22,fcf:"M",ar:"Buy",at:1100,isB:false,prT:"→",ec:7,rd:"Nov 8",evEb:38,roic:"H",wce:"M",note:"Travel tech SaaS. Hotel + airline clients globally. 35% revenue growth. India trav."},
+{id:66,sym:"NEWGEN.NS",name:"Newgen Software",s:"Technology",cap:"Small Cap",pe:38.5,pb:8.5,de:0.0,roe:24.4,roce:23.8,divY:0.5,revG:22,profG:28,prHold:41,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1600,isB:false,prT:"→",ec:8,rd:"Nov 5",evEb:28,roic:"H",wce:"H",note:"Low-code digital process automation. Zero debt, 24% ROE. Banking + govt clients wo."},
+{id:67,sym:"RADICO.NS",name:"Radico Khaitan",s:"FMCG",cap:"Mid Cap",pe:45.0,pb:8.5,de:0.5,roe:18.5,roce:15.8,divY:0.8,revG:15,profG:20,prHold:47,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:2500,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:28,roic:"M",wce:"M",note:"Premium spirits. Rampur Single Malt going global. India premiumisation trend = vol."},
+{id:68,sym:"BIKAJI.NS",name:"Bikaji Foods",s:"FMCG",cap:"Small Cap",pe:52.5,pb:8.5,de:0.1,roe:18.4,roce:17.8,divY:0.5,revG:22,profG:28,prHold:55,pledged:0,intCov:22,fcf:"H",ar:"Buy",at:950,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:38,roic:"H",wce:"H",note:"Rajasthani snacks going national. 22% CAGR. D2C + modern trade expansion. India or."},
+{id:69,sym:"PGEL.NS",name:"PG Electroplast",s:"Electronics",cap:"Small Cap",pe:35.0,pb:6.5,de:0.3,roe:18.5,roce:15.8,divY:0.0,revG:32,profG:38,prHold:52,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:550,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:25,roic:"M",wce:"M",note:"EMS for white goods + smart meters. PLI beneficiary. India AC + washing machine ma."},
+{id:70,sym:"VENUSPIPES.NS",name:"Venus Pipes",s:"Metals",cap:"Small Cap",pe:25.0,pb:4.5,de:0.2,roe:20.5,roce:18.8,divY:0.5,revG:28,profG:35,prHold:55,pledged:0,intCov:15,fcf:"M",ar:"Buy",at:2500,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:18,roic:"H",wce:"M",note:"Stainless steel pipes + tubes. Oil & gas + pharma + food sectors. Import substitut."},
+{id:71,sym:"SANSERA.NS",name:"Sansera Engineering",s:"Auto",cap:"Small Cap",pe:28.0,pb:4.5,de:0.5,roe:18.5,roce:15.8,divY:0.5,revG:18,profG:22,prHold:42,pledged:0,intCov:10,fcf:"M",ar:"Buy",at:1400,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:20,roic:"M",wce:"M",note:"Precision forged components for auto. EV-agnostic — components needed regardless o."},
+{id:72,sym:"TDPOWERSYS.NS",name:"TD Power Systems",s:"Infrastructure",cap:"Small Cap",pe:28.0,pb:4.5,de:0.0,roe:18.5,roce:17.8,divY:1.0,revG:18,profG:22,prHold:68,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:700,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:22,roic:"H",wce:"H",note:"Generators for power plants. Zero debt, 68% promoter. Data centre boom + renewable."},
+{id:73,sym:"TECHNOEI.NS",name:"Techno Electric",s:"Power",cap:"Small Cap",pe:32.0,pb:5.5,de:0.0,roe:18.5,roce:17.8,divY:1.2,revG:15,profG:20,prHold:52,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1600,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:24,roic:"H",wce:"H",note:"Power T&D EPC + wind energy. Zero debt. India grid modernisation for renewables = ."},
+{id:74,sym:"SUDARSCHEM.NS",name:"Sudarshan Chemical",s:"Chemicals",cap:"Small Cap",pe:35.0,pb:5.5,de:0.2,roe:18.5,roce:17.2,divY:1.0,revG:15,profG:18,prHold:52,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:1400,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:26,roic:"M",wce:"M",note:"Pigments manufacturer. Global position in organic pigments. Paints + plastics + pr."},
+{id:75,sym:"DEEPAKFERT.NS",name:"Deepak Fertilisers",s:"Chemicals",cap:"Mid Cap",pe:15.0,pb:2.5,de:0.5,roe:18.5,roce:16.8,divY:1.5,revG:12,profG:18,prHold:46,pledged:0,intCov:10,fcf:"M",ar:"Buy",at:1600,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:12,roic:"M",wce:"M",note:"Fertilisers + TAN (mining chemical). India mining boom = TAN demand. Cheap PE 15 f."},
+{id:76,sym:"IDEAFORGE.NS",name:"ideaForge Technology",s:"Technology",cap:"Small Cap",pe:null,pb:4.5,de:0.2,roe:5.5,roce:4.8,divY:0.0,revG:28,profG:0,prHold:18,pledged:0,intCov:8,fcf:"L",ar:"Hold",at:900,isB:false,prT:"→",ec:4,rd:"Nov 12",evEb:40,roic:"L",wce:"L",note:"India's largest drone manufacturer. Defence + surveillance. India drone policy = m."},
+{id:77,sym:"AARTIIND.NS",name:"Aarti Industries",s:"Chemicals",cap:"Mid Cap",pe:38.0,pb:5.5,de:0.8,roe:15.5,roce:12.8,divY:0.5,revG:12,profG:10,prHold:45,pledged:0,intCov:8,fcf:"M",ar:"Hold",at:700,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:20,roic:"M",wce:"M",note:"Benzene derivatives + pharma chemicals. China+1 play. Currently in capex cycle. Ma."},
+{id:78,sym:"LATENTVIEW.NS",name:"LatentView Analytics",s:"Technology",cap:"Small Cap",pe:45.0,pb:6.5,de:0.0,roe:18.5,roce:17.8,divY:0.5,revG:25,profG:30,prHold:35,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:550,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:32,roic:"H",wce:"H",note:"Data analytics + AI services. Zero debt. Fortune 500 US clients. Analytics becomin."},
+{id:79,sym:"CAMPUS.NS",name:"Campus Activewear",s:"Consumer",cap:"Small Cap",pe:48.5,pb:5.5,de:0.2,roe:14.4,roce:13.8,divY:0.3,revG:12,profG:8,prHold:75,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:380,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:36,roic:"M",wce:"M",note:"Mass market sports footwear. 75% promoter. 50Cr+ pairs/year market. India footwear."},
+{id:80,sym:"DODLA.NS",name:"Dodla Dairy",s:"FMCG",cap:"Small Cap",pe:28.0,pb:4.5,de:0.5,roe:18.5,roce:15.8,divY:0.5,revG:15,profG:18,prHold:60,pledged:0,intCov:10,fcf:"M",ar:"Buy",at:1200,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:18,roic:"M",wce:"M",note:"South India dairy. High promoter holding. India dairy organised market only 20% pe."},
+{id:81,sym:"HATSUN.NS",name:"Hatsun Agro",s:"FMCG",cap:"Mid Cap",pe:65.0,pb:12.5,de:1.2,roe:22.5,roce:15.8,divY:0.5,revG:15,profG:18,prHold:68,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:1300,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:22,roic:"M",wce:"M",note:"South India ice cream + dairy king. Arun brand dominance. 68% promoter. Premium da."},
+{id:82,sym:"ALKYLAMINE.NS",name:"Alkyl Amines",s:"Chemicals",cap:"Mid Cap",pe:28.5,pb:5.2,de:0.1,roe:18.5,roce:17.4,divY:1.2,revG:10,profG:12,prHold:72,pledged:0,intCov:15,fcf:"H",ar:"Buy",at:3000,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:22,roic:"H",wce:"H",note:"Amines manufacturer. 72% promoter, zero debt. Pharma + agrochemical inputs. China+."},
+{id:83,sym:"FINEORG.NS",name:"Fine Organic Industries",s:"Chemicals",cap:"Mid Cap",pe:32.5,pb:6.5,de:0.0,roe:20.8,roce:20.2,divY:1.5,revG:12,profG:15,prHold:50,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:6000,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:26,roic:"H",wce:"H",note:"Oleochemical additives. Zero debt. Global leader in polymer additives. Niche = pri."},
+{id:84,sym:"MRSFOODPRD.NS",name:"Mrs Bectors Food",s:"FMCG",cap:"Small Cap",pe:45.0,pb:8.5,de:0.2,roe:18.5,roce:16.8,divY:0.3,revG:18,profG:22,prHold:49,pledged:0,intCov:18,fcf:"M",ar:"Buy",at:850,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:28,roic:"M",wce:"M",note:"Premium biscuits + bakery. McDonald's, KFC supplier in India. B2B + B2C model. Pre."},
+{id:85,sym:"JAMNAAUTO.NS",name:"Jamna Auto",s:"Auto",cap:"Small Cap",pe:18.0,pb:3.5,de:0.5,roe:18.5,roce:16.8,divY:1.5,revG:15,profG:18,prHold:48,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:160,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:12,roic:"M",wce:"M",note:"Leaf springs + suspension. Commercial vehicle auto ancillary. India CV upcycle = J."},
+{id:86,sym:"CLEAN.NS",name:"Clean Science Technology",s:"Chemicals",cap:"Mid Cap",pe:45.0,pb:10.2,de:0.0,roe:22.5,roce:21.8,divY:0.3,revG:15,profG:20,prHold:53,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:2000,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:38,roic:"H",wce:"H",note:"Performance chemicals — MEHQ, BHA, Guaiacol. Zero debt. World's lowest-cost produc."},
+{id:87,sym:"NAZARA.NS",name:"Nazara Technologies",s:"Technology",cap:"Small Cap",pe:65.5,pb:5.5,de:0.1,roe:8.4,roce:7.8,divY:0.0,revG:28,profG:5,prHold:42,pledged:0,intCov:15,fcf:"L",ar:"Hold",at:1100,isB:false,prT:"→",ec:5,rd:"Nov 12",evEb:48,roic:"L",wce:"L",note:"India gaming + esports + edtech. First mover. India gaming market will be $8Bn by ."},
+{id:88,sym:"RHIM.NS",name:"RHI Magnesita India",s:"Chemicals",cap:"Small Cap",pe:22.0,pb:3.5,de:0.2,roe:18.5,roce:16.8,divY:1.5,revG:12,profG:15,prHold:70,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:800,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:16,roic:"M",wce:"M",note:"Refractory materials for steel + cement + glass. 70% promoter (global MNC parent).."},
+{id:89,sym:"ELGIEQUIP.NS",name:"Elgi Equipments",s:"Infrastructure",cap:"Mid Cap",pe:42.0,pb:7.5,de:0.1,roe:22.5,roce:21.8,divY:1.0,revG:15,profG:18,prHold:45,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1000,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:32,roic:"H",wce:"H",note:"Air compressors. 120+ countries. Quality engineering brand. India manufacturing + ."},
+{id:90,sym:"PGEL.NS",name:"PG Electroplast",s:"Electronics",cap:"Small Cap",pe:35.0,pb:6.5,de:0.3,roe:18.5,roce:15.8,divY:0.0,revG:32,profG:38,prHold:52,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:550,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:25,roic:"M",wce:"M",note:"EMS white goods. PLI beneficiary. AC + washing machine + smart meters manufacturin."},
+// ── 10 EMERGING — High Risk, 5-10x Potential ──────────────────────────────
+{id:91,sym:"MSTC.NS",name:"MSTC",s:"Technology",cap:"Small Cap",pe:12.0,pb:2.5,de:0.0,roe:22.5,roce:21.8,divY:2.5,revG:8,profG:12,prHold:64,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:700,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:10,roic:"H",wce:"H",note:"Govt e-commerce + recycling. 64% Govt. Scrap recycling + auction platform. India c."},
+{id:92,sym:"OPTIEMUS.NS",name:"Optiemus Electronics",s:"Electronics",cap:"Small Cap",pe:25.0,pb:3.5,de:0.3,roe:15.5,roce:13.8,divY:0.0,revG:35,profG:40,prHold:52,pledged:0,intCov:10,fcf:"M",ar:"Buy",at:500,isB:false,prT:"→",ec:5,rd:"Nov 12",evEb:20,roic:"M",wce:"M",note:"EMS for smartphones + IoT. PLI beneficiary. Nokia handsets + smart devices. India ."},
+{id:93,sym:"WPIL.NS",name:"WPIL",s:"Infrastructure",cap:"Small Cap",pe:18.0,pb:3.5,de:0.3,roe:18.5,roce:16.8,divY:1.5,revG:12,profG:15,prHold:65,pledged:0,intCov:10,fcf:"M",ar:"Buy",at:1800,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:14,roic:"M",wce:"M",note:"Pumps for water + oil/gas + power. 65% promoter. Jal Jeevan Mission + irrigation +."},
+{id:94,sym:"TRANSPEK.NS",name:"Transpek Industry",s:"Chemicals",cap:"Small Cap",pe:12.0,pb:2.5,de:0.2,roe:18.5,roce:17.2,divY:2.0,revG:12,profG:15,prHold:60,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:2000,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:10,roic:"M",wce:"M",note:"Chlorination chemistry. Pharma + agrochemical inputs. 60% promoter, low PE 12. Chi."},
+{id:95,sym:"JBCHEPHARM.NS",name:"JB Chemicals",s:"Pharma",cap:"Mid Cap",pe:42.0,pb:8.5,de:0.0,roe:22.5,roce:21.8,divY:0.5,revG:18,profG:22,prHold:54,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:2200,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:32,roic:"H",wce:"H",note:"Pharma brand + CDMO. KKR backed. Russia + Romania strong markets. Zero debt, 22% R."},
+{id:96,sym:"ERIS.NS",name:"Eris Lifesciences",s:"Pharma",cap:"Mid Cap",pe:28.0,pb:5.5,de:0.5,roe:22.5,roce:20.8,divY:0.8,revG:15,profG:18,prHold:52,pledged:0,intCov:12,fcf:"H",ar:"Buy",at:1500,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:20,roic:"H",wce:"H",note:"Chronic disease pharma. Diabetes + cardiac. India chronic disease burden growing 1."},
+{id:97,sym:"HFCL.NS",name:"HFCL",s:"Technology",cap:"Small Cap",pe:28.0,pb:4.5,de:0.5,roe:15.5,roce:13.8,divY:0.3,revG:18,profG:22,prHold:38,pledged:0,intCov:8,fcf:"M",ar:"Buy",at:180,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:18,roic:"M",wce:"M",note:"Telecom cables + defence communication. 5G + Jio Bharat = massive fibre deployment."},
+{id:98,sym:"SUVEN.NS",name:"Suven Pharmaceuticals",s:"Pharma",cap:"Small Cap",pe:45.0,pb:8.5,de:0.0,roe:22.5,roce:21.8,divY:0.3,revG:22,profG:28,prHold:50,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1200,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:35,roic:"H",wce:"H",note:"CDMO for global innovator drugs. Zero debt, 22% ROE. Long-term contracts with Eli ."},
+{id:99,sym:"AARTIDRUGS.NS",name:"Aarti Drugs",s:"Pharma",cap:"Small Cap",pe:28.0,pb:3.5,de:0.3,roe:15.5,roce:14.2,divY:0.5,revG:12,profG:15,prHold:52,pledged:0,intCov:10,fcf:"M",ar:"Buy",at:700,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:18,roic:"M",wce:"M",note:"API manufacturer. Metformin + anti-infectives. China+1 API shift. Cheap valuation ."},
+{id:100,sym:"PGHL.NS",name:"Procter & Gamble Health",s:"Pharma",cap:"Small Cap",pe:32.0,pb:8.5,de:0.0,roe:35.5,roce:34.8,divY:2.5,revG:10,profG:15,prHold:51,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:6000,isB:false,prT:"→",ec:8,rd:"Nov 12",evEb:25,roic:"H",wce:"H",note:"P&G consumer health. Vicks + Neurobion. 35% ROE, zero debt, 2.5% dividend. MNC qua."},
 ];
 
 const SWING_EXTRA=[
-  {sym:"EICHERMOT.NS",name:"Eicher Motors",s:"Auto",cap:"Large Cap"},
-  {sym:"M&M.NS",name:"Mahindra & Mahindra",s:"Auto",cap:"Large Cap"},
-  {sym:"TVSMOTOR.NS",name:"TVS Motor",s:"Auto",cap:"Large Cap"},
-  {sym:"ASHOKLEY.NS",name:"Ashok Leyland",s:"Auto",cap:"Large Cap"},
-  {sym:"MOTHERSON.NS",name:"Motherson Sumi",s:"Auto",cap:"Mid Cap"},
-  {sym:"BOSCHLTD.NS",name:"Bosch India",s:"Auto",cap:"Large Cap"},
-  {sym:"FEDERALBNK.NS",name:"Federal Bank",s:"Banking",cap:"Mid Cap"},
-  {sym:"BANDHANBNK.NS",name:"Bandhan Bank",s:"Banking",cap:"Large Cap"},
-  {sym:"AUBANK.NS",name:"AU Small Finance Bank",s:"Banking",cap:"Mid Cap"},
-  {sym:"RBLBANK.NS",name:"RBL Bank",s:"Banking",cap:"Mid Cap"},
-  {sym:"MPHASIS.NS",name:"Mphasis",s:"IT",cap:"Large Cap"},
-  {sym:"OFSS.NS",name:"Oracle Financial",s:"IT",cap:"Large Cap"},
-  {sym:"KPITTECH.NS",name:"KPIT Technologies",s:"IT",cap:"Mid Cap"},
-  {sym:"CYIENT.NS",name:"Cyient",s:"IT",cap:"Mid Cap"},
-  {sym:"TATAELXSI.NS",name:"Tata Elxsi",s:"IT",cap:"Mid Cap"},
-  {sym:"HAPPSTMNDS.NS",name:"Happiest Minds",s:"IT",cap:"Small Cap"},
-  {sym:"ALKEM.NS",name:"Alkem Labs",s:"Pharma",cap:"Large Cap"},
-  {sym:"TORNTPHARM.NS",name:"Torrent Pharma",s:"Pharma",cap:"Large Cap"},
-  {sym:"AUROPHARMA.NS",name:"Aurobindo Pharma",s:"Pharma",cap:"Large Cap"},
-  {sym:"MANKIND.NS",name:"Mankind Pharma",s:"Pharma",cap:"Large Cap"},
-  {sym:"NATCO.NS",name:"Natco Pharma",s:"Pharma",cap:"Mid Cap"},
-  {sym:"LAURUS.NS",name:"Laurus Labs",s:"Pharma",cap:"Mid Cap"},
-  {sym:"GLAND.NS",name:"Gland Pharma",s:"Pharma",cap:"Mid Cap"},
-  {sym:"COLPAL.NS",name:"Colgate-Palmolive",s:"FMCG",cap:"Large Cap"},
-  {sym:"EMAMILTD.NS",name:"Emami",s:"FMCG",cap:"Mid Cap"},
-  {sym:"VARUNBEV.NS",name:"Varun Beverages",s:"FMCG",cap:"Large Cap"},
-  {sym:"TATACONSUM.NS",name:"Tata Consumer",s:"FMCG",cap:"Large Cap"},
-  {sym:"CUMMINSIND.NS",name:"Cummins India",s:"Infrastructure",cap:"Large Cap"},
-  {sym:"THERMAX.NS",name:"Thermax",s:"Infrastructure",cap:"Large Cap"},
-  {sym:"KEC.NS",name:"KEC International",s:"Infrastructure",cap:"Mid Cap"},
-  {sym:"BEML.NS",name:"BEML",s:"Infrastructure",cap:"Mid Cap"},
-  {sym:"GRSE.NS",name:"Garden Reach Shipbuilders",s:"Infrastructure",cap:"Mid Cap"},
-  {sym:"DATAPATTNS.NS",name:"Data Patterns",s:"Electronics",cap:"Small Cap"},
-  {sym:"ADANIGREEN.NS",name:"Adani Green",s:"Power",cap:"Large Cap"},
-  {sym:"CESC.NS",name:"CESC",s:"Power",cap:"Mid Cap"},
-  {sym:"TORNTPOWER.NS",name:"Torrent Power",s:"Power",cap:"Large Cap"},
-  {sym:"SJVN.NS",name:"SJVN",s:"Power",cap:"Mid Cap"},
-  {sym:"JSWENERGY.NS",name:"JSW Energy",s:"Power",cap:"Large Cap"},
-  {sym:"SAIL.NS",name:"SAIL",s:"Metals",cap:"Large Cap"},
-  {sym:"NMDC.NS",name:"NMDC",s:"Metals",cap:"Large Cap"},
-  {sym:"HINDZINC.NS",name:"Hindustan Zinc",s:"Metals",cap:"Large Cap"},
-  {sym:"VEDL.NS",name:"Vedanta",s:"Metals",cap:"Large Cap"},
-  {sym:"NATIONALUM.NS",name:"National Aluminium",s:"Metals",cap:"Large Cap"},
-  {sym:"NAVINFLUOR.NS",name:"Navin Fluorine",s:"Chemicals",cap:"Mid Cap"},
-  {sym:"VINATI.NS",name:"Vinati Organics",s:"Chemicals",cap:"Mid Cap"},
-  {sym:"ATUL.NS",name:"Atul",s:"Chemicals",cap:"Mid Cap"},
-  {sym:"CLEAN.NS",name:"Clean Science",s:"Chemicals",cap:"Mid Cap"},
-  {sym:"NYKAA.NS",name:"Nykaa",s:"Consumer",cap:"Large Cap"},
-  {sym:"PAGEIND.NS",name:"Page Industries",s:"Consumer",cap:"Large Cap"},
-  {sym:"MANYAVAR.NS",name:"Vedant Fashions",s:"Consumer",cap:"Large Cap"},
-  {sym:"METRO.NS",name:"Metro Brands",s:"Consumer",cap:"Mid Cap"},
-  {sym:"BATA.NS",name:"Bata India",s:"Consumer",cap:"Mid Cap"},
-  {sym:"DMART.NS",name:"Avenue Supermarts",s:"Consumer",cap:"Large Cap"},
-  {sym:"CROMPTON.NS",name:"Crompton Consumer",s:"Consumer Durables",cap:"Mid Cap"},
-  {sym:"VGUARD.NS",name:"V-Guard Industries",s:"Consumer Durables",cap:"Mid Cap"},
-  {sym:"PHOENIXLTD.NS",name:"Phoenix Mills",s:"Real Estate",cap:"Large Cap"},
-  {sym:"BRIGADE.NS",name:"Brigade Enterprises",s:"Real Estate",cap:"Mid Cap"},
-  {sym:"SOBHA.NS",name:"Sobha Developers",s:"Real Estate",cap:"Mid Cap"},
-  {sym:"PAYTM.NS",name:"Paytm",s:"Technology",cap:"Large Cap"},
-  {sym:"POLICYBZR.NS",name:"PB Fintech",s:"Finance",cap:"Large Cap"},
-  {sym:"360ONE.NS",name:"360 ONE WAM",s:"Finance",cap:"Mid Cap"},
-  {sym:"MOTILALOFS.NS",name:"Motilal Oswal",s:"Finance",cap:"Mid Cap"},
-  {sym:"CONCOR.NS",name:"Container Corp",s:"Infrastructure",cap:"Large Cap"},
-  {sym:"TIINDIA.NS",name:"Tube Investments",s:"Auto",cap:"Large Cap"},
-  {sym:"AMBER.NS",name:"Amber Enterprises",s:"Electronics",cap:"Mid Cap"},
-  {sym:"BPCL.NS",name:"BPCL",s:"Energy",cap:"Large Cap"},
-  {sym:"IOC.NS",name:"Indian Oil Corp",s:"Energy",cap:"Large Cap"},
-  {sym:"GAIL.NS",name:"GAIL India",s:"Energy",cap:"Large Cap"},
-  {sym:"NAUKRI.NS",name:"Info Edge",s:"Technology",cap:"Large Cap"},
-  {sym:"TRENT.NS",name:"Trent Zudio",s:"Consumer",cap:"Large Cap"},
-  {sym:"JSWSTEEL.NS",name:"JSW Steel",s:"Metals",cap:"Large Cap"},
-  {sym:"HINDPETRO.NS",name:"HPCL",s:"Energy",cap:"Large Cap"},
-  {sym:"TRENT.NS",name:"Trent Zudio",s:"Consumer",cap:"Large Cap"},
-  {sym:"ZOMATO.NS",name:"Zomato",s:"Consumer",cap:"Large Cap"},
-  {sym:"TECHM.NS",name:"Tech Mahindra",s:"IT",cap:"Large Cap"},
-  {sym:"LTTS.NS",name:"L&T Technology Services",s:"IT",cap:"Large Cap"},
-  {sym:"JUBLPHARMA.NS",name:"Jubilant Pharmova",s:"Pharma",cap:"Mid Cap"},
-  {sym:"IPCALAB.NS",name:"IPCA Laboratories",s:"Pharma",cap:"Mid Cap"},
-  {sym:"TATACOMM.NS",name:"Tata Communications",s:"Telecom",cap:"Large Cap"},
-  {sym:"IDEA.NS",name:"Vodafone Idea",s:"Telecom",cap:"Large Cap"},
-  {sym:"INDUSTOWER.NS",name:"Indus Towers",s:"Telecom",cap:"Large Cap"},
-  {sym:"DLF.NS",name:"DLF",s:"Real Estate",cap:"Large Cap"},
-  {sym:"LODHA.NS",name:"Macrotech Developers",s:"Real Estate",cap:"Large Cap"},
-  {sym:"CANBK.NS",name:"Canara Bank",s:"Banking",cap:"Large Cap"},
-  {sym:"PNB.NS",name:"Punjab National Bank",s:"Banking",cap:"Large Cap"},
-  {sym:"BANKBARODA.NS",name:"Bank of Baroda",s:"Banking",cap:"Large Cap"},
-  {sym:"UNIONBANK.NS",name:"Union Bank of India",s:"Banking",cap:"Large Cap"},
-  {sym:"MANAPPURAM.NS",name:"Manappuram Finance",s:"Finance",cap:"Mid Cap"},
-  {sym:"STARHEALTH.NS",name:"Star Health Insurance",s:"Insurance",cap:"Large Cap"},
-  {sym:"NESTLEIND.NS",name:"Nestle India",s:"FMCG",cap:"Large Cap"},
-  {sym:"BRITANNIA.NS",name:"Britannia Industries",s:"FMCG",cap:"Large Cap"},
-  {sym:"DABUR.NS",name:"Dabur India",s:"FMCG",cap:"Large Cap"},
-  {sym:"GODREJCP.NS",name:"Godrej Consumer",s:"FMCG",cap:"Large Cap"},
-  {sym:"SCHAEFFLER.NS",name:"Schaeffler India",s:"Auto",cap:"Mid Cap"},
-  {sym:"EXIDEIND.NS",name:"Exide Industries",s:"Auto",cap:"Mid Cap"},
-  {sym:"SIEMENS.NS",name:"Siemens India",s:"Infrastructure",cap:"Large Cap"},
-  {sym:"ABB.NS",name:"ABB India",s:"Infrastructure",cap:"Large Cap"},
-  {sym:"KAJARIACER.NS",name:"Kajaria Ceramics",s:"Infrastructure",cap:"Mid Cap"},
-  {sym:"MFSL.NS",name:"Max Financial Services",s:"Insurance",cap:"Large Cap"},
+  {sym:"EICHERMOT.NS",name:"Eicher Motors",s:"Auto",cap:"Large Cap"},{sym:"TVSMOTOR.NS",name:"TVS Motor",s:"Auto",cap:"Large Cap"},{sym:"ASHOKLEY.NS",name:"Ashok Leyland",s:"Auto",cap:"Large Cap"},{sym:"MOTHERSON.NS",name:"Motherson Sumi",s:"Auto",cap:"Mid Cap"},{sym:"EXIDEIND.NS",name:"Exide Industries",s:"Auto",cap:"Mid Cap"},{sym:"BOSCHLTD.NS",name:"Bosch India",s:"Auto",cap:"Large Cap"},
+  {sym:"CANBK.NS",name:"Canara Bank",s:"Banking",cap:"Large Cap"},{sym:"PNB.NS",name:"Punjab National Bank",s:"Banking",cap:"Large Cap"},{sym:"BANKBARODA.NS",name:"Bank of Baroda",s:"Banking",cap:"Large Cap"},{sym:"FEDERALBNK.NS",name:"Federal Bank",s:"Banking",cap:"Mid Cap"},{sym:"BANDHANBNK.NS",name:"Bandhan Bank",s:"Banking",cap:"Large Cap"},{sym:"YESBANK.NS",name:"Yes Bank",s:"Banking",cap:"Large Cap"},
+  {sym:"LTFH.NS",name:"L&T Finance",s:"Finance",cap:"Large Cap"},{sym:"MANAPPURAM.NS",name:"Manappuram Finance",s:"Finance",cap:"Mid Cap"},{sym:"POLICYBZR.NS",name:"PB Fintech",s:"Finance",cap:"Large Cap"},{sym:"360ONE.NS",name:"360 ONE WAM",s:"Finance",cap:"Mid Cap"},
+  {sym:"INFY.NS",name:"Infosys",s:"IT",cap:"Large Cap"},{sym:"TCS.NS",name:"TCS",s:"IT",cap:"Large Cap"},{sym:"WIPRO.NS",name:"Wipro",s:"IT",cap:"Large Cap"},{sym:"TECHM.NS",name:"Tech Mahindra",s:"IT",cap:"Large Cap"},{sym:"MPHASIS.NS",name:"Mphasis",s:"IT",cap:"Large Cap"},{sym:"HEXAWARE.NS",name:"Hexaware",s:"IT",cap:"Large Cap"},{sym:"KPITTECH.NS",name:"KPIT Technologies",s:"IT",cap:"Mid Cap"},
+  {sym:"DRREDDY.NS",name:"Dr Reddy Labs",s:"Pharma",cap:"Large Cap"},{sym:"CIPLA.NS",name:"Cipla",s:"Pharma",cap:"Large Cap"},{sym:"DIVISLAB.NS",name:"Divi Labs",s:"Pharma",cap:"Large Cap"},{sym:"AUROPHARMA.NS",name:"Aurobindo Pharma",s:"Pharma",cap:"Large Cap"},{sym:"TORNTPHARM.NS",name:"Torrent Pharma",s:"Pharma",cap:"Large Cap"},{sym:"ALKEM.NS",name:"Alkem Labs",s:"Pharma",cap:"Large Cap"},{sym:"MANKIND.NS",name:"Mankind Pharma",s:"Pharma",cap:"Large Cap"},{sym:"APOLLOHOSP.NS",name:"Apollo Hospitals",s:"Pharma",cap:"Large Cap"},{sym:"FORTIS.NS",name:"Fortis Healthcare",s:"Pharma",cap:"Large Cap"},{sym:"MAXHEALTH.NS",name:"Max Healthcare",s:"Pharma",cap:"Large Cap"},
+  {sym:"NESTLEIND.NS",name:"Nestle India",s:"FMCG",cap:"Large Cap"},{sym:"BRITANNIA.NS",name:"Britannia",s:"FMCG",cap:"Large Cap"},{sym:"EMAMILTD.NS",name:"Emami",s:"FMCG",cap:"Mid Cap"},{sym:"VARUNBEV.NS",name:"Varun Beverages",s:"FMCG",cap:"Large Cap"},{sym:"TATACONSUM.NS",name:"Tata Consumer",s:"FMCG",cap:"Large Cap"},{sym:"UBL.NS",name:"United Breweries",s:"FMCG",cap:"Large Cap"},
+  {sym:"BPCL.NS",name:"BPCL",s:"Energy",cap:"Large Cap"},{sym:"IOC.NS",name:"Indian Oil",s:"Energy",cap:"Large Cap"},{sym:"HINDPETRO.NS",name:"HPCL",s:"Energy",cap:"Large Cap"},{sym:"GAIL.NS",name:"GAIL India",s:"Energy",cap:"Large Cap"},{sym:"MGL.NS",name:"Mahanagar Gas",s:"Energy",cap:"Mid Cap"},{sym:"GUJGASLTD.NS",name:"Gujarat Gas",s:"Energy",cap:"Mid Cap"},
+  {sym:"NTPC.NS",name:"NTPC",s:"Power",cap:"Large Cap"},{sym:"POWERGRID.NS",name:"Power Grid",s:"Power",cap:"Large Cap"},{sym:"NHPC.NS",name:"NHPC",s:"Power",cap:"Large Cap"},{sym:"TATAPOWER.NS",name:"Tata Power",s:"Power",cap:"Large Cap"},{sym:"CESC.NS",name:"CESC",s:"Power",cap:"Mid Cap"},{sym:"IEX.NS",name:"Indian Energy Exchange",s:"Power",cap:"Mid Cap"},
+  {sym:"ULTRACEMCO.NS",name:"UltraTech Cement",s:"Infrastructure",cap:"Large Cap"},{sym:"JKCEMENT.NS",name:"JK Cement",s:"Infrastructure",cap:"Large Cap"},{sym:"SIEMENS.NS",name:"Siemens India",s:"Infrastructure",cap:"Large Cap"},{sym:"ABB.NS",name:"ABB India",s:"Infrastructure",cap:"Large Cap"},{sym:"CONCOR.NS",name:"Container Corp",s:"Infrastructure",cap:"Large Cap"},{sym:"DELHIVERY.NS",name:"Delhivery",s:"Infrastructure",cap:"Large Cap"},
+  {sym:"TATASTEEL.NS",name:"Tata Steel",s:"Metals",cap:"Large Cap"},{sym:"JSWSTEEL.NS",name:"JSW Steel",s:"Metals",cap:"Large Cap"},{sym:"SAIL.NS",name:"SAIL",s:"Metals",cap:"Large Cap"},{sym:"HINDALCO.NS",name:"Hindalco",s:"Metals",cap:"Large Cap"},{sym:"VEDL.NS",name:"Vedanta",s:"Metals",cap:"Large Cap"},{sym:"NMDC.NS",name:"NMDC",s:"Metals",cap:"Large Cap"},{sym:"HINDZINC.NS",name:"Hindustan Zinc",s:"Metals",cap:"Large Cap"},{sym:"JSL.NS",name:"Jindal Stainless",s:"Metals",cap:"Mid Cap"},
+  {sym:"ASIANPAINT.NS",name:"Asian Paints",s:"Consumer",cap:"Large Cap"},{sym:"BERGEPAINT.NS",name:"Berger Paints",s:"Consumer",cap:"Large Cap"},{sym:"PIDILITIND.NS",name:"Pidilite Industries",s:"Consumer",cap:"Large Cap"},{sym:"PAGEIND.NS",name:"Page Industries",s:"Consumer",cap:"Large Cap"},{sym:"MANYAVAR.NS",name:"Vedant Fashions",s:"Consumer",cap:"Large Cap"},{sym:"METRO.NS",name:"Metro Brands",s:"Consumer",cap:"Mid Cap"},{sym:"BATA.NS",name:"Bata India",s:"Consumer",cap:"Mid Cap"},
+  {sym:"VOLTAS.NS",name:"Voltas",s:"Consumer Durables",cap:"Mid Cap"},{sym:"BLUESTARCO.NS",name:"Blue Star",s:"Consumer Durables",cap:"Mid Cap"},{sym:"WHIRLPOOL.NS",name:"Whirlpool India",s:"Consumer Durables",cap:"Mid Cap"},{sym:"CROMPTON.NS",name:"Crompton Consumer",s:"Consumer Durables",cap:"Mid Cap"},
+  {sym:"STARHEALTH.NS",name:"Star Health Insurance",s:"Insurance",cap:"Large Cap"},{sym:"MFSL.NS",name:"Max Financial Services",s:"Insurance",cap:"Large Cap"},
+  {sym:"DLF.NS",name:"DLF",s:"Real Estate",cap:"Large Cap"},{sym:"LODHA.NS",name:"Macrotech Developers",s:"Real Estate",cap:"Large Cap"},{sym:"PHOENIXLTD.NS",name:"Phoenix Mills",s:"Real Estate",cap:"Large Cap"},{sym:"BRIGADE.NS",name:"Brigade Enterprises",s:"Real Estate",cap:"Mid Cap"},
+  {sym:"IDEA.NS",name:"Vodafone Idea",s:"Telecom",cap:"Large Cap"},{sym:"TATACOMM.NS",name:"Tata Communications",s:"Telecom",cap:"Large Cap"},{sym:"INDUSTOWER.NS",name:"Indus Towers",s:"Telecom",cap:"Large Cap"},
+  {sym:"NAUKRI.NS",name:"Info Edge",s:"Technology",cap:"Large Cap"},{sym:"PAYTM.NS",name:"Paytm",s:"Technology",cap:"Large Cap"},{sym:"ZOMATO.NS",name:"Zomato",s:"Technology",cap:"Large Cap"},{sym:"TANLA.NS",name:"Tanla Platforms",s:"Technology",cap:"Mid Cap"},{sym:"INDIAMART.NS",name:"IndiaMART",s:"Technology",cap:"Mid Cap"},
+  {sym:"TATACHEM.NS",name:"Tata Chemicals",s:"Chemicals",cap:"Large Cap"},{sym:"AARTIIND.NS",name:"Aarti Industries",s:"Chemicals",cap:"Mid Cap"},{sym:"SRF.NS",name:"SRF",s:"Chemicals",cap:"Large Cap"},
 ];
-
 const _syms=new Set(STOCKS.map(s=>s.sym));
 const ALL_SWING=[...STOCKS,...SWING_EXTRA.filter(s=>!_syms.has(s.sym))];
-
 
 // ─── SCORING ENGINE ───────────────────────────────────────────────────────────
 function calcPillars(stock, ld) {
@@ -294,7 +214,7 @@ function calcPillars(stock, ld) {
     {name:"Growth Engine",score:p3,max:16,detail:`Revenue: ${p3_rev}/8 · Earnings Consistency: ${p3_ec}/4 · Profit Growth: ${p3_prof}/4`},
     {name:"Balance Sheet",score:p4,max:14,detail:`D/E: ${p4_de}/8 · Interest Coverage: ${p4_ic}/5 · Working Capital: ${p4_wce}/2`},
     {name:"Governance",score:p5,max:14,detail:`Promoter Holding: ${p5_hold}/5 · Pledged: ${p5_pledge}/6 · Trend: ${p5_trend}/3`},
-    {name:"Analyst + FII",score:p6,max:10,detail:`Rating:${p6_rat}/5 Upside:${p6_upside}/3 FII:${p6_fii}+DII:${p6_dii}/2`},
+    {name:"Analyst + FII",score:p6,max:10,detail:`Rating: ${p6_rat}/5 · Upside: ${p6_upside}/3 · FII Flow: ${p6_fii}/2`},
     {name:"Price Momentum",score:p7,max:10,detail:`52W Position: ${p7_52w}/5 · Volume: ${ld?.vol?p7_vol:"N/A"}/3`},
   ]};
 }
@@ -316,16 +236,34 @@ function getCategories(stock, score, vr) {
   return cats;
 }
 
-function getPriceLevels(stock, live) {
-  if(!live?.price) return null;
+function getPriceLevels(stock,live){
+  if(!live?.price)return null;
   const p=live.price;
-  const rr_swing=(((p*1.06-p*0.93)/(p-p*0.93))).toFixed(1);
-  const rr_short=(((p*1.18-p*0.88)/(p-p*0.88))).toFixed(1);
+  const spe=SECTOR_PE[stock.s]||25;
+  // Swing: volume-driven
+  const vr=(live.vol&&live.avgVol)?live.vol/live.avgVol:1;
+  const su=vr>=4?0.09:vr>=3?0.07:vr>=2?0.06:0.05;
+  const ss=vr>=3?0.05:0.07;
+  const swT=p*(1+su),swS=p*(1-ss);
+  const swRR=((swT-p)/(p-swS)).toFixed(1);
+  // Short: PE + 52W + growth
+  const range=(live.h52&&live.l52)?live.h52-live.l52:0;
+  const pos52=range>0?(p-live.l52)/range:0.5;
+  const momentum=pos52<0.3?0.22:pos52<0.5?0.16:pos52<0.7?0.12:0.08;
+  const peDisc=stock.pe>0?Math.max(0,(spe-stock.pe)/spe):0;
+  const growthB=(stock.revG||0)>25?0.05:(stock.revG||0)>15?0.03:0;
+  const stUp=momentum+(peDisc*0.15)+growthB;
+  const stT=Math.round(p*(1+stUp)),stS=Math.round(p*0.88);
+  const stRR=((stT-p)/(p-stS)).toFixed(1);
+  // Long: ROE-based or analyst target
+  let ltT;
+  if(stock.at&&stock.at>p*1.05){ltT=stock.at;}
+  else{const bvG=(stock.roe||15)/100;const fairPE=Math.min(spe*1.15,stock.pe*(1+(stock.profG||10)/100));const rExp=fairPE>stock.pe?(fairPE/stock.pe-1)*0.5:0;ltT=Math.round(p*(1+bvG*1.5+rExp));}
   return{
     buyZone:`₹${(p*0.97).toFixed(0)}–₹${p.toFixed(0)}`,
-    swing:{target:`₹${(p*1.06).toFixed(0)}`,stop:`₹${(p*0.93).toFixed(0)}`,gain:"5–7%",rr:rr_swing,duration:"1–3 days",exit:"Next 1-3 trading sessions. Exit if target or stop hit, whichever comes first."},
-    short:{target:`₹${Math.min(stock.at,p*1.20).toFixed(0)}`,stop:`₹${(p*0.88).toFixed(0)}`,gain:"12–20%",rr:rr_short,duration:"4–12 weeks",exit:`Exit by ${new Date(Date.now()+90*24*60*60*1000).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} or when target hit.`},
-    long:{target:`₹${stock.at}`,stop:`₹${(p*0.80).toFixed(0)}`,gain:`${((stock.at/p-1)*100).toFixed(0)}%`,rr:"3:1+",duration:"12–36 months",exit:`Hold until ${new Date(Date.now()+18*30*24*60*60*1000).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} or analyst target revision.`},
+    swing:{target:`₹${swT.toFixed(0)}`,stop:`₹${swS.toFixed(0)}`,gain:`${(su*100).toFixed(0)}%`,rr:swRR,duration:"1–3 days",exit:"Exit at target OR stop — whichever hits first."},
+    short:{target:`₹${stT}`,stop:`₹${stS}`,gain:`~${(stUp*100).toFixed(0)}%`,rr:stRR,duration:"4–12 weeks",exit:`Exit by ${new Date(Date.now()+90*24*60*60*1000).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} or target hit.`,basis:`PE vs sector: ${peDisc>0.1?"cheap":"fair"} · 52W: ${pos52<0.35?"near low":"mid"} · Growth: ${stock.revG||0}% CAGR`},
+    long:{target:`₹${ltT}`,stop:`₹${Math.round(p*0.80)}`,gain:`${((ltT/p-1)*100).toFixed(0)}%`,rr:"3:1+",duration:"12–36 months",exit:`Hold until ${new Date(Date.now()+18*30*24*60*60*1000).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})} or target revision.`,basis:stock.at&&stock.at>p*1.05?"Analyst consensus target":`ROE ${stock.roe}% driven book value growth`},
   };
 }
 
@@ -350,16 +288,16 @@ function generateRemark(stock, pillars, rec, upside, peg) {
 
 function getFlags(stock, score, live, vr, peg) {
   const risks=[],opps=[];
-  const sfg2=SF[stock.s];
+  const sfg=SF[stock.s];
   if(stock.pledged>10) risks.push("⚠ High pledging "+stock.pledged+"%");
   if(stock.prT==="↓") risks.push("⬇ Promoter reducing stake");
   if(stock.de>1.5&&!stock.isB) risks.push("⚠ High debt/equity "+stock.de);
   if(stock.fcf==="L") risks.push("⚠ Poor free cash flow");
-  if(sfg2?.fi==="Selling") risks.push("📉 FII selling sector this week");
+  if(sfr?.fi==="Selling") risks.push("📉 FII selling sector this week");
   if(stock.ec<5) risks.push("⚠ Inconsistent earnings ("+stock.ec+"/10)");
   if(live?.price&&live.price>live.h52*0.95) risks.push("⚠ Near 52-week high");
   if(stock.prT==="↑") opps.push("⬆ Promoter increasing stake");
-  if(sfg2?.fi==="Buying") opps.push("💚 FII buying sector "+sfg2?.fa);
+  if(sfr?.fi==="Buying") opps.push("💚 FII buying sector "+fii.amt);
   if(live?.price&&live.price<live.l52*1.1) opps.push("🎯 Near 52-week low — opportunity");
   if(peg<0.8) opps.push("✅ PEG "+peg+" = cheap growth");
   if(stock.pledged===0) opps.push("✅ Zero promoter pledging");
@@ -440,40 +378,21 @@ export default function App() {
 
   const fetchSwingPrices=useCallback(async()=>{
     const newSld={};
-    const extras=SWING_EXTRA;
+    const extras=SWING_EXTRA.filter(s=>!STOCKS.find(x=>x.sym===s.sym));
     for(let i=0;i<extras.length;i+=20){
       const syms=extras.slice(i,i+20).map(s=>s.sym).join(',');
-      try{
-        const r=await fetch('/api/finance?symbols='+encodeURIComponent(syms),{signal:AbortSignal.timeout(15000)});
-        const j=await r.json();
-        (j?.quoteResponse?.result||[]).forEach(q=>{newSld[q.symbol]={price:q.regularMarketPrice,chg:q.regularMarketChange,pct:q.regularMarketChangePercent,vol:q.regularMarketVolume,avgVol:q.averageDailyVolume3Month,h52:q.fiftyTwoWeekHigh,l52:q.fiftyTwoWeekLow};});
-      }catch(_){}
+      try{const r=await fetch('/api/finance?symbols='+encodeURIComponent(syms),{signal:AbortSignal.timeout(15000)});const j=await r.json();(j?.quoteResponse?.result||[]).forEach(q=>{if(q.regularMarketPrice)newSld[q.symbol]={price:q.regularMarketPrice,chg:q.regularMarketChange,pct:q.regularMarketChangePercent,vol:q.regularMarketVolume,avgVol:q.averageDailyVolume3Month,h52:q.fiftyTwoWeekHigh,l52:q.fiftyTwoWeekLow};});}catch(_){}
       await new Promise(r=>setTimeout(r,400));
     }
     setSwingLd(prev=>({...prev,...newSld}));
   },[]);
 
   const fetchFiiDii=useCallback(async()=>{
-    try{
-      const r=await fetch('/api/fii-dii',{signal:AbortSignal.timeout(8000)});
-      const j=await r.json();
-      if(Array.isArray(j)){
-        const fd=j.find(x=>x.category&&x.category.toUpperCase().includes('FII'));
-        const dd=j.find(x=>x.category&&x.category.toUpperCase().includes('DII'));
-        if(fd||dd)setFiiDii({fii:fd?fd.netValue:0,dii:dd?dd.netValue:0});
-      }
-    }catch(_){}
+    try{const r=await fetch('/api/fii-dii',{signal:AbortSignal.timeout(8000)});const j=await r.json();if(Array.isArray(j)){const fd=j.find(x=>x.category&&x.category.toUpperCase().includes('FII'));const dd=j.find(x=>x.category&&x.category.toUpperCase().includes('DII'));if(fd||dd)setFiiDii({fii:fd?fd.netValue:0,dii:dd?dd.netValue:0});}}catch(_){}
   },[]);
 
   const fetchBrief=useCallback(async()=>{
-    try{
-      const syms='^GSPC,^IXIC,^N225,^HSI,CL=F,GC=F,USDINR=X';
-      const r=await fetch('/api/finance?symbols='+encodeURIComponent(syms),{signal:AbortSignal.timeout(15000)});
-      const j=await r.json();
-      const m={};
-      (j?.quoteResponse?.result||[]).forEach(x=>{m[x.symbol]=x;});
-      setBrief({sp500:m['^GSPC'],nasdaq:m['^IXIC'],nikkei:m['^N225'],hsi:m['^HSI'],crude:m['CL=F'],gold:m['GC=F'],usdinr:m['USDINR=X'],at:new Date()});
-    }catch(_){}
+    try{const syms='^GSPC,^IXIC,^N225,^HSI,CL=F,GC=F,USDINR=X';const r=await fetch('/api/finance?symbols='+encodeURIComponent(syms),{signal:AbortSignal.timeout(15000)});const j=await r.json();const m={};(j?.quoteResponse?.result||[]).forEach(x=>{m[x.symbol]=x;});setBrief({sp500:m['^GSPC'],nasdaq:m['^IXIC'],nikkei:m['^N225'],hsi:m['^HSI'],crude:m['CL=F'],gold:m['GC=F'],usdinr:m['USDINR=X'],at:new Date()});}catch(_){}
   },[]);
 
 
@@ -525,8 +444,7 @@ export default function App() {
 
 
   const exitAlerts=useMemo(()=>portfolio.map(h=>{
-    const lv=ld[h.sym];
-    if(!lv||!lv.price)return null;
+    const lv=ld[h.sym];if(!lv||!lv.price)return null;
     const pctChg=(lv.price-h.buyPrice)/h.buyPrice*100;
     const pnlAmt=(lv.price-h.buyPrice)*h.qty;
     if(pctChg<=-7)return{...h,live:lv,pctChg,pnlAmt,alert:"EXIT — Stop Loss Hit (-7%)",alertC:"#ff5252"};
@@ -555,13 +473,10 @@ export default function App() {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
           <div style={{display:"flex",alignItems:"center",gap:12}}>
             <span style={{fontSize:18,fontWeight:900,letterSpacing:-0.8,background:"linear-gradient(135deg,#60a5fa,#34d399)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>IndiaScope v5</span>
-            <span style={{fontSize:10,color:"#2a3a55"}}>300 Stocks · FII+DII Live</span>
+            <span style={{fontSize:10,color:"#2a3a55"}}>300 Stocks · FII+DII · Wealth Focus</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap"}}>
-            {fiiDii&&<span style={{fontSize:11,display:"flex",gap:6}}>
-              <span style={{color:fiiDii.fii>=0?"#34d399":"#ff5252",fontWeight:700}}>FII {fiiDii.fii>=0?"+":""}{Math.round(fiiDii.fii)}Cr</span>
-              <span style={{color:fiiDii.dii>=0?"#60a5fa":"#ff5252",fontWeight:700}}>DII {fiiDii.dii>=0?"+":""}{Math.round(fiiDii.dii)}Cr</span>
-            </span>}
+            {fiiDii&&<span style={{fontSize:11,display:"flex",gap:6}}><span style={{color:fiiDii.fii>=0?"#34d399":"#ff5252",fontWeight:700}}>FII {fiiDii.fii>=0?"+":""}{Math.round(fiiDii.fii)}Cr</span><span style={{color:fiiDii.dii>=0?"#60a5fa":"#ff5252",fontWeight:700}}>DII {fiiDii.dii>=0?"+":""}{Math.round(fiiDii.dii)}Cr</span></span>}
             {nifty&&<span style={{fontSize:12,color:nifty.pct>=0?"#69f0ae":"#ff5252",fontWeight:700,cursor:"pointer"}} onClick={()=>setFiiPanelOpen(!fiiPanelOpen)}>Nifty ₹{fmt(nifty.price,0)} {nifty.pct>=0?"+":""}{fmt(nifty.pct,2)}% · 📊 FII</span>}
             {loading&&<span style={{fontSize:11,color:"#3b82f6",display:"flex",alignItems:"center",gap:4}}><span style={{width:6,height:6,borderRadius:"50%",background:"#3b82f6",display:"inline-block",animation:"blink 1s infinite"}}/>Auto ↻</span>}
             {!loading&&ts&&<span style={{fontSize:10,color:"#2a3a55"}}>↺ {ts.toLocaleTimeString()}</span>}
@@ -576,13 +491,11 @@ export default function App() {
             <span style={{fontSize:9,color:"#2a3a55"}}>Source: NSE India · I update this weekly</span>
           </div>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-            {Object.entries(SF).map(([sec,data])=>(
-              <div key={sec} style={{background:"#0a0f1e",borderRadius:6,padding:"5px 9px",border:"1px solid "+(data.fi==="Buying"&&data.di==="Buying"?"#34d39933":"#2a3a55"),minWidth:110}}>
-                <div style={{fontSize:8.5,color:SCOL[sec]||"#60a5fa",fontWeight:600,marginBottom:2}}>{sec}</div>
-                <div style={{display:"flex",gap:8}}>
-                  <div><div style={{fontSize:8,color:"#2a3a55"}}>FII</div><div style={{fontSize:10,fontWeight:700,color:data.fi==="Buying"?"#34d399":data.fi==="Selling"?"#f87171":"#ffd740"}}>{data.fw} {data.fa}</div></div>
-                  <div><div style={{fontSize:8,color:"#2a3a55"}}>DII</div><div style={{fontSize:10,fontWeight:700,color:data.di==="Buying"?"#60a5fa":data.di==="Selling"?"#f87171":"#ffd740"}}>{data.dw} {data.da}</div></div>
-                </div>
+            {Object.entries(SF).map(([sec,data],idx)=>(
+              <div key={sec} style={{background:"#0a0f1e",borderRadius:6,padding:"5px 10px",border:`1px solid ${data.fi==="Buying"?"#34d39933":data.fi==="Selling"?"#f8717133":"#2a3a55"}`,minWidth:100}}>
+                <div style={{fontSize:9,color:SCOL[sec]||"#60a5fa",fontWeight:600}}>{sec}</div>
+                <div style={{fontSize:11,fontWeight:700,color:data.fi==="Buying"?"#34d399":data.fi==="Selling"?"#f87171":"#ffd740"}}>{data.fw} {data.flow}</div>
+                <div style={{fontSize:9,color:"#2a3a55"}}>{data.fa}</div>
               </div>
             ))}
           </div>
@@ -614,55 +527,41 @@ export default function App() {
         <div style={{padding:14}}>
           <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:12,padding:16}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-              <div style={{fontSize:14,fontWeight:800,color:"#e0ecff"}}>🌅 Morning Briefing</div>
+              <div style={{fontSize:14,fontWeight:800,color:"#e0ecff"}}>🌅 Morning Briefing — Global Markets</div>
               <button onClick={fetchBrief} style={{background:"#141e30",border:"1px solid #3b82f6",borderRadius:5,padding:"5px 12px",color:"#60a5fa",cursor:"pointer",fontSize:11}}>Refresh Now</button>
             </div>
-            {!brief&&<div style={{color:"#2a3a55",textAlign:"center",padding:32,fontSize:12}}>Click Refresh Now to load global markets. Best viewed before 9:15 AM.</div>}
+            {!brief&&<div style={{color:"#2a3a55",textAlign:"center",padding:28,fontSize:12}}>Click Refresh Now. Best viewed before 9:15 AM.</div>}
             {brief&&<>
-              <div style={{fontSize:10,color:"#2a3a55",marginBottom:12}}>Updated: {brief.at&&brief.at.toLocaleTimeString()}</div>
-              <div style={{fontSize:12,fontWeight:700,color:"#8899bb",marginBottom:8}}>🌍 Global Markets</div>
-              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:8,marginBottom:14}}>
+              <div style={{fontSize:10,color:"#2a3a55",marginBottom:10}}>Updated: {brief.at&&brief.at.toLocaleTimeString()}</div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(130px,1fr))",gap:8,marginBottom:14}}>
                 {[["S&P 500",brief.sp500],["Nasdaq",brief.nasdaq],["Nikkei",brief.nikkei],["Hang Seng",brief.hsi],["Crude Oil",brief.crude],["Gold",brief.gold],["USD/INR",brief.usdinr]].map(function(item){
-                  var label=item[0],d=item[1];
-                  if(!d)return null;
-                  var pct=d.regularMarketChangePercent||0;
-                  return React.createElement("div",{key:label,style:{background:"#070b14",borderRadius:8,padding:"10px 12px",border:"1px solid "+(pct>=0?"#34d39922":"#f8717122")}},
-                    React.createElement("div",{style:{fontSize:9,color:"#2a3a55",marginBottom:3}},label),
-                    React.createElement("div",{style:{fontSize:15,fontWeight:800,color:"#e0ecff"}},Number(d.regularMarketPrice||0).toFixed(label==="USD/INR"?2:0)),
+                  const d=item[1];if(!d)return null;
+                  const pct=d.regularMarketChangePercent||0;
+                  return React.createElement("div",{key:item[0],style:{background:"#070b14",borderRadius:8,padding:"9px 11px",border:"1px solid "+(pct>=0?"#34d39922":"#f8717122")}},
+                    React.createElement("div",{style:{fontSize:9,color:"#2a3a55",marginBottom:2}},item[0]),
+                    React.createElement("div",{style:{fontSize:14,fontWeight:800,color:"#e0ecff"}},(d.regularMarketPrice||0).toFixed(item[0]==="USD/INR"?2:0)),
                     React.createElement("div",{style:{fontSize:11,fontWeight:700,color:pct>=0?"#69f0ae":"#ff5252"}},(pct>=0?"+":"")+pct.toFixed(2)+"%")
                   );
                 })}
               </div>
-              <div style={{background:"#070b14",borderRadius:8,padding:"12px 14px",marginBottom:12}}>
-                <div style={{fontSize:12,fontWeight:700,color:"#8899bb",marginBottom:8}}>📊 Impact on Indian Sectors</div>
+              <div style={{background:"#070b14",borderRadius:8,padding:"11px 13px"}}>
+                <div style={{fontSize:11,fontWeight:700,color:"#8899bb",marginBottom:7}}>📊 Today's Impact on Indian Sectors</div>
                 {(function(){
-                  var sp=brief.sp500?brief.sp500.regularMarketChangePercent:0;
-                  var cr=brief.crude?brief.crude.regularMarketChangePercent:0;
-                  var go=brief.gold?brief.gold.regularMarketChangePercent:0;
-                  var fx=brief.usdinr?brief.usdinr.regularMarketChangePercent:0;
-                  var impacts=[];
-                  if(sp<-1)impacts.push({sec:"IT",c:"#ff5252",msg:"US markets down "+sp.toFixed(1)+"% → IT stocks may open weak. Watch TCS, Infy, HCL."});
-                  else if(sp>1)impacts.push({sec:"IT",c:"#34d399",msg:"US markets up "+sp.toFixed(1)+"% → IT stocks likely to open strong."});
-                  if(cr>2)impacts.push({sec:"Energy",c:"#34d399",msg:"Crude up "+cr.toFixed(1)+"% → ONGC, Petronet positive."});
-                  else if(cr<-2)impacts.push({sec:"Energy",c:"#ffd740",msg:"Crude down "+Math.abs(cr).toFixed(1)+"% → OMC margins improve (BPCL, IOC)."});
-                  if(go>1)impacts.push({sec:"Finance",c:"#34d399",msg:"Gold up "+go.toFixed(1)+"% → Muthoot Finance positive."});
-                  if(fx>0.5)impacts.push({sec:"IT",c:"#34d399",msg:"INR weakened → IT exporters get revenue boost."});
-                  if(impacts.length===0)impacts.push({sec:"All",c:"#ffd740",msg:"Global markets stable. No major trigger. Normal open expected."});
-                  return impacts.map(function(x,i){return React.createElement("div",{key:i,style:{display:"flex",gap:8,padding:"5px 0",borderBottom:"1px solid #0d1525",alignItems:"flex-start"}},
-                    React.createElement("span",{style:{background:(SCOL[x.sec]||"#3b82f6")+"22",color:SCOL[x.sec]||"#60a5fa",fontSize:9,padding:"2px 6px",borderRadius:3,fontWeight:600,whiteSpace:"nowrap"}},x.sec),
-                    React.createElement("span",{style:{fontSize:11,color:x.c,lineHeight:1.5}},x.msg)
+                  const sp=brief.sp500?brief.sp500.regularMarketChangePercent:0;
+                  const cr=brief.crude?brief.crude.regularMarketChangePercent:0;
+                  const go=brief.gold?brief.gold.regularMarketChangePercent:0;
+                  const impacts=[];
+                  if(sp<-1)impacts.push({s:"IT",c:"#ff5252",m:"US markets down "+sp.toFixed(1)+"% → IT stocks may open weak"});
+                  else if(sp>1)impacts.push({s:"IT",c:"#34d399",m:"US markets up "+sp.toFixed(1)+"% → IT stocks likely to open strong"});
+                  if(cr>2)impacts.push({s:"Energy",c:"#34d399",m:"Crude up "+cr.toFixed(1)+"% → ONGC, Petronet positive"});
+                  else if(cr<-2)impacts.push({s:"Energy",c:"#ffd740",m:"Crude down "+Math.abs(cr).toFixed(1)+"% → OMC margins improve"});
+                  if(go>1)impacts.push({s:"Finance",c:"#34d399",m:"Gold up "+go.toFixed(1)+"% → Muthoot Finance positive"});
+                  if(impacts.length===0)impacts.push({s:"All",c:"#ffd740",m:"Markets stable overnight. Normal open expected."});
+                  return impacts.map(function(x,i){return React.createElement("div",{key:i,style:{display:"flex",gap:8,padding:"5px 0",borderBottom:"1px solid #0d1525"}},
+                    React.createElement("span",{style:{color:SCOL[x.s]||"#60a5fa",fontSize:10,fontWeight:600,minWidth:60}},x.s),
+                    React.createElement("span",{style:{fontSize:11,color:x.c}},x.m)
                   );});
                 })()}
-              </div>
-              <div style={{background:"#070b14",borderRadius:8,padding:"12px 14px"}}>
-                <div style={{fontSize:12,fontWeight:700,color:"#8899bb",marginBottom:8}}>📅 Results This Week</div>
-                {STOCKS.filter(function(s){var d=(new Date(s.rd+", 2026")-new Date())/86400000;return d>=0&&d<=5;}).slice(0,8).map(function(s){
-                  var d=Math.round((new Date(s.rd+", 2026")-new Date())/86400000);
-                  return React.createElement("div",{key:s.sym,style:{display:"flex",justifyContent:"space-between",padding:"5px 0",borderBottom:"1px solid #0d1525"}},
-                    React.createElement("span",{style:{color:"#e0ecff",fontWeight:600,fontSize:11}},s.name),
-                    React.createElement("span",{style:{color:d<=1?"#f59e0b":"#ffd740",fontSize:10,fontWeight:700}},d===0?"Today":d===1?"Tomorrow":"In "+d+" days")
-                  );
-                })}
               </div>
             </>}
           </div>
@@ -741,7 +640,7 @@ export default function App() {
           {SECTORS.map(sec=><button key={sec} onClick={()=>setSector(sec)} style={{background:sector===sec?`${SCOL[sec]||"#3b82f6"}22`:"transparent",border:`1px solid ${sector===sec?(SCOL[sec]||"#3b82f6"):"#141e30"}`,borderRadius:99,padding:"3px 10px",color:sector===sec?(SCOL[sec]||"#60a5fa"):"#3d5070",cursor:"pointer",fontSize:9.5,fontWeight:sector===sec?700:400,whiteSpace:"nowrap",flexShrink:0}}>{sec}</button>)}
         </div>
         <div style={{padding:"0 16px 8px",display:"flex",gap:7,flexWrap:"wrap",alignItems:"center"}}>
-          <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search any stock — type name or symbol (e.g. Reliance, SBIN)" style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:7,padding:"7px 11px",color:"#c8d8f0",fontSize:12,flex:1,minWidth:150,outline:"none"}}/>
+          <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search…" style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:7,padding:"7px 11px",color:"#c8d8f0",fontSize:12,flex:1,minWidth:150,outline:"none"}}/>
           <div style={{display:"flex",gap:3,flexWrap:"wrap"}}>{[["score","Score"],["peg","PEG"],["roe","ROE"],["roce","ROCE"],["pe","P/E"],["evEb","EV/EBITDA"],["divY","Div%"],["upside","Upside"]].map(([k,l])=>sBtn(k,l))}</div>
         </div>
         <div style={{overflowX:"auto",padding:"0 16px 80px"}}>
@@ -764,10 +663,7 @@ export default function App() {
                     </td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17",fontSize:10,fontWeight:600,color:CCOL[s.cap]||"#60a5fa",whiteSpace:"nowrap"}}>{s.cap.replace(" Cap","")}</td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
-                      <span style={{fontSize:10,fontWeight:700,color:sft?.fi==="Buying"?"#34d399":sft?.fi==="Selling"?"#f87171":"#4a6080"}}>{sft?.fw||"→"}</span>
-                    </td>
-                    <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
-                      <span style={{fontSize:10,fontWeight:700,color:sft?.di==="Buying"?"#60a5fa":sft?.di==="Selling"?"#f87171":"#4a6080"}}>{sft?.dw||"→"}</span>
+                      <span style={{fontSize:10,fontWeight:700,color:sfr?.fi==="Buying"?"#34d399":sfr?.fi==="Selling"?"#f87171":"#4a6080"}}>{sfr?.fw||"→"}</span>
                     </td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
                       {s.live?.price?<><div style={{fontWeight:800,color:"#e0ecff",fontSize:12}}>₹{fmt(s.live.price,1)}</div><div style={{fontSize:9,color:s.live.chg>=0?"#69f0ae":"#ff5252"}}>{s.live.chg>=0?"+":""}{fmt(s.live.pct,2)}%</div></>:<span style={{color:"#1e2e45"}}>—</span>}
@@ -815,42 +711,30 @@ export default function App() {
       {/* SWING ALERTS */}
       {mainTab==="swing"&&(
         <div style={{padding:"14px"}}>
-          <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:8,padding:"10px 14px",marginBottom:12,fontSize:11,color:"#4a6080",lineHeight:1.6}}>
-            ⚡ <strong style={{color:"#f59e0b"}}>Live Swing Scanner — 300 stocks</strong> · Top 20 by volume surge + momentum · Refreshes every 3 min · Buy today, exit in 1–3 days
+          <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:8,padding:"10px 14px",marginBottom:10,fontSize:11,color:"#4a6080"}}>
+            ⚡ <strong style={{color:"#f59e0b"}}>Live Swing Scanner — 300 stocks</strong> · Top 20 by volume surge + momentum · Refreshes every 3 min
+            <span style={{color:"#3d5070"}}> · Search any stock in Stocks tab → click → All Data tab for analysis</span>
           </div>
-          <div style={{background:"#0a0f1e",border:"1px solid #2563eb44",borderRadius:8,padding:"10px 14px",marginBottom:12}}>
-            <span style={{fontSize:11,color:"#60a5fa",fontWeight:700}}>🔍 Request Analysis for any stock: </span>
-            <span style={{fontSize:10,color:"#4a6080"}}>Go to Stocks tab → type stock name in search → click on it → "All Data" tab shows analysis or Screener.in link.</span>
-          </div>
-          {swingRows.length>0&&swingRows.length<10&&<div style={{background:"#131c2e",border:"1px solid #1a2540",borderRadius:8,padding:"8px 14px",marginBottom:10,fontSize:10,color:"#3b82f6"}}>
-            ⏳ Loading {200-swingRows.length} more stocks... Extended universe prices load in ~60 sec. Showing {swingRows.length}/20 now.
-          </div>}
+          {swingRows.length>0&&swingRows.length<10&&<div style={{background:"#131c2e",border:"1px solid #1a2540",borderRadius:6,padding:"7px 12px",marginBottom:8,fontSize:10,color:"#3b82f6"}}>⏳ Loading extended universe... {swingRows.length}/20 picks loaded. Full list in ~60 sec.</div>}
           {swingRows.length===0
-            ?<div style={{color:"#2a3a55",padding:28,textAlign:"center",background:"#0a0f1e",borderRadius:12,fontSize:12}}>No swing signals yet. Click Refresh after 9:15 AM when market opens.</div>
+            ?<div style={{color:"#2a3a55",padding:24,textAlign:"center",background:"#0a0f1e",borderRadius:10,fontSize:12}}>No swing signals yet. Click Refresh after 9:15 AM when market opens.</div>
             :swingRows.map((s,i)=>{
-              const rec=s.rec||{label:"BUY",c:"#69f0ae",bg:"#001a08",ring:"#69f0ae44"};
-              const cap=s.cap||"";
               const lvl=s.levels||null;
               return(
-                <div key={s.sym||String(i)} onClick={()=>{setSel({...s,pillars:s.pillars||[],cats:[{l:"Swing",c:"#f59e0b",bg:"#1a1000"}],remark:s.remark||("Vol "+(s.vr||0).toFixed(1)+"x avg · momentum pick"),flags:s.flags||{risks:[],opps:[]}});setMTab("targets");setNews([]);}} style={{background:"#0a0f1e",border:"2px solid #f59e0b33",borderRadius:11,padding:"12px 14px",cursor:"pointer",marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
-                  <div style={{flex:1,minWidth:200}}>
+                <div key={s.sym||String(i)} onClick={()=>{setSel({...s,pillars:s.pillars||[],cats:[{l:"Swing",c:"#f59e0b",bg:"#1a1000"}],remark:s.remark||("Vol "+(s.vr||0).toFixed(1)+"x avg"),flags:s.flags||{risks:[],opps:[]}});setMTab("targets");setNews([]);}} style={{background:"#0a0f1e",border:"2px solid #f59e0b33",borderRadius:11,padding:"12px 14px",cursor:"pointer",marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8}}>
+                  <div style={{flex:1,minWidth:180}}>
                     <div style={{fontWeight:800,color:"#e0ecff",fontSize:14}}>{i+1}. {s.name}</div>
-                    <div style={{fontSize:10,color:"#4a6080",marginTop:3}}>
-                      <span style={{color:"#f59e0b",fontWeight:700}}>Volume {(s.vr||0).toFixed(1)}× avg</span>
-                      {" · "}
-                      <span style={{color:((s.pct||0)>=0?"#69f0ae":"#ff5252"),fontWeight:700}}>{(s.pct||0)>=0?"+":""}{(s.pct||0).toFixed(2)}% today</span>
-                      {cap&&<span style={{color:"#3d5070"}}>{" · "}{cap}</span>}
+                    <div style={{fontSize:10,color:"#4a6080",marginTop:2}}>
+                      <span style={{color:"#f59e0b",fontWeight:700}}>Vol {(s.vr||0).toFixed(1)}×</span>
+                      {" · "}<span style={{color:((s.pct||0)>=0?"#69f0ae":"#ff5252"),fontWeight:700}}>{(s.pct||0)>=0?"+":""}{(s.pct||0).toFixed(2)}% today</span>
                     </div>
                   </div>
                   <div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
-                    {s.live&&s.live.price&&<div style={{textAlign:"center"}}>
-                      <div style={{fontSize:16,fontWeight:800,color:"#e0ecff"}}>₹{fmt(s.live.price,1)}</div>
-                      <div style={{fontSize:9,color:(s.live.chg||0)>=0?"#69f0ae":"#ff5252"}}>{(s.live.chg||0)>=0?"+":""}{fmt(s.live.pct,2)}%</div>
-                    </div>}
-                    {lvl&&<div style={{background:"#070b14",borderRadius:7,padding:"8px 12px",textAlign:"right"}}>
+                    {s.live&&s.live.price&&<div style={{textAlign:"center"}}><div style={{fontSize:16,fontWeight:800,color:"#e0ecff"}}>₹{fmt(s.live.price,1)}</div></div>}
+                    {lvl&&<div style={{background:"#070b14",borderRadius:7,padding:"7px 12px",textAlign:"right"}}>
                       <div style={{fontSize:11,color:"#69f0ae",fontWeight:700}}>🟢 Buy: {lvl.buyZone}</div>
                       <div style={{fontSize:11,color:"#4ade80"}}>Target: {lvl.swing.target} ({lvl.swing.gain})</div>
-                      <div style={{fontSize:10,color:"#ff5252"}}>Stop Loss: {lvl.swing.stop}</div>
+                      <div style={{fontSize:10,color:"#ff5252"}}>Stop: {lvl.swing.stop}</div>
                       <div style={{fontSize:9,color:"#2a3a55"}}>Exit within {lvl.swing.duration}</div>
                     </div>}
                   </div>
@@ -1034,12 +918,6 @@ export default function App() {
 
               {/* ALL DATA */}
               {mTab==="data"&&(
-                <div>
-                {!sel.pe&&<div style={{background:"#0a0f1e",borderRadius:8,padding:"12px 14px",marginBottom:12,textAlign:"center"}}>
-                  <div style={{color:"#8899bb",fontSize:11,marginBottom:8}}>Extended universe stock — full fundamental data not pre-loaded yet.</div>
-                  <a href={"https://www.screener.in/company/"+sel.sym.replace(".NS","")+"/"} target="_blank" rel="noopener noreferrer" style={{display:"inline-block",background:"#1a2540",border:"1px solid #3b82f6",borderRadius:6,padding:"7px 14px",color:"#60a5fa",textDecoration:"none",fontSize:11,fontWeight:600}}>View Full Data on Screener.in ↗</a>
-                  <div style={{fontSize:10,color:"#2a3a55",marginTop:6}}>Mention this stock on Monday to add it to core 100.</div>
-                </div>}
                 <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
                   {[
                     {l:"P/E Ratio",v:sel.pe,sub:`Sector: ${SECTOR_PE[sel.s]||"—"}`,ok:sel.pe<(SECTOR_PE[sel.s]||999)},
@@ -1068,7 +946,6 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-</div>
               )}
             </div>
             <div style={{padding:"0 18px 12px",fontSize:9.5,color:"#141e30",borderTop:"1px solid #0d1525",paddingTop:10,lineHeight:1.6}}>
