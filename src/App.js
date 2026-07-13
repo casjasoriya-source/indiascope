@@ -293,11 +293,11 @@ function getFlags(stock, score, live, vr, peg) {
   if(stock.prT==="↓") risks.push("⬇ Promoter reducing stake");
   if(stock.de>1.5&&!stock.isB) risks.push("⚠ High debt/equity "+stock.de);
   if(stock.fcf==="L") risks.push("⚠ Poor free cash flow");
-  if(sfr?.fi==="Selling") risks.push("📉 FII selling sector this week");
+  if(sfg?.fi==="Selling") risks.push("📉 FII selling sector this week");
   if(stock.ec<5) risks.push("⚠ Inconsistent earnings ("+stock.ec+"/10)");
   if(live?.price&&live.price>live.h52*0.95) risks.push("⚠ Near 52-week high");
   if(stock.prT==="↑") opps.push("⬆ Promoter increasing stake");
-  if(sfr?.fi==="Buying") opps.push("💚 FII buying sector "+fii.amt);
+  if(sfg?.fi==="Buying") opps.push("💚 FII+DII buying sector "+sfg?.fa);
   if(live?.price&&live.price<live.l52*1.1) opps.push("🎯 Near 52-week low — opportunity");
   if(peg<0.8) opps.push("✅ PEG "+peg+" = cheap growth");
   if(stock.pledged===0) opps.push("✅ Zero promoter pledging");
@@ -663,7 +663,7 @@ export default function App() {
                     </td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17",fontSize:10,fontWeight:600,color:CCOL[s.cap]||"#60a5fa",whiteSpace:"nowrap"}}>{s.cap.replace(" Cap","")}</td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
-                      <span style={{fontSize:10,fontWeight:700,color:sfr?.fi==="Buying"?"#34d399":sfr?.fi==="Selling"?"#f87171":"#4a6080"}}>{sfr?.fw||"→"}</span>
+                      <span style={{fontSize:10,fontWeight:700,color:sft?.fi==="Buying"?"#34d399":sft?.fi==="Selling"?"#f87171":"#4a6080"}}>{sft?.fw||"→"}</span>
                     </td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17"}}>
                       {s.live?.price?<><div style={{fontWeight:800,color:"#e0ecff",fontSize:12}}>₹{fmt(s.live.price,1)}</div><div style={{fontSize:9,color:s.live.chg>=0?"#69f0ae":"#ff5252"}}>{s.live.chg>=0?"+":""}{fmt(s.live.pct,2)}%</div></>:<span style={{color:"#1e2e45"}}>—</span>}
@@ -801,8 +801,8 @@ export default function App() {
                   <div style={{fontSize:10,color:"#2a3a55"}}>{sel.sym} · {sel.cap} · EC: {sel.ec}/10 · PEG: {sel.peg<50?sel.peg:"N/A"} · EV/EBITDA: {sel.evEb}</div>
                   <div style={{display:"flex",gap:5,marginTop:6,flexWrap:"wrap",alignItems:"center"}}>
                     <span style={{background:`${SCOL[sel.s]||"#3b82f6"}22`,color:SCOL[sel.s]||"#60a5fa",fontSize:10,padding:"2px 7px",borderRadius:4,fontWeight:600}}>{sel.s}</span>
-                    <span style={{background:sel.rec.bg,color:sel.rec.c,fontSize:11,padding:"2px 9px",borderRadius:4,fontWeight:800,border:`1px solid ${sel.rec.ring}`}}>{sel.rec.label}</span>
-                    <span style={{fontSize:13,fontWeight:900,color:sel.rec.c}}>{sel.score}/100</span>
+                    <span style={{background:sel.rec?.bg||'#001a08',color:sel.rec?.c||'#69f0ae',fontSize:11,padding:"2px 9px",borderRadius:4,fontWeight:800,border:`1px solid ${sel.rec?.ring||'#ffffff22'}`}}>{sel.rec?.label||'BUY'}</span>
+                    <span style={{fontSize:13,fontWeight:900,color:sel.rec?.c||'#69f0ae'}}>{sel.score}/100</span>
                     {sel.cats.map(cat=><span key={cat.l} style={{background:cat.bg,color:cat.c,border:`1px solid ${cat.c}55`,fontSize:9,padding:"2px 6px",borderRadius:4,fontWeight:700}}>{cat.l}</span>)}
                     <span style={{fontSize:10,color:sel.prT==="↑"?"#34d399":sel.prT==="↓"?"#f87171":"#4a6080"}}>Promoter {sel.prT}</span>
                   </div>
