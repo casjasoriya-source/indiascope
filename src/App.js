@@ -114,7 +114,7 @@ const STOCKS=[
 {id:73,sym:"TECHNOEI.NS",name:"Techno Electric",s:"Power",cap:"Small Cap",pe:32.0,pb:5.5,de:0.0,roe:18.5,roce:17.8,divY:1.2,revG:15,profG:20,prHold:52,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:1600,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:24,roic:"H",wce:"H",note:"Power T&D EPC + wind energy. Zero debt. India grid modernisation for renewables = ."},
 {id:74,sym:"SUDARSCHEM.NS",name:"Sudarshan Chemical",s:"Chemicals",cap:"Small Cap",pe:35.0,pb:5.5,de:0.2,roe:18.5,roce:17.2,divY:1.0,revG:15,profG:18,prHold:52,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:1400,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:26,roic:"M",wce:"M",note:"Pigments manufacturer. Global position in organic pigments. Paints + plastics + pr."},
 {id:75,sym:"DEEPAKFERT.NS",name:"Deepak Fertilisers",s:"Chemicals",cap:"Mid Cap",pe:15.0,pb:2.5,de:0.5,roe:18.5,roce:16.8,divY:1.5,revG:12,profG:18,prHold:46,pledged:0,intCov:10,fcf:"M",ar:"Buy",at:1600,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:12,roic:"M",wce:"M",note:"Fertilisers + TAN (mining chemical). India mining boom = TAN demand. Cheap PE 15 f."},
-{id:76,sym:"IDEAFORGE.NS",name:"ideaForge Technology",s:"Technology",cap:"Small Cap",pe:null,pb:4.5,de:0.2,roe:5.5,roce:4.8,divY:0.0,revG:28,profG:0,prHold:18,pledged:0,intCov:8,fcf:"L",ar:"Hold",at:900,isB:false,prT:"→",ec:4,rd:"Nov 12",evEb:40,roic:"L",wce:"L",note:"India's largest drone manufacturer. Defence + surveillance. India drone policy = m."},
+{id:76,sym:"IDEAFORGE.NS",name:"ideaForge Technology",s:"Technology",cap:"Small Cap",pe:999,pb:4.5,de:0.2,roe:5.5,roce:4.8,divY:0.0,revG:28,profG:0,prHold:18,pledged:0,intCov:8,fcf:"L",ar:"Hold",at:900,isB:false,prT:"→",ec:4,rd:"Nov 12",evEb:40,roic:"L",wce:"L",note:"India's largest drone manufacturer. Defence + surveillance. India drone policy = m."},
 {id:77,sym:"AARTIIND.NS",name:"Aarti Industries",s:"Chemicals",cap:"Mid Cap",pe:38.0,pb:5.5,de:0.8,roe:15.5,roce:12.8,divY:0.5,revG:12,profG:10,prHold:45,pledged:0,intCov:8,fcf:"M",ar:"Hold",at:700,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:20,roic:"M",wce:"M",note:"Benzene derivatives + pharma chemicals. China+1 play. Currently in capex cycle. Ma."},
 {id:78,sym:"LATENTVIEW.NS",name:"LatentView Analytics",s:"Technology",cap:"Small Cap",pe:45.0,pb:6.5,de:0.0,roe:18.5,roce:17.8,divY:0.5,revG:25,profG:30,prHold:35,pledged:0,intCov:99,fcf:"H",ar:"Buy",at:550,isB:false,prT:"→",ec:7,rd:"Nov 12",evEb:32,roic:"H",wce:"H",note:"Data analytics + AI services. Zero debt. Fortune 500 US clients. Analytics becomin."},
 {id:79,sym:"CAMPUS.NS",name:"Campus Activewear",s:"Consumer",cap:"Small Cap",pe:48.5,pb:5.5,de:0.2,roe:14.4,roce:13.8,divY:0.3,revG:12,profG:8,prHold:75,pledged:0,intCov:12,fcf:"M",ar:"Buy",at:380,isB:false,prT:"→",ec:6,rd:"Nov 12",evEb:36,roic:"M",wce:"M",note:"Mass market sports footwear. 75% promoter. 50Cr+ pairs/year market. India footwear."},
@@ -494,7 +494,7 @@ export default function App() {
             {Object.entries(SF).map(([sec,data],idx)=>(
               <div key={sec} style={{background:"#0a0f1e",borderRadius:6,padding:"5px 10px",border:`1px solid ${data.fi==="Buying"?"#34d39933":data.fi==="Selling"?"#f8717133":"#2a3a55"}`,minWidth:100}}>
                 <div style={{fontSize:9,color:SCOL[sec]||"#60a5fa",fontWeight:600}}>{sec}</div>
-                <div style={{fontSize:11,fontWeight:700,color:data.fi==="Buying"?"#34d399":data.fi==="Selling"?"#f87171":"#ffd740"}}>{data.fw} {data.flow}</div>
+                <div style={{fontSize:11,fontWeight:700,color:data.fi==="Buying"?"#34d399":data.fi==="Selling"?"#f87171":"#ffd740"}}>{data.fw} {data.fi}</div>
                 <div style={{fontSize:9,color:"#2a3a55"}}>{data.fa}</div>
               </div>
             ))}
@@ -698,7 +698,7 @@ export default function App() {
                       </div>
                     </td>
                     <td style={{padding:"8px 5px",background:i%2===0?"#0a0f1e":"#080d17",borderRadius:"0 7px 7px 0"}}>
-                      <span style={{background:s.rec.bg,color:s.rec.c,padding:"3px 7px",borderRadius:4,fontSize:9,fontWeight:800,border:`1px solid ${s.rec.ring}`,whiteSpace:"nowrap"}}>{s.rec.label}</span>
+                      <span style={{background:s.rec?.bg||"#001a08",color:s.rec?.c||"#69f0ae",padding:"3px 7px",borderRadius:4,fontSize:9,fontWeight:800,border:"1px solid "+(s.rec?.ring||"#ffffff22"),whiteSpace:"nowrap"}}>{s.rec?.label||"BUY"}</span>
                     </td>
                   </tr>
                 );
