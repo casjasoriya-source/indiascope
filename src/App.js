@@ -332,6 +332,9 @@ export default function App() {
   const [pfForm, setPfForm]=useState({sym:"",qty:"",buy:""});
   const [fiiPanelOpen, setFiiPanelOpen]=useState(false);
   const [brief,setBrief]=useState(null);
+  const [newsAnn,setNewsAnn]=useState(null);
+  const [depth,setDepth]=useState(null);
+  const [depthLoading,setDepthLoading]=useState(false);
   const refreshRef=useRef(null);
 
 
@@ -396,8 +399,23 @@ export default function App() {
   },[]);
 
 
+  const fetchNews2=useCallback(async()=>{
+    try{const r=await fetch('/api/announcements',{signal:AbortSignal.timeout(15000)});
+    const j=await r.json();setNewsAnn(j);}catch(_){}
+  },[]);
+
+  const fetchDepth=useCallback(async()=>{
+    setDepthLoading(true);
+    // Scan top 40 stocks by market cap for intraday signals
+    const topSyms=STOCKS.slice(0,40).map(s=>s.sym.replace('.NS','')).join(',');
+    try{const r=await fetch('/api/depth?symbols='+encodeURIComponent(topSyms),{signal:AbortSignal.timeout(30000)});
+    const j=await r.json();setDepth(j);}catch(_){}
+    setDepthLoading(false);
+  },[]);
+
+
   useEffect(()=>{
-    fetchAll();fetchFiiDii();fetchSwingPrices();
+    fetchAll();fetchFiiDii();fetchSwingPrices();fetchNews2();
     const t1=setInterval(()=>{fetchAll();fetchFiiDii();},180000);
     const t2=setInterval(fetchSwingPrices,300000);
     return()=>{clearInterval(t1);clearInterval(t2);};
@@ -514,7 +532,7 @@ export default function App() {
 
       {/* MAIN TABS */}
       <div style={{display:"flex",borderBottom:"1px solid #141e30",padding:"0 16px"}}>
-        {[["stocks","📊 Stocks"],["swing","⚡ Swing (300)"],["portfolio","💼 Portfolio"],["brief","🌅 Morning Brief"],["refresh","🔄 Info"]].map(([id,l])=>(
+        {[["stocks","📊 Stocks"],["swing","⚡ Swing (300)"],["intraday","🎯 Intraday"],["news","📰 News Signals"],["portfolio","💼 Portfolio"],["brief","🌅 Morning Brief"],["refresh","🔄 Info"]].map(([id,l])=>(
           <button key={id} onClick={()=>setMainTab(id)} style={{padding:"9px 14px",background:"transparent",border:"none",borderBottom:`2px solid ${mainTab===id?"#3b82f6":"transparent"}`,color:mainTab===id?"#60a5fa":"#3d5070",cursor:"pointer",fontSize:11,fontWeight:mainTab===id?700:400,whiteSpace:"nowrap"}}>
             {l}
           </button>
@@ -744,6 +762,192 @@ export default function App() {
           }
         </div>
       )}
+
+      {mainTab==="intraday"&&(
+        <div style={{padding:14}}>
+          <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:8,padding:"10px 14px",marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div>
+              <span style={{fontSize:13,fontWeight:800,color:"#e0ecff"}}>🎯 Intraday Order Book Analysis</span>
+              <div style={{fontSize:10,color:"#4a6080",marginTop:2}}>Demand vs Supply from NSE live order book · Scans top 40 stocks · Refreshes on demand</div>
+            </div>
+            <button onClick={fetchDepth} style={{background:depthLoading?"#1a2540":"#1a3a1a",border:"1px solid "+(depthLoading?"#3b82f6":"#34d399"),borderRadius:6,padding:"7px 14px",color:depthLoading?"#60a5fa":"#34d399",cursor:"pointer",fontSize:11,fontWeight:700}}>
+              {depthLoading?"⏳ Scanning...":"⚡ Scan Now"}
+            </button>
+          </div>
+
+          {!depth&&!depthLoading&&<div style={{textAlign:"center",padding:32,color:"#2a3a55",fontSize:12,background:"#0a0f1e",borderRadius:10}}>
+            Click "Scan Now" to analyse order book depth across top 40 stocks.<br/>
+            <span style={{fontSize:10,color:"#1a2a40"}}>Best used between 10 AM – 2 PM when order books are deepest.</span>
+          </div>}
+
+          {depthLoading&&<div style={{textAlign:"center",padding:32,color:"#3b82f6",fontSize:12}}>⏳ Fetching live order book from NSE for 40 stocks...</div>}
+
+          {depth?.results&&<>
+            {/* Summary bar */}
+            <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:12}}>
+              {[
+                ["Strong Buy",depth.results.filter(r=>r.signal==="STRONG BUY").length,"#00e676"],
+                ["Buy",depth.results.filter(r=>r.signal==="BUY").length,"#34d399"],
+                ["Sell/Avoid",depth.results.filter(r=>r.signal==="SELL"||r.signal==="STRONG SELL").length,"#ff5252"],
+                ["Neutral",depth.results.filter(r=>r.signal==="NEUTRAL").length,"#ffd740"],
+              ].map(([l,v,c])=>(
+                <div key={l} style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:8,padding:"10px",textAlign:"center"}}>
+                  <div style={{fontSize:20,fontWeight:900,color:c}}>{v}</div>
+                  <div style={{fontSize:9,color:"#2a3a55"}}>{l}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Top signals */}
+            {["STRONG BUY","BUY","STRONG SELL","SELL"].map(sig=>{
+              const items=depth.results.filter(r=>r.signal===sig);
+              if(!items.length)return null;
+              return(
+                <div key={sig} style={{marginBottom:14}}>
+                  <div style={{fontSize:11,fontWeight:700,color:items[0].signalColor,marginBottom:6,padding:"4px 10px",background:items[0].signalColor+"11",borderRadius:4,display:"inline-block"}}>{sig} ({items.length})</div>
+                  {items.map((s,i)=>(
+                    <div key={i} style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:10,padding:"12px 14px",marginBottom:8}}>
+                      {/* Header */}
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,flexWrap:"wrap",gap:6}}>
+                        <div>
+                          <span style={{fontWeight:800,color:"#e0ecff",fontSize:14}}>{s.symbol}</span>
+                          <span style={{fontSize:10,color:"#4a6080",marginLeft:8}}>₹{s.price}</span>
+                          <span style={{fontSize:10,color:s.price>=s.vwap?"#34d399":"#ff5252",marginLeft:6}}>VWAP ₹{s.vwap}</span>
+                        </div>
+                        <span style={{background:s.signalColor+"22",color:s.signalColor,border:"1px solid "+s.signalColor+"44",borderRadius:5,padding:"3px 10px",fontSize:11,fontWeight:800}}>{s.signal}</span>
+                      </div>
+
+                      {/* Order book visual */}
+                      <div style={{display:"flex",gap:6,marginBottom:10,alignItems:"center"}}>
+                        <div style={{flex:1}}>
+                          <div style={{fontSize:9,color:"#34d399",fontWeight:700,marginBottom:3}}>BUYERS ({s.buyPct}%)</div>
+                          <div style={{background:"#001510",borderRadius:4,overflow:"hidden",height:8}}>
+                            <div style={{background:"#34d399",height:"100%",width:s.buyPct+"%",transition:"width 0.3s"}}/>
+                          </div>
+                          <div style={{fontSize:9,color:"#2a3a55",marginTop:2}}>{(s.totalBidQty/1000).toFixed(0)}K qty</div>
+                        </div>
+                        <div style={{fontSize:11,fontWeight:900,color:s.obi>0?"#34d399":"#ff5252"}}>
+                          {s.obi>0?"▶":"◀"} {Math.abs(s.obi*100).toFixed(0)}%
+                        </div>
+                        <div style={{flex:1}}>
+                          <div style={{fontSize:9,color:"#ff5252",fontWeight:700,marginBottom:3,textAlign:"right"}}>SELLERS ({100-s.buyPct}%)</div>
+                          <div style={{background:"#150000",borderRadius:4,overflow:"hidden",height:8}}>
+                            <div style={{background:"#ff5252",height:"100%",width:(100-s.buyPct)+"%",float:"right",transition:"width 0.3s"}}/>
+                          </div>
+                          <div style={{fontSize:9,color:"#2a3a55",marginTop:2,textAlign:"right"}}>{(s.totalAskQty/1000).toFixed(0)}K qty</div>
+                        </div>
+                      </div>
+
+                      {/* Trade levels */}
+                      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:6,marginBottom:8}}>
+                        <div style={{background:"#070b14",borderRadius:6,padding:"7px 8px",textAlign:"center"}}>
+                          <div style={{fontSize:9,color:"#2a3a55"}}>Entry</div>
+                          <div style={{fontSize:11,fontWeight:700,color:"#60a5fa"}}>{s.entry}</div>
+                        </div>
+                        <div style={{background:"#070b14",borderRadius:6,padding:"7px 8px",textAlign:"center"}}>
+                          <div style={{fontSize:9,color:"#2a3a55"}}>Target 1</div>
+                          <div style={{fontSize:11,fontWeight:700,color:"#34d399"}}>{s.target1}</div>
+                        </div>
+                        <div style={{background:"#070b14",borderRadius:6,padding:"7px 8px",textAlign:"center"}}>
+                          <div style={{fontSize:9,color:"#2a3a55"}}>Target 2</div>
+                          <div style={{fontSize:11,fontWeight:700,color:"#4ade80"}}>{s.target2}</div>
+                        </div>
+                        <div style={{background:"#070b14",borderRadius:6,padding:"7px 8px",textAlign:"center"}}>
+                          <div style={{fontSize:9,color:"#2a3a55"}}>Stop Loss</div>
+                          <div style={{fontSize:11,fontWeight:700,color:"#ff5252"}}>{s.stopLoss}</div>
+                        </div>
+                      </div>
+
+                      {/* Day range + key levels */}
+                      <div style={{fontSize:10,color:"#3d5070"}}>
+                        Support: <span style={{color:"#34d399"}}>₹{s.bidSupport}</span> · 
+                        Resistance: <span style={{color:"#ff5252"}}>₹{s.askResistance}</span> · 
+                        Day: ₹{s.dayLow}–₹{s.dayHigh} · 
+                        Spread: {s.spreadPct.toFixed(2)}%
+                      </div>
+
+                      {/* Bid/Ask ladder */}
+                      <div style={{display:"flex",gap:8,marginTop:8}}>
+                        <div style={{flex:1}}>
+                          <div style={{fontSize:9,color:"#34d399",fontWeight:700,marginBottom:3}}>📗 BID (Buyers)</div>
+                          {s.bids.map((b,bi)=>(
+                            <div key={bi} style={{display:"flex",justifyContent:"space-between",fontSize:9,padding:"1px 0",borderBottom:"1px solid #070b14"}}>
+                              <span style={{color:"#34d399"}}>₹{b.price}</span>
+                              <span style={{color:"#4a6080"}}>{(b.quantity/1000).toFixed(1)}K</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{flex:1}}>
+                          <div style={{fontSize:9,color:"#ff5252",fontWeight:700,marginBottom:3}}>📕 ASK (Sellers)</div>
+                          {s.asks.map((a,ai)=>(
+                            <div key={ai} style={{display:"flex",justifyContent:"space-between",fontSize:9,padding:"1px 0",borderBottom:"1px solid #070b14"}}>
+                              <span style={{color:"#ff5252"}}>₹{a.price}</span>
+                              <span style={{color:"#4a6080"}}>{(a.quantity/1000).toFixed(1)}K</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+            <div style={{fontSize:9,color:"#1a2a40",textAlign:"center",padding:8}}>Updated: {new Date(depth.at).toLocaleTimeString()}</div>
+          </>}
+        </div>
+      )}
+
+
+      {mainTab==="news"&&(
+        <div style={{padding:14}}>
+          <div style={{background:"#0a0f1e",border:"1px solid #141e30",borderRadius:8,padding:"10px 14px",marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div>
+              <span style={{fontSize:13,fontWeight:800,color:"#e0ecff"}}>📰 News & Corporate Signals</span>
+              <div style={{fontSize:10,color:"#4a6080",marginTop:2}}>NSE corporate announcements · Orders, contracts, results, penalties · Auto-analysed</div>
+            </div>
+            <button onClick={fetchNews2} style={{background:"#1a2540",border:"1px solid #3b82f6",borderRadius:6,padding:"7px 14px",color:"#60a5fa",cursor:"pointer",fontSize:11,fontWeight:700}}>🔄 Refresh</button>
+          </div>
+
+          {!newsAnn&&<div style={{textAlign:"center",padding:28,color:"#2a3a55",fontSize:12,background:"#0a0f1e",borderRadius:10}}>Loading NSE announcements...</div>}
+
+          {newsAnn?.error&&<div style={{textAlign:"center",padding:20,color:"#ff5252",fontSize:11}}>{newsAnn.error}</div>}
+
+          {newsAnn?.announcements&&<>
+            <div style={{fontSize:10,color:"#2a3a55",marginBottom:10}}>{newsAnn.total} total announcements today · {newsAnn.announcements.length} with clear signal · {new Date(newsAnn.at).toLocaleTimeString()}</div>
+
+            {/* BUY signals first */}
+            {["BUY","WATCH","AVOID"].map(sig=>{
+              const items=newsAnn.announcements.filter(a=>a.signal===sig);
+              if(!items.length)return null;
+              const sigColor=sig==="BUY"?"#34d399":sig==="AVOID"?"#ff5252":"#ffd740";
+              return(
+                <div key={sig} style={{marginBottom:14}}>
+                  <div style={{fontSize:11,fontWeight:700,color:sigColor,marginBottom:8,padding:"4px 10px",background:sigColor+"11",borderRadius:4,display:"inline-block"}}>
+                    {sig==="BUY"?"✅":sig==="AVOID"?"🚫":"👀"} {sig} SIGNAL ({items.length} stocks)
+                  </div>
+                  {items.map((a,i)=>(
+                    <div key={i} style={{background:"#0a0f1e",border:"1px solid "+sigColor+"33",borderRadius:8,padding:"10px 12px",marginBottom:6,display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:8}}>
+                      <div style={{flex:1}}>
+                        <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:4}}>
+                          <span style={{fontWeight:800,color:"#e0ecff",fontSize:13}}>{a.symbol}</span>
+                          <span style={{fontSize:9,color:"#3d5070"}}>{a.name}</span>
+                          <span style={{fontSize:9,color:"#2a3a55"}}>{a.time}</span>
+                        </div>
+                        <div style={{fontSize:11,color:"#8899bb",lineHeight:1.5}}>{a.subject}</div>
+                        <div style={{fontSize:10,color:sigColor,marginTop:4}}>📌 {a.reason}</div>
+                      </div>
+                      <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4}}>
+                        <span style={{background:sigColor+"22",color:sigColor,border:"1px solid "+sigColor+"44",borderRadius:4,padding:"2px 8px",fontSize:10,fontWeight:700}}>{sig}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+          </>}
+        </div>
+      )}
+
 
       {mainTab==="portfolio"&&(
         <div style={{padding:"14px"}}>
