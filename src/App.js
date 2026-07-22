@@ -406,10 +406,16 @@ export default function App() {
 
   const fetchDepth=useCallback(async()=>{
     setDepthLoading(true);
-    // Scan top 40 stocks by market cap for intraday signals
+    setDepth(null);
     const topSyms=STOCKS.slice(0,40).map(s=>s.sym).join(',');
-    try{const r=await fetch('/api/depth?symbols='+encodeURIComponent(topSyms),{signal:AbortSignal.timeout(30000)});
-    const j=await r.json();setDepth(j);}catch(_){}
+    try{
+      const r=await fetch('/api/depth?symbols='+encodeURIComponent(topSyms));
+      if(!r.ok){setDepth({error:'API error: '+r.status+' '+r.statusText});setDepthLoading(false);return;}
+      const j=await r.json();
+      setDepth(j);
+    }catch(e){
+      setDepth({error:'Fetch failed: '+e.message});
+    }
     setDepthLoading(false);
   },[]);
 
