@@ -407,7 +407,7 @@ export default function App() {
   const fetchDepth=useCallback(async()=>{
     setDepthLoading(true);
     // Scan top 40 stocks by market cap for intraday signals
-    const topSyms=STOCKS.slice(0,40).map(s=>s.sym.replace('.NS','')).join(',');
+    const topSyms=STOCKS.slice(0,40).map(s=>s.sym).join(',');
     try{const r=await fetch('/api/depth?symbols='+encodeURIComponent(topSyms),{signal:AbortSignal.timeout(30000)});
     const j=await r.json();setDepth(j);}catch(_){}
     setDepthLoading(false);
@@ -780,7 +780,7 @@ export default function App() {
             <span style={{fontSize:10,color:"#1a2a40"}}>Best used between 10 AM – 2 PM when order books are deepest.</span>
           </div>}
 
-          {depthLoading&&<div style={{textAlign:"center",padding:32,color:"#3b82f6",fontSize:12}}>⏳ Fetching live order book from NSE for 40 stocks...</div>}
+          {depthLoading&&<div style={{textAlign:"center",padding:32,color:"#3b82f6",fontSize:12}}>⏳ Scanning 40 stocks via Yahoo Finance for intraday signals...</div>}
 
           {depth?.results&&<>
             {/* Summary bar */}
