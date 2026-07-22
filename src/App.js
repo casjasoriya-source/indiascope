@@ -782,7 +782,13 @@ export default function App() {
 
           {depthLoading&&<div style={{textAlign:"center",padding:32,color:"#3b82f6",fontSize:12}}>⏳ Scanning 40 stocks via Yahoo Finance for intraday signals...</div>}
 
-          {depth?.results&&<>
+          {depth&&!depth.results&&<div style={{background:"#1a0000",border:"1px solid #ff525444",borderRadius:8,padding:14,color:"#ff5252",fontSize:12}}>
+            ❌ Scan failed: {depth.error||"No data returned"}. Check API is deployed at /api/depth
+          </div>}
+          {depth?.results&&depth.results.length===0&&<div style={{textAlign:"center",padding:24,color:"#ffd740",fontSize:12,background:"#0a0f1e",borderRadius:8}}>
+            ⚠ No signals found. Market may be closed or low activity. Try during 10AM–2PM.
+          </div>}
+          {depth?.results&&depth.results.length>0&&<>
             {/* Summary bar */}
             <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:12}}>
               {[
@@ -800,7 +806,7 @@ export default function App() {
 
             {/* Top signals */}
             {["STRONG BUY","BUY","STRONG SELL","SELL"].map(sig=>{
-              const items=depth.results.filter(r=>r.signal===sig);
+              const items=(depth.results||[]).filter(r=>r.signal===sig);
               if(!items.length)return null;
               return(
                 <div key={sig} style={{marginBottom:14}}>
@@ -870,7 +876,7 @@ export default function App() {
                       <div style={{display:"flex",gap:8,marginTop:8}}>
                         <div style={{flex:1}}>
                           <div style={{fontSize:9,color:"#34d399",fontWeight:700,marginBottom:3}}>📗 BID (Buyers)</div>
-                          {s.bids.map((b,bi)=>(
+                          {(s.bids||[]).map((b,bi)=>(
                             <div key={bi} style={{display:"flex",justifyContent:"space-between",fontSize:9,padding:"1px 0",borderBottom:"1px solid #070b14"}}>
                               <span style={{color:"#34d399"}}>₹{b.price}</span>
                               <span style={{color:"#4a6080"}}>{(b.quantity/1000).toFixed(1)}K</span>
@@ -879,7 +885,7 @@ export default function App() {
                         </div>
                         <div style={{flex:1}}>
                           <div style={{fontSize:9,color:"#ff5252",fontWeight:700,marginBottom:3}}>📕 ASK (Sellers)</div>
-                          {s.asks.map((a,ai)=>(
+                          {(s.asks||[]).map((a,ai)=>(
                             <div key={ai} style={{display:"flex",justifyContent:"space-between",fontSize:9,padding:"1px 0",borderBottom:"1px solid #070b14"}}>
                               <span style={{color:"#ff5252"}}>₹{a.price}</span>
                               <span style={{color:"#4a6080"}}>{(a.quantity/1000).toFixed(1)}K</span>
